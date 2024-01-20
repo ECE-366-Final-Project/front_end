@@ -1,2 +1,2 @@
-# frontend
-Frontend with html/css/react
+# Front End
+Front end with html/css/react
