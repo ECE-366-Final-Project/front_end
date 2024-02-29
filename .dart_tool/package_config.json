@@ -75,9 +75,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.2.0",
+      "rootUri": "file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.2.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "http_parser",
@@ -237,9 +237,9 @@
     },
     {
       "name": "web",
-      "rootUri": "file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.4.2",
+      "rootUri": "file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.5.0",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "win32",
@@ -260,7 +260,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-01-30T14:42:23.569503Z",
+  "generated": "2024-02-29T01:03:24.067585Z",
   "generator": "pub",
   "generatorVersion": "3.4.0-82.0.dev"
 }

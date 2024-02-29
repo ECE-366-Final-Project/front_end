@@ -39,9 +39,9 @@ google_fonts
 file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/google_fonts-6.1.0/
 file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/google_fonts-6.1.0/lib/
 http
-3.2
-file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.2.0/
-file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.2.0/lib/
+3.3
+file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.2.1/
+file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.2.1/lib/
 http_parser
 2.12
 file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2/
@@ -143,9 +143,9 @@ vm_service
 file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-13.0.0/
 file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-13.0.0/lib/
 web
-3.2
-file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.4.2/
-file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.4.2/lib/
+3.3
+file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.5.0/
+file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.5.0/lib/
 win32
 3.2
 file:///C:/Users/laniw/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.2.0/

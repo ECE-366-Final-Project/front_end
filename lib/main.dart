@@ -6,10 +6,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFF000000)),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -28,16 +27,56 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.title),
+        title: new TextButton(
+            child: Text('♤♡ COOPER CASINO ♢♧',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold)),
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MyApp()))),
+        backgroundColor: const Color(0xFF000000),
+        elevation: 0,
+        actions: [
+          TextButton(
+              child: Text('BLACKJACK',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold)),
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()))),
+          Text("|",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold)),
+          TextButton(
+              child: Text('SLOTS',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold)),
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()))),
+          Text("|",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold)),
+          IconButton(
+              icon: const Icon(Icons.account_circle,
+                  color: Colors.white,
+                  size: 40.0,
+                  semanticLabel: 'User Account'),
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()))),
+        ],
       ),
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
+          children: <Widget>[],
         ),
       ),
     );
