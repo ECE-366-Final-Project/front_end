@@ -1,6 +1,31 @@
-2024/02/28-19:00:17.325 6040 Reusing MANIFEST C:\Users\laniw\AppData\Local\Temp\flutter_tools.91a5db91\flutter_tools_chrome_device.10d69c3b\Default\Local Storage\leveldb/MANIFEST-000001
-2024/02/28-19:00:17.336 6040 Recovering log #3
-2024/02/28-19:00:17.344 6040 Reusing old log C:\Users\laniw\AppData\Local\Temp\flutter_tools.91a5db91\flutter_tools_chrome_device.10d69c3b\Default\Local Storage\leveldb/000003.log 
-2024/02/28-19:30:47.023 938 Level-0 table #5: started
-2024/02/28-19:30:47.037 938 Level-0 table #5: 38946 bytes OK
-2024/02/28-19:30:47.042 938 Delete type=0 #3
+2024/02/28-19:36:14.460 1824 Reusing MANIFEST C:\Users\laniw\AppData\Local\Temp\flutter_tools.48d9ab90\flutter_tools_chrome_device.ab6f7c0e\Default\Local Storage\leveldb/MANIFEST-000001
+2024/02/28-19:36:14.466 1824 Recovering log #4
+2024/02/28-19:36:14.476 1824 Reusing old log C:\Users\laniw\AppData\Local\Temp\flutter_tools.48d9ab90\flutter_tools_chrome_device.ab6f7c0e\Default\Local Storage\leveldb/000004.log 
+2024/02/28-19:36:14.478 1824 Delete type=0 #3
+2024/02/28-19:59:43.926 61a0 Level-0 table #8: started
+2024/02/28-19:59:43.938 61a0 Level-0 table #8: 37213 bytes OK
+2024/02/28-19:59:43.944 61a0 Delete type=0 #4
+2024/02/28-20:03:37.185 61a0 Level-0 table #10: started
+2024/02/28-20:03:37.195 61a0 Level-0 table #10: 48798 bytes OK
+2024/02/28-20:03:37.201 61a0 Delete type=0 #7
+2024/02/28-20:09:48.853 61a0 Level-0 table #12: started
+2024/02/28-20:09:48.865 61a0 Level-0 table #12: 52167 bytes OK
+2024/02/28-20:09:48.871 61a0 Delete type=0 #9
+2024/02/28-20:15:16.199 61a0 Level-0 table #14: started
+2024/02/28-20:15:16.222 61a0 Level-0 table #14: 51988 bytes OK
+2024/02/28-20:15:16.227 61a0 Delete type=0 #11
+2024/02/28-20:18:20.394 61a0 Level-0 table #16: started
+2024/02/28-20:18:20.406 61a0 Level-0 table #16: 51334 bytes OK
+2024/02/28-20:18:20.411 61a0 Delete type=0 #13
+2024/02/28-20:18:20.413 61a0 Compacting 4@0 + 1@1 files
+2024/02/28-20:18:20.424 61a0 Generated table #17@0: 100 keys, 21764 bytes
+2024/02/28-20:18:20.424 61a0 Compacted 4@0 + 1@1 files => 21764 bytes
+2024/02/28-20:18:20.426 61a0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/02/28-20:18:20.427 61a0 Delete type=2 #8
+2024/02/28-20:18:20.427 61a0 Delete type=2 #10
+2024/02/28-20:18:20.427 61a0 Delete type=2 #12
+2024/02/28-20:18:20.427 61a0 Delete type=2 #14
+2024/02/28-20:18:20.427 61a0 Delete type=2 #16
+2024/02/28-20:20:05.309 61a0 Level-0 table #19: started
+2024/02/28-20:20:05.322 61a0 Level-0 table #19: 51253 bytes OK
+2024/02/28-20:20:05.326 61a0 Delete type=0 #15
