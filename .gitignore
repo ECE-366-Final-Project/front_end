@@ -1,8 +1,14 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 /build/
-.flutter-plugins
 package_config_subset
 package_config.json
 chrome-device/default
 dartpad/
+
+pubspec.lock
+.dart_tool/package_config_subset
+.dart_tool/package_config.json
+.dart_tool/version
+build/flutter_assets/NOTICES
+build/flutter_assets/shaders/ink_sparkle.frag
