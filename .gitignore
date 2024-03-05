@@ -1,8 +1,8 @@
+.flutter-plugins
+.flutter-plugins-dependencies
 /build/
 .flutter-plugins
 package_config_subset
 package_config.json
 chrome-device/default
 dartpad/
-.flutter-plugins
-.flutter-plugins-dependencies
