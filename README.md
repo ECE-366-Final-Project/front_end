@@ -10,7 +10,7 @@ $ git clone https://github.com/ECE-366-Final-Project/front_end.git
 
 ## Build & Run  
 This project primarily uses Flutter! [Get it here.](https://docs.flutter.dev/get-started/install)  
-You can host a local instance of our frontendt by running (in the root directory): 
+You can host a local instance of our frontend by running (in the root directory): 
 ```
 $ flutter run
 ``` 
