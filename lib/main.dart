@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-enum SampleItem { blackjack, roulette, slots }
+import 'package:front_end/color-palette.dart';
 
 void main() => runApp(new MyApp());
 
@@ -25,7 +24,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  SampleItem? selectedItem;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -41,38 +39,57 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
         actions: [
-          PopupMenuButton(
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<SampleItem>>[
-                    PopupMenuItem<SampleItem>(
-                        child: TextButton(
-                            child: Text('BLACKJACK'),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyApp())))),
-                    PopupMenuItem<SampleItem>(
-                        child: TextButton(
-                            child: Text('ROULETTE'),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyApp())))),
-                    PopupMenuItem<SampleItem>(
-                        child: TextButton(
-                            child: Text('SLOTS'),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyApp())))),
-                  ]),
+          MenuAnchor(
+              style: MenuStyle(backgroundColor: ColorPalette()),
+              builder: (BuildContext context, MenuController controller,
+                  Widget? child) {
+                return TextButton(
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                    child: Text('GAMES',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold)));
+              },
+              menuChildren: [
+                TextButton(
+                    child: Text('BLACKJACK',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()))),
+                TextButton(
+                    child: Text('ROULETTE',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()))),
+                TextButton(
+                    child: Text('SLOTS',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()))),
+              ]),
           Text("|",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold)),
           TextButton(
-              child: Text('BALANCE',
+              child: Text('BALANCE: \$',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 25.0,
