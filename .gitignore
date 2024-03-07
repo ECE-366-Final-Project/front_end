@@ -1,7 +1,10 @@
+.dart_tool/chrome-device/default
 /build/
-.flutter-plugins
-.flutter-plugins-dependencies
-package_config_subset
-package_config.json
+.dart_tool/.flutter-plugins
+.dart_tool/.flutter-plugins-dependencies
+.dart_tool/package_config_subset
+.dart_tool/package_config.json
 chrome-device/default
 dartpad/
+\.dart_tool\chrome-device
+.dart_tool/chrome-device/Default/History
