@@ -1,6 +1,5 @@
-2024/02/28-19:36:14.540 1824 Reusing MANIFEST C:\Users\laniw\AppData\Local\Temp\flutter_tools.48d9ab90\flutter_tools_chrome_device.ab6f7c0e\Default\Session Storage/MANIFEST-000001
-2024/02/28-19:36:14.544 1824 Recovering log #3
-2024/02/28-19:36:14.556 1824 Reusing old log C:\Users\laniw\AppData\Local\Temp\flutter_tools.48d9ab90\flutter_tools_chrome_device.ab6f7c0e\Default\Session Storage/000003.log 
-2024/02/28-20:17:03.771 61a0 Level-0 table #5: started
-2024/02/28-20:17:03.782 61a0 Level-0 table #5: 18147 bytes OK
-2024/02/28-20:17:03.787 61a0 Delete type=0 #3
+2024/03/07-12:17:35.869 494c Reusing MANIFEST C:\Users\laniw\AppData\Local\Temp\flutter_tools.fdc31970\flutter_tools_chrome_device.953772e8\Default\Session Storage/MANIFEST-000001
+2024/03/07-12:17:35.889 494c Recovering log #7
+2024/03/07-12:17:35.899 494c Reusing old log C:\Users\laniw\AppData\Local\Temp\flutter_tools.fdc31970\flutter_tools_chrome_device.953772e8\Default\Session Storage/000007.log 
+2024/03/07-12:17:35.910 494c Delete type=0 #3
+2024/03/07-12:17:35.910 494c Delete type=0 #4

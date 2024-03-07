@@ -1,5 +1,5 @@
 name: front_end
-description: Slots UI
+description: Cooper Casino's Frontend
 
 publish_to: 'none' 
 
@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  google_fonts: ^6.1.0
   auto_size_text: ^3.0.0
 
 dev_dependencies:
