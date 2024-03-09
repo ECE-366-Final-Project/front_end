@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/color-palette.dart';
 import 'package:front_end/account-login.dart';
-import 'package:front_end/depo-withdraw.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 final List<String> imgList = [
@@ -60,87 +58,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new TextButton(
-            child: Text('♤♡ COOPER CASINO ♢♧',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold)),
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyApp()))),
+        title: Text('COOPER CASINO',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
-        actions: [
-          MenuAnchor(
-              style: MenuStyle(backgroundColor: ColorPalette()),
-              builder: (BuildContext context, MenuController controller,
-                  Widget? child) {
-                return TextButton(
-                    onPressed: () {
-                      if (controller.isOpen) {
-                        controller.close();
-                      } else {
-                        controller.open();
-                      }
-                    },
-                    child: Text('GAMES',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold)));
-              },
-              menuChildren: [
-                TextButton(
-                    child: Text('BLACKJACK',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
-                TextButton(
-                    child: Text('ROULETTE',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
-                TextButton(
-                    child: Text('SLOTS',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
-              ]),
-          Text("|",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold)),
-          TextButton(
-              child: Text('BALANCE: \$',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold)),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()))),
-          Text("|",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold)),
-          IconButton(
-              icon: const Icon(Icons.account_circle,
-                  color: Colors.white,
-                  size: 40.0,
-                  semanticLabel: 'User Account'),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()))),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -162,15 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                    child: Text('BLACKJACK',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
-                TextButton(
-                    child: Text('ROULETTE',
+                    child: Text('PLAY NOW!',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25.0,
@@ -179,16 +95,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => new AccountLogin()))),
-                TextButton(
-                    child: Text('SLOTS',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => new DepoWithdraw()))),
               ],
             ),
             Row(
