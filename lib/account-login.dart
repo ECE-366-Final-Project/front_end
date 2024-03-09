@@ -32,12 +32,15 @@ class AccountLogin extends StatelessWidget {
             padding:
                 EdgeInsets.only(left: 15.0, right: 15.0, top: 0, bottom: 0),
             child: TextField(
+              style:
+                  TextStyle(color: Colors.white, decorationColor: Colors.white),
               cursorColor: Colors.white,
+              cursorErrorColor: Colors.red,
               decoration: InputDecoration(
                   hoverColor: Colors.white,
                   border: OutlineInputBorder(),
-                  labelText: 'Email',
-                  hintText: 'Enter a valid email address'),
+                  labelText: 'Username',
+                  hintText: 'Enter your username'),
             ),
           ),
           const Padding(

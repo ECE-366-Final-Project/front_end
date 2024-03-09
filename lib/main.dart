@@ -58,11 +58,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('COOPER CASINO',
+        title: Text('♤♡ COOPER CASINO ♢♧',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold)),
+        centerTitle: true,
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
       ),
