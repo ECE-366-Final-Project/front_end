@@ -142,77 +142,80 @@ class _MyHomePageState extends State<MyHomePage> {
                   context, MaterialPageRoute(builder: (context) => MyApp()))),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.center,
-            child: CarouselSlider(
-              items: imageSliders,
-              options: CarouselOptions(autoPlay: true, height: 500),
-              carouselController: _controller,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 50),
+            Align(
+              alignment: Alignment.center,
+              child: CarouselSlider(
+                items: imageSliders,
+                options: CarouselOptions(autoPlay: true, height: 500),
+                carouselController: _controller,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                  child: Text('BLACKJACK',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold)),
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyApp()))),
-              TextButton(
-                  child: Text('ROULETTE',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold)),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => new AccountLogin()))),
-              TextButton(
-                  child: Text('SLOTS',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold)),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => new DepoWithdraw()))),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                child: IconButton(
-                  onPressed: () => _controller.previousPage(),
-                  icon: Icon(Icons.navigate_before,
-                      color: Colors.white,
-                      size: 40.0,
-                      semanticLabel: 'Navigate Left'),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    child: Text('BLACKJACK',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()))),
+                TextButton(
+                    child: Text('ROULETTE',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => new AccountLogin()))),
+                TextButton(
+                    child: Text('SLOTS',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => new DepoWithdraw()))),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: IconButton(
+                    onPressed: () => _controller.previousPage(),
+                    icon: Icon(Icons.navigate_before,
+                        color: Colors.white,
+                        size: 40.0,
+                        semanticLabel: 'Navigate Left'),
+                  ),
                 ),
-              ),
-              Flexible(
-                child: IconButton(
-                  onPressed: () => _controller.nextPage(),
-                  icon: Icon(Icons.navigate_next,
-                      color: Colors.white,
-                      size: 40.0,
-                      semanticLabel: 'Navigate Right'),
+                Flexible(
+                  child: IconButton(
+                    onPressed: () => _controller.nextPage(),
+                    icon: Icon(Icons.navigate_next,
+                        color: Colors.white,
+                        size: 40.0,
+                        semanticLabel: 'Navigate Right'),
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
