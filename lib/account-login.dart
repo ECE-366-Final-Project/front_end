@@ -58,12 +58,12 @@ class AccountLogin extends StatelessWidget {
                 ),
               ),
             ),
-            const Padding(
+            Padding(
               padding:
                   EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
               child: SizedBox(
                 width: 350,
-                child: TextField(
+                child: TextFormField(
                   style: TextStyle(
                       color: Colors.white, decorationColor: Colors.white),
                   cursorColor: Colors.white,
