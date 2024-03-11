@@ -23,5 +23,8 @@ flutter:
 
   assets:
     - lib/assets/images/login_logo.png
+    - lib/assets/images/card-deck.png
+    - lib/assets/images/roulette.png
+    - lib/assets/images/slot-machine.png
 
   uses-material-design: true

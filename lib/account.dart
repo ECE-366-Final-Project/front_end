@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/main.dart';
 import 'package:front_end/color-palette.dart';
 
-class DepoWithdraw extends StatelessWidget {
+class Account extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
