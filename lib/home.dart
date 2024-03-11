@@ -10,14 +10,11 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: TextButton(
-            child: Text('COOPER CASINO',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold)),
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()))),
+        title: Text('COOPER CASINO',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
         actions: [

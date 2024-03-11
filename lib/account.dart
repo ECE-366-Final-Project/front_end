@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/depo-withdraw.dart';
+import 'package:front_end/home.dart';
 import 'package:front_end/main.dart';
 import 'package:front_end/color-palette.dart';
 
@@ -15,7 +17,7 @@ class Account extends StatelessWidget {
                     fontSize: 25.0,
                     fontWeight: FontWeight.bold)),
             onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyApp()))),
+                context, MaterialPageRoute(builder: (context) => Home()))),
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
         actions: [
@@ -74,20 +76,8 @@ class Account extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold)),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()))),
-          Text("|",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold)),
-          IconButton(
-              icon: const Icon(Icons.account_circle,
-                  color: Colors.white,
-                  size: 40.0,
-                  semanticLabel: 'User Account'),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()))),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DepoWithdraw()))),
         ],
       ),
       body: Column(
