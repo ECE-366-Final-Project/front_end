@@ -76,8 +76,11 @@ class Account extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold)),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DepoWithdraw()))),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          DepoWithdraw(title: 'Deposit/Withdrawal')))),
         ],
       ),
       body: Column(
