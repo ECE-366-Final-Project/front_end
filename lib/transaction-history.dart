@@ -69,19 +69,6 @@ class TransactionHistory extends StatelessWidget {
                   color: Colors.white,
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold)),
-          TextButton(
-              child: Text('BALANCE: \$',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold)),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()))),
-          Text("|",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold)),
           IconButton(
               icon: const Icon(Icons.account_circle,
                   color: Colors.white,
@@ -91,9 +78,26 @@ class TransactionHistory extends StatelessWidget {
                   context, MaterialPageRoute(builder: (context) => MyApp()))),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextButton(
+                child: Text('BALANCE: \$',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 100.0,
+                        fontWeight: FontWeight.bold)),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => MyApp()))),
+            IconButton(
+                onPressed: () => {},
+                icon: Icon(Icons.refresh,
+                    color: Colors.white,
+                    size: 20.0,
+                    semanticLabel: 'Refresh History'))
+          ],
+        ),
       ),
     );
   }

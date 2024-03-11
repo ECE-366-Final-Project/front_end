@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/home.dart';
-import 'package:front_end/main.dart';
 import 'package:front_end/color-palette.dart';
 import 'package:front_end/transaction-history.dart';
 
@@ -47,24 +46,21 @@ class Account extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
+                    onPressed: () => {}),
                 TextButton(
                     child: Text('ROULETTE',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
+                    onPressed: () => {}),
                 TextButton(
                     child: Text('SLOTS',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
+                    onPressed: () => {}),
               ]),
           Text("|",
               style: TextStyle(

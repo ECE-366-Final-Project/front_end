@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
-import 'package:front_end/main.dart';
 import 'package:front_end/color-palette.dart';
 
 class Home extends StatelessWidget {
@@ -43,24 +42,21 @@ class Home extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
+                    onPressed: () => {}),
                 TextButton(
                     child: Text('ROULETTE',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
+                    onPressed: () => {}),
                 TextButton(
                     child: Text('SLOTS',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()))),
+                    onPressed: () => {}),
               ]),
           Text("|",
               style: TextStyle(
@@ -115,10 +111,7 @@ class Home extends StatelessWidget {
                                   color: Colors.black,
                                   height: 128.0,
                                   width: 128.0),
-                              onPressed: (() => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyApp())))))),
+                              onPressed: (() => {})))),
                   SizedBox(height: 10.0),
                   Text('BLACKJACK',
                       style: TextStyle(
@@ -141,10 +134,7 @@ class Home extends StatelessWidget {
                                     color: Colors.black,
                                     height: 128.0,
                                     width: 128.0),
-                                onPressed: (() => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MyApp())))))),
+                                onPressed: (() => {})))),
                     SizedBox(height: 10.0),
                     Text('ROULETTE',
                         style: TextStyle(
@@ -168,10 +158,7 @@ class Home extends StatelessWidget {
                                     color: Colors.black,
                                     height: 128.0,
                                     width: 128.0),
-                                onPressed: (() => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MyApp())))))),
+                                onPressed: (() => {})))),
                     SizedBox(height: 10.0),
                     Text('SLOTS',
                         style: TextStyle(
