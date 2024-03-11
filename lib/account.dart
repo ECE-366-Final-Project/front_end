@@ -94,7 +94,7 @@ class Account extends StatelessWidget {
                 ),
                 SizedBox(height: 40.0),
                 TextButton(
-                    child: Text('${text}',
+                    child: Text('\$ ' + '${text}',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 30.0,
@@ -102,8 +102,7 @@ class Account extends StatelessWidget {
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                DepoWithdraw(title: 'Deposit/Withdrawal')))),
+                            builder: (context) => DepoWithdraw()))),
                 SizedBox(height: 20.0),
                 TextButton(
                     child: Text('TRANSACTION & GAME HISTORY',

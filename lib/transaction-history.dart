@@ -181,8 +181,7 @@ class _TransactionHistory extends State<TransactionHistory> {
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                DepoWithdraw(title: 'Deposit/Withdrawal')))),
+                            builder: (context) => DepoWithdraw()))),
                 IconButton(
                     onPressed: () => {
                           setState(() {

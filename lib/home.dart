@@ -77,11 +77,8 @@ class Home extends StatelessWidget {
                         color: Colors.white,
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            DepoWithdraw(title: 'Deposit/Withdrawal')))),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DepoWithdraw()))),
             Text("|",
                 style: TextStyle(
                     color: Colors.white,

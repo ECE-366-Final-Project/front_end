@@ -12,15 +12,13 @@ var currencyValue = new NumberFormat('#,##0.00', 'en_US');
 
 onKeyboardTap(String value) {
   tempBalance = tempBalance + value;
-  text = '\$${(double.parse(tempBalance)).toString()}';
+  text = '${(double.parse(tempBalance)).toString()}';
   print(value);
   print(text);
 }
 
 class DepoWithdraw extends StatefulWidget {
-  const DepoWithdraw({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const DepoWithdraw({Key? key}) : super(key: key);
 
   @override
   State<DepoWithdraw> createState() => _DepoWithdrawState();
@@ -63,7 +61,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 100.0),
-            Text(text,
+            Text('\$' + text,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 60.0,
