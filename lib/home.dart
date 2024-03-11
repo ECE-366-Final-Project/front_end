@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/main.dart';
@@ -184,6 +182,7 @@ class Home extends StatelessWidget {
                 )
               ],
             ),
+            SizedBox(height: 200.0),
           ],
         ),
       ),
