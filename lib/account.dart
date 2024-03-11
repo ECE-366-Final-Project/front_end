@@ -3,6 +3,7 @@ import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/home.dart';
 import 'package:front_end/main.dart';
 import 'package:front_end/color-palette.dart';
+import 'package:front_end/transaction-history.dart';
 
 class Account extends StatelessWidget {
   @override
@@ -85,7 +86,18 @@ class Account extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[],
+        children: <Widget>[
+          TextButton(
+              child: Text('TRANSACTION HISTORY',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold)),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TransactionHistory()))),
+        ],
       ),
     );
   }
