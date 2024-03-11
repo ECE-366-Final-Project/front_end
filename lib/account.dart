@@ -70,38 +70,55 @@ class Account extends StatelessWidget {
                               fontWeight: FontWeight.bold)),
                       onPressed: () => {}),
                 ]),
-            Text("|",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold)),
-            TextButton(
-                child: Text('BALANCE: \$',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold)),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            DepoWithdraw(title: 'Deposit/Withdrawal')))),
           ],
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextButton(
-                child: Text('TRANSACTION HISTORY',
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 110.0),
+                Text('USERNAME',
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
+                        color: const Color.fromRGBO(255, 255, 255, 1),
+                        fontSize: 40.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TransactionHistory()))),
-          ],
+                SizedBox(height: 20.0),
+                Center(
+                  child: SizedBox(
+                      width: 200,
+                      height: 150,
+                      child: Image.asset('lib/assets/images/login_logo.png')),
+                ),
+                SizedBox(height: 40.0),
+                TextButton(
+                    child: Text('${text}',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DepoWithdraw(title: 'Deposit/Withdrawal')))),
+                SizedBox(height: 20.0),
+                TextButton(
+                    child: Text('TRANSACTION & GAME HISTORY',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TransactionHistory()))),
+                SizedBox(height: 50.0),
+              ],
+            ),
+          ),
         ),
       ),
     );
