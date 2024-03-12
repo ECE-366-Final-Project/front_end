@@ -67,7 +67,6 @@ class AccountCreation extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white, decorationColor: Colors.white),
                   cursorColor: Colors.white,
-                  cursorErrorColor: Colors.red,
                   obscureText: true,
                   decoration: InputDecoration(
                       hoverColor: Colors.white,
