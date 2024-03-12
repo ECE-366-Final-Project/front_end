@@ -5,17 +5,10 @@ import 'package:front_end/home.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 
+String originalBalance = '0.00';
 String text = '0.00';
 String tempBalance = '';
-double changeSign = double.parse(text) * -1;
-var currencyValue = new NumberFormat('#,##0.00', 'en_US');
-
-onKeyboardTap(String value) {
-  tempBalance = tempBalance + value;
-  text = '${(double.parse(tempBalance)).toString()}';
-  print(value);
-  print(text);
-}
+var currencyValue = new NumberFormat.compact();
 
 class DepoWithdraw extends StatefulWidget {
   const DepoWithdraw({Key? key}) : super(key: key);
@@ -73,8 +66,15 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Deposit',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () => {
-                  if (double.parse(text) < 0) {text = changeSign.toString()}
+                onPressed: () {
+                  if (double.parse(text) < 0) {
+                    setState(() {
+                      text = (double.parse(text) * -1).toString();
+                    });
+                  } else {
+                    text = (double.parse(originalBalance) + double.parse(text))
+                        .toString();
+                  }
                 },
               ),
               SizedBox(width: 20.0),
@@ -83,22 +83,39 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Withdrawal',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () => {
-                  if (double.parse(text) > 0) {text = changeSign.toString()}
+                onPressed: () {
+                  if (double.parse(text) > 0) {
+                    setState(() {
+                      text = (double.parse(text) * -1).toString();
+                    });
+                  } else {
+                    text = (double.parse(originalBalance) - double.parse(text))
+                        .toString();
+                  }
                 },
               ),
             ]),
             NumericKeyboard(
-              onKeyboardTap: onKeyboardTap,
+              onKeyboardTap: (String value) {
+                tempBalance =
+                    tempBalance + currencyValue.format(double.parse(value));
+                setState(() {
+                  text = tempBalance;
+                });
+              },
               mainAxisAlignment: MainAxisAlignment.center,
               textStyle: TextStyle(
                   color: Colors.white,
                   fontSize: 40.0,
                   fontWeight: FontWeight.bold),
               rightButtonFn: () {
-                if (text.isEmpty) return;
+                if (text.isEmpty || text == '0.00' || text == '-0.00') return;
                 setState(() {
                   text = text.substring(0, text.length - 1);
+                  tempBalance = text;
+                  if (text.isEmpty || text == '0.00' || text == '-0.00') {
+                    text = '0.00';
+                  }
                 });
               },
               rightButtonLongPressFn: () {

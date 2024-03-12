@@ -173,7 +173,7 @@ class _TransactionHistory extends State<TransactionHistory> {
               children: [
                 SizedBox(height: 50.0),
                 TextButton(
-                    child: Text('BALANCE: \$',
+                    child: Text('BALANCE: \$ ' + text,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 40.0,

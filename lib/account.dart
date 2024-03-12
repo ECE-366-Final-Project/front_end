@@ -94,7 +94,7 @@ class Account extends StatelessWidget {
                 ),
                 SizedBox(height: 40.0),
                 TextButton(
-                    child: Text('\$ ' + '${text}',
+                    child: Text('\$' + text,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 30.0,

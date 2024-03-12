@@ -72,7 +72,7 @@ class Home extends StatelessWidget {
                     fontSize: 25.0,
                     fontWeight: FontWeight.bold)),
             TextButton(
-                child: Text('BALANCE: \$',
+                child: Text('BALANCE: \$ ' + text,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 25.0,
