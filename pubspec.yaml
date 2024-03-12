@@ -1,5 +1,5 @@
 name: front_end
-description: Slots UI
+description: Cooper Casino's Frontend
 
 publish_to: 'none' 
 
@@ -12,13 +12,21 @@ dependencies:
   flutter:
     sdk: flutter
 
-  google_fonts: ^6.1.0
   auto_size_text: ^3.0.0
+  carousel_slider: ^4.2.1
+  intl: ^0.19.0
+  onscreen_num_keyboard: ^1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
+
+  assets:
+    - lib/assets/images/login_logo.png
+    - lib/assets/images/card-deck.png
+    - lib/assets/images/roulette.png
+    - lib/assets/images/slot-machine.png
 
   uses-material-design: true
