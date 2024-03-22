@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/color-palette.dart';
+import 'package:front_end/slots.dart';
 
 class Home extends StatelessWidget {
+  final theme_d = ThemeData().copyWith(
+          scaffoldBackgroundColor: const Color(0xFF000000),
+          splashColor: Colors.white,
+          focusColor: Colors.white,
+          colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.white));
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Cooper Casino',
       debugShowCheckedModeBanner: false,
-      theme: new ThemeData().copyWith(
-          scaffoldBackgroundColor: const Color(0xFF000000),
-          splashColor: Colors.white,
-          focusColor: Colors.white,
-          colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.white)),
+      theme: theme_d,
       home: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -64,7 +66,7 @@ class Home extends StatelessWidget {
                               color: Colors.white,
                               fontSize: 15.0,
                               fontWeight: FontWeight.bold)),
-                      onPressed: () => {}),
+                      onPressed: () => {Slots_Home(title: "Slots Home",userID: "admin", theme: theme_d)}),
                 ]),
             Text("|",
                 style: TextStyle(
@@ -163,8 +165,10 @@ class Home extends StatelessWidget {
                                       color: Colors.black,
                                       height: 128.0,
                                       width: 128.0),
-                                  onPressed: (() => {})))),
-                      SizedBox(height: 10.0),
+                                  onPressed: (() => 
+                                 Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Slots_Home(title: "Slots Home",userID: "admin", theme: theme_d))))))),
+                    SizedBox(height: 10.0),
                       Text('SLOTS',
                           style: TextStyle(
                               color: Colors.white,

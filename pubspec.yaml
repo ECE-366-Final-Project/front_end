@@ -17,6 +17,7 @@ dependencies:
   onscreen_num_keyboard: ^1.0.4
   intl: ^0.19.0
   cupertino_icons: ^1.0.0
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
