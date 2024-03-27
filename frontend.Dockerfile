@@ -1,8 +1,8 @@
 # Flutter dockerfile
 # Evan Rosenfeld, James Ryan
 
-#stage1 build
-FROM debian:latest AS build
+#stage0 deps
+FROM debian:latest AS deps
 
 RUN apt-get update
 # Install necessary dependencies for running Flutter on web
@@ -19,6 +19,8 @@ RUN flutter doctor -v
 RUN flutter channel master
 RUN flutter upgrade
 
+#stage1 build
+FROM deps AS build
 # Copy files to container and build
 ADD ./frontend /app
 WORKDIR /app/
