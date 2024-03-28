@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/account-login.dart';
+import 'package:front_end/home.dart';
 
 class AccountCreation extends StatelessWidget {
   @override
@@ -103,8 +103,8 @@ class AccountCreation extends StatelessWidget {
                   color: Colors.black, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AccountLogin()));
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Home()));
                 },
                 child: const Text(
                   'CREATE YOUR ACCOUNT',

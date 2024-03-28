@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/color-palette.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/home.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 
-String originalBalance = '0.00';
 String text = '0.00';
+String depoWithText = '0.00';
 String tempBalance = '';
 var currencyValue = new NumberFormat.compact();
 
@@ -42,6 +43,65 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
           backgroundColor: const Color(0xFF000000),
           elevation: 0,
           actions: [
+            MenuAnchor(
+                style: MenuStyle(backgroundColor: ColorPalette()),
+                builder: (BuildContext context, MenuController controller,
+                    Widget? child) {
+                  return TextButton(
+                      onPressed: () {
+                        if (controller.isOpen) {
+                          controller.close();
+                        } else {
+                          controller.open();
+                        }
+                      },
+                      child: Text('GAMES',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold)));
+                },
+                menuChildren: [
+                  TextButton(
+                      child: Text('BLACKJACK',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () => {}),
+                  TextButton(
+                      child: Text('ROULETTE',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () => {}),
+                  TextButton(
+                      child: Text('SLOTS',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () => {}),
+                ]),
+            Text("|",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold)),
+            TextButton(
+                child: Text('BALANCE: \$ ' + text,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold)),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DepoWithdraw()))),
+            Text("|",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold)),
             IconButton(
                 icon: const Icon(Icons.account_circle,
                     color: Colors.white,
@@ -59,6 +119,14 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     color: Colors.white,
                     fontSize: 60.0,
                     fontWeight: FontWeight.bold)),
+            SizedBox(
+              height: 10.0,
+            ),
+            Text('\$' + depoWithText,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold)),
             SizedBox(height: 20.0),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               TextButton(
@@ -67,14 +135,10 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () {
-                  if (double.parse(text) < 0) {
-                    setState(() {
-                      text = (double.parse(text) * -1).toString();
-                    });
-                  } else {
-                    text = (double.parse(originalBalance) + double.parse(text))
+                  setState(() {
+                    text = (double.parse(text) + double.parse(depoWithText))
                         .toString();
-                  }
+                  });
                 },
               ),
               SizedBox(width: 20.0),
@@ -84,14 +148,10 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () {
-                  if (double.parse(text) > 0) {
-                    setState(() {
-                      text = (double.parse(text) * -1).toString();
-                    });
-                  } else {
-                    text = (double.parse(originalBalance) - double.parse(text))
+                  setState(() {
+                    text = (double.parse(text) - double.parse(depoWithText))
                         .toString();
-                  }
+                  });
                 },
               ),
             ]),
@@ -100,7 +160,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 tempBalance =
                     tempBalance + currencyValue.format(double.parse(value));
                 setState(() {
-                  text = tempBalance;
+                  depoWithText = tempBalance;
                 });
               },
               mainAxisAlignment: MainAxisAlignment.center,
@@ -109,19 +169,24 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                   fontSize: 40.0,
                   fontWeight: FontWeight.bold),
               rightButtonFn: () {
-                if (text.isEmpty || text == '0.00' || text == '-0.00') return;
+                if (depoWithText.isEmpty ||
+                    depoWithText == '0.00' ||
+                    depoWithText == '-0.00') return;
                 setState(() {
-                  text = text.substring(0, text.length - 1);
-                  tempBalance = text;
-                  if (text.isEmpty || text == '0.00' || text == '-0.00') {
-                    text = '0.00';
+                  depoWithText =
+                      depoWithText.substring(0, depoWithText.length - 1);
+                  tempBalance = depoWithText;
+                  if (depoWithText.isEmpty ||
+                      depoWithText == '0.00' ||
+                      depoWithText == '-0.00') {
+                    depoWithText = '0.00';
                   }
                 });
               },
               rightButtonLongPressFn: () {
-                if (text.isEmpty) return;
+                if (depoWithText.isEmpty) return;
                 setState(() {
-                  text = '0.00';
+                  depoWithText = '0.00';
                 });
               },
               rightIcon: const Icon(
