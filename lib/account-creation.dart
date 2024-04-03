@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/home.dart';
-import 'package:front_end/account-creation.dart';
 
-class AccountLogin extends StatelessWidget {
+class AccountCreation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -77,7 +76,26 @@ class AccountLogin extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            Padding(
+              padding:
+                  EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+              child: SizedBox(
+                width: 350,
+                child: TextFormField(
+                  style: TextStyle(
+                      color: Colors.white, decorationColor: Colors.white),
+                  cursorColor: Colors.white,
+                  cursorErrorColor: Colors.red,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      hoverColor: Colors.white,
+                      border: OutlineInputBorder(),
+                      labelText: 'Re-Enter Your Password',
+                      hintText: 'Re-enter your password'),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
             Container(
               height: 50,
               width: 250,
@@ -89,25 +107,14 @@ class AccountLogin extends StatelessWidget {
                       context, MaterialPageRoute(builder: (context) => Home()));
                 },
                 child: const Text(
-                  'LOGIN',
+                  'CREATE YOUR ACCOUNT',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25,
+                    fontSize: 20,
                   ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 40,
-            ),
-            TextButton(
-              child: Text('Create an Account',
-                  style: TextStyle(color: Colors.white)),
-              onPressed: () => {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AccountCreation()))
-              },
-            )
           ],
         )),
       ),

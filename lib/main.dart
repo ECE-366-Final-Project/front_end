@@ -32,7 +32,11 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cooper Casino',
-      theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFF000000)),
+      theme: new ThemeData().copyWith(
+          scaffoldBackgroundColor: const Color(0xFF000000),
+          splashColor: Colors.white,
+          focusColor: Colors.white,
+          colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.white)),
       home: MyHomePage(title: 'Cooper Casino Home Page'),
     );
   }
@@ -58,11 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('COOPER CASINO',
+        title: Text('♤♡ COOPER CASINO ♢♧',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold)),
+        centerTitle: true,
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
       ),
@@ -85,16 +90,28 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                    child: Text('PLAY NOW!',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => new AccountLogin()))),
+                Container(
+                  height: 50,
+                  width: 250,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AccountLogin()));
+                    },
+                    child: const Text(
+                      'PLAY NOW!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
               ],
             ),
             Row(
@@ -119,7 +136,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ],
-            )
+            ),
+            SizedBox(height: 50)
           ],
         ),
       ),

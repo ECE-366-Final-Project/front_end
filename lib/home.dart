@@ -1,24 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/color-palette.dart';
-import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/account.dart';
-import 'package:front_end/home.dart';
-import 'package:intl/intl.dart';
-import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
+import 'package:front_end/depo-withdraw.dart';
+import 'package:front_end/color-palette.dart';
 
-String text = '0.00';
-String depoWithText = '0.00';
-String tempBalance = '';
-var currencyValue = new NumberFormat.compact();
-
-class DepoWithdraw extends StatefulWidget {
-  const DepoWithdraw({Key? key}) : super(key: key);
-
-  @override
-  State<DepoWithdraw> createState() => _DepoWithdrawState();
-}
-
-class _DepoWithdrawState extends State<DepoWithdraw> {
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -112,90 +97,89 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
           ],
         ),
         body: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(height: 100.0),
-            Text('\$' + text,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 60.0,
-                    fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 10.0,
-            ),
-            Text('\$' + depoWithText,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold)),
-            SizedBox(height: 20.0),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              TextButton(
-                style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Deposit',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  setState(() {
-                    text = (double.parse(text) + double.parse(depoWithText))
-                        .toString();
-                  });
-                },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 200.0),
+              OverflowBar(
+                overflowAlignment: OverflowBarAlignment.center,
+                alignment: MainAxisAlignment.center,
+                children: [
+                  Column(children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Container(
+                            height: 200.0,
+                            width: 200.0,
+                            color: Colors.white,
+                            child: IconButton(
+                                icon: Image.asset(
+                                    'lib/assets/images/card-deck.png',
+                                    color: Colors.black,
+                                    height: 128.0,
+                                    width: 128.0),
+                                onPressed: (() => {})))),
+                    SizedBox(height: 10.0),
+                    Text('BLACKJACK',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold)),
+                  ]),
+                  SizedBox(width: 50),
+                  Column(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Container(
+                              height: 200.0,
+                              width: 200.0,
+                              color: Colors.white,
+                              child: IconButton(
+                                  icon: Image.asset(
+                                      'lib/assets/images/roulette.png',
+                                      color: Colors.black,
+                                      height: 128.0,
+                                      width: 128.0),
+                                  onPressed: (() => {})))),
+                      SizedBox(height: 10.0),
+                      Text('ROULETTE',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  SizedBox(width: 50),
+                  Column(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Container(
+                              height: 200.0,
+                              width: 200.0,
+                              color: Colors.white,
+                              child: IconButton(
+                                  icon: Image.asset(
+                                      'lib/assets/images/slot-machine.png',
+                                      color: Colors.black,
+                                      height: 128.0,
+                                      width: 128.0),
+                                  onPressed: (() => {})))),
+                      SizedBox(height: 10.0),
+                      Text('SLOTS',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold))
+                    ],
+                  )
+                ],
               ),
-              SizedBox(width: 20.0),
-              TextButton(
-                style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Withdrawal',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  setState(() {
-                    text = (double.parse(text) - double.parse(depoWithText))
-                        .toString();
-                  });
-                },
-              ),
-            ]),
-            NumericKeyboard(
-              onKeyboardTap: (String value) {
-                tempBalance =
-                    tempBalance + currencyValue.format(double.parse(value));
-                setState(() {
-                  depoWithText = tempBalance;
-                });
-              },
-              mainAxisAlignment: MainAxisAlignment.center,
-              textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold),
-              rightButtonFn: () {
-                if (depoWithText.isEmpty ||
-                    depoWithText == '0.00' ||
-                    depoWithText == '-0.00') return;
-                setState(() {
-                  depoWithText =
-                      depoWithText.substring(0, depoWithText.length - 1);
-                  tempBalance = depoWithText;
-                  if (depoWithText.isEmpty ||
-                      depoWithText == '0.00' ||
-                      depoWithText == '-0.00') {
-                    depoWithText = '0.00';
-                  }
-                });
-              },
-              rightButtonLongPressFn: () {
-                if (depoWithText.isEmpty) return;
-                setState(() {
-                  depoWithText = '0.00';
-                });
-              },
-              rightIcon: const Icon(
-                Icons.backspace_outlined,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 100.0)
-          ]),
+              SizedBox(height: 200.0),
+            ],
+          ),
         ),
       ),
     );
