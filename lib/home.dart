@@ -1,7 +1,37 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/color-palette.dart';
+import "package:front_end/slots.dart";
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+
+const SRC = "localhost:8080";
+
+Future<void> Ping() async {
+  var call = Uri.http(SRC, "/Ping");
+  var txt = "";
+  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
+  try{
+  final packet = await http.get(call).timeout(const Duration(seconds: 5));
+  txt = packet.body;
+} on TimeoutException {
+  txt = "Failed to Connect to Server";
+  col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
+  print("Failed!");
+}
+  Fluttertoast.showToast(
+      msg: txt,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      textColor: Colors.white,
+      webPosition: "center",
+      webBgColor: col_str,
+      fontSize: 40);
+  }
+
 
 class Home extends StatelessWidget {
   @override
@@ -87,6 +117,16 @@ class Home extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 25.0,
                     fontWeight: FontWeight.bold)),
+            // This is to test the server connection quickly:
+            IconButton(
+                icon: Icon(Icons.network_wifi,
+                    color: Colors.white,
+                    size: 40.0,
+                    semanticLabel: 'Server Check'),
+                onPressed: () async {
+                  Ping();
+                }),
+
             IconButton(
                 icon: const Icon(Icons.account_circle,
                     color: Colors.white,
@@ -166,7 +206,12 @@ class Home extends StatelessWidget {
                                       color: Colors.black,
                                       height: 128.0,
                                       width: 128.0),
-                                  onPressed: (() => {})))),
+                                  onPressed: (() => {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Slots()))
+                                      })))),
                       SizedBox(height: 10.0),
                       Text('SLOTS',
                           style: TextStyle(
