@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/color-palette.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/account.dart';
+import 'package:front_end/generics.dart';
 import 'package:front_end/home.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
@@ -9,6 +10,8 @@ import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 String text = '0.00';
 String depoWithText = '0.00';
 String tempBalance = '';
+//Todo: Get this live
+String userID = "1";
 var currencyValue = new NumberFormat.compact();
 
 class DepoWithdraw extends StatefulWidget {
@@ -30,87 +33,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
           focusColor: Colors.white,
           colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.white)),
       home: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: TextButton(
-              child: Text('COOPER CASINO',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold)),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Home()))),
-          backgroundColor: const Color(0xFF000000),
-          elevation: 0,
-          actions: [
-            MenuAnchor(
-                style: MenuStyle(backgroundColor: ColorPalette()),
-                builder: (BuildContext context, MenuController controller,
-                    Widget? child) {
-                  return TextButton(
-                      onPressed: () {
-                        if (controller.isOpen) {
-                          controller.close();
-                        } else {
-                          controller.open();
-                        }
-                      },
-                      child: Text('GAMES',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25.0,
-                              fontWeight: FontWeight.bold)));
-                },
-                menuChildren: [
-                  TextButton(
-                      child: Text('BLACKJACK',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold)),
-                      onPressed: () => {}),
-                  TextButton(
-                      child: Text('ROULETTE',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold)),
-                      onPressed: () => {}),
-                  TextButton(
-                      child: Text('SLOTS',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold)),
-                      onPressed: () => {}),
-                ]),
-            Text("|",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold)),
-            TextButton(
-                child: Text('BALANCE: \$ ' + text,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold)),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DepoWithdraw()))),
-            Text("|",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold)),
-            IconButton(
-                icon: const Icon(Icons.account_circle,
-                    color: Colors.white,
-                    size: 40.0,
-                    semanticLabel: 'User Account'),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Account()))),
-          ],
-        ),
+        appBar: App_Bar(context),
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 100.0),
@@ -134,7 +57,8 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Deposit',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () {
+                onPressed: () async{
+                  Deposit(depoWithText);
                   setState(() {
                     text = (double.parse(text) + double.parse(depoWithText))
                         .toString();
@@ -147,7 +71,8 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Withdrawal',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () {
+                onPressed: () async{
+                  Withdraw(depoWithText);
                   setState(() {
                     text = (double.parse(text) - double.parse(depoWithText))
                         .toString();
@@ -199,5 +124,13 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         ),
       ),
     );
+  }
+  
+  void Withdraw(String depoWithText) {
+
+  }
+  
+  void Deposit(String depoWithText) {
+
   }
 }
