@@ -5,7 +5,6 @@ import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 import 'package:front_end/depo-withdraw.dart';
-import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:front_end/generics.dart';
@@ -118,18 +117,17 @@ class _SlotsState extends State<Slots> {
   }
 
   Future<void> Play_Slots(double bet) async {
-    var reqs = {"userID": 1, "bet": bet.toString()};
-    if (bet > double.parse(text)) {
+    var reqs = {"userID": '1', "bet": bet.toString()};
+    // if (bet > double.parse(text)) {
       request("PlaySlots", reqs);
-    } else {
-      Fluttertoast.showToast(
-          msg: "Bet Too Large!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          textColor: Colors.white,
-          webPosition: "center",
-          webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
-          fontSize: 40);
-    }
+    // } else {
+    //   Fluttertoast.showToast(
+    //       msg: "Bet Too Large!",
+    //       gravity: ToastGravity.BOTTOM,
+    //       textColor: Colors.white,
+    //       webPosition: "center",
+    //       webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
+    //       fontSize: 40);
+    // }
   }
 }

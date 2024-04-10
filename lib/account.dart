@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
-import 'package:front_end/color-palette.dart';
 import 'package:front_end/generics.dart';
-import 'package:front_end/home.dart';
 
 var feed = <Widget>[
   accountItems("Slots", r"+ $ 4,946.00", "Win"),
