@@ -31,5 +31,17 @@ flutter:
     - lib/assets/images/card-deck.png
     - lib/assets/images/roulette.png
     - lib/assets/images/slot-machine.png
+    - lib/assets/images/red_curtains_left.png
+    - lib/assets/images/red_curtains_right.png
+    - lib/assets/sprites/slots-symbols/1xbar.png
+    - lib/assets/sprites/slots-symbols/2xbar.png
+    - lib/assets/sprites/slots-symbols/3xbar.png
+    - lib/assets/sprites/slots-symbols/cherry.png
+    - lib/assets/sprites/slots-symbols/clover.png
+    - lib/assets/sprites/slots-symbols/lemon.png
+    - lib/assets/sprites/slots-symbols/seven.png
+    - lib/assets/sprites/slots-symbols/bell.png
+    - lib/assets/sprites/slots-symbols/gem.png
+    - lib/assets/sprites/slots-symbols/jackpot_style_2.png
 
   uses-material-design: true
