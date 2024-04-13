@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
 
-
+String balance = '0.00';
 Future<List> request(String command, Map<String,dynamic> args, {Toast = true}) async  {
   const SRC = "localhost:8080";
   var call;
@@ -106,7 +106,7 @@ App_Bar(context){
                     fontSize: 25.0,
                     fontWeight: FontWeight.bold)),
             TextButton(
-                child: Text('BALANCE: \$ ' + text,
+                child: Text('BALANCE: \$ ' + balance,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 25.0,

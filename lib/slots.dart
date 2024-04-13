@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
-import 'package:front_end/depo-withdraw.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:front_end/generics.dart';
 
 var currencyValue = new NumberFormat.compact();
@@ -18,6 +16,7 @@ class Slots extends StatefulWidget {
 }
 
 class _SlotsState extends State<Slots> {
+  var bet_input = "0.00";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,7 +32,7 @@ class _SlotsState extends State<Slots> {
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 100.0),
-            Text('\$' + text,
+            Text('\$' + bet_input,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 60.0,
@@ -41,7 +40,7 @@ class _SlotsState extends State<Slots> {
             SizedBox(
               height: 10.0,
             ),
-            Text('\$' + depoWithText,
+            Text('\$' + bet_input,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 40.0,
@@ -54,7 +53,7 @@ class _SlotsState extends State<Slots> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  await Play_Slots(double.parse(depoWithText));
+                  await Play_Slots(double.parse(bet_input));
                 },
               ),
               SizedBox(width: 20.0),
@@ -65,17 +64,17 @@ class _SlotsState extends State<Slots> {
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () {
                   setState(() {
-                    depoWithText = "0.00";
+                    bet_input = "0.00";
                   });
                 },
               ),
             ]),
             NumericKeyboard(
               onKeyboardTap: (String value) {
-                tempBalance =
-                    tempBalance + currencyValue.format(double.parse(value));
+                bet_input =
+                    bet_input + currencyValue.format(double.parse(value));
                 setState(() {
-                  depoWithText = tempBalance;
+                  bet_input = bet_input;
                 });
               },
               mainAxisAlignment: MainAxisAlignment.center,
@@ -84,24 +83,23 @@ class _SlotsState extends State<Slots> {
                   fontSize: 40.0,
                   fontWeight: FontWeight.bold),
               rightButtonFn: () {
-                if (depoWithText.isEmpty ||
-                    depoWithText == '0.00' ||
-                    depoWithText == '-0.00') return;
+                if (bet_input.isEmpty ||
+                    bet_input == '0.00' ||
+                    bet_input == '-0.00') return;
                 setState(() {
-                  depoWithText =
-                      depoWithText.substring(0, depoWithText.length - 1);
-                  tempBalance = depoWithText;
-                  if (depoWithText.isEmpty ||
-                      depoWithText == '0.00' ||
-                      depoWithText == '-0.00') {
-                    depoWithText = '0.00';
+                  bet_input =
+                      bet_input.substring(0, bet_input.length - 1);
+                  if (bet_input.isEmpty ||
+                      bet_input == '0.00' ||
+                      bet_input == '-0.00') {
+                    bet_input = '0.00';
                   }
                 });
               },
               rightButtonLongPressFn: () {
-                if (depoWithText.isEmpty) return;
+                if (bet_input.isEmpty) return;
                 setState(() {
-                  depoWithText = '0.00';
+                  bet_input = '0.00';
                 });
               },
               rightIcon: const Icon(
@@ -118,16 +116,16 @@ class _SlotsState extends State<Slots> {
 
   Future<void> Play_Slots(double bet) async {
     var reqs = {"userID": '1', "bet": bet.toString()};
-    // if (bet > double.parse(text)) {
+    if (bet > double.parse(balance)) {
       request("PlaySlots", reqs);
-    // } else {
-    //   Fluttertoast.showToast(
-    //       msg: "Bet Too Large!",
-    //       gravity: ToastGravity.BOTTOM,
-    //       textColor: Colors.white,
-    //       webPosition: "center",
-    //       webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
-    //       fontSize: 40);
-    // }
+    } else {
+      Fluttertoast.showToast(
+          msg: "Bet Too Large!",
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          webPosition: "center",
+          webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
+          fontSize: 40);
+    }
   }
 }

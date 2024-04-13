@@ -117,7 +117,7 @@ class _Account extends State<Account> {
                 ),
                 SizedBox(height: 40.0),
                 TextButton(
-                    child: Text('\$' + text,
+                    child: Text('\$' + balance,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 30.0,
