@@ -53,9 +53,8 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async{
                   Deposit(depoWithText);
-                  setState(() {
-                    balance = (double.parse(balance) + double.parse(depoWithText))
-                        .toString();
+                  setState(() async {
+                    balance = await balanceUpdate();
                   });
                 },
               ),
@@ -67,9 +66,8 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async{
                   Withdraw(depoWithText);
-                  setState(() {
-                    balance = (double.parse(balance) - double.parse(depoWithText))
-                        .toString();
+                  setState(() async {
+                    balance = await balanceUpdate();
                   });
                 },
               ),
@@ -121,10 +119,10 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
   }
   
   void Withdraw(String depoWithText) {
-
+    request("Withdraw", {"token" :sessiontoken, "amount": depoWithText});
   }
   
   void Deposit(String depoWithText) {
-
+    request("Deposit", {"token" :sessiontoken, "amount": depoWithText});
   }
 }

@@ -115,7 +115,7 @@ class _SlotsState extends State<Slots> {
   }
 
   Future<void> Play_Slots(double bet) async {
-    var reqs = {"userID": '1', "bet": bet.toString()};
+    var reqs = {"token": sessiontoken, "bet": bet.toString()};
     if (bet > double.parse(balance)) {
       request("PlaySlots", reqs);
     } else {
