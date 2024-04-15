@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/color-palette.dart';
+import 'package:front_end/slots.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
@@ -54,7 +55,7 @@ Future<List> request(String command, Map<String, String> args,
 }
 
 Future<String> balanceUpdate() async {
-  var call = Uri.http(SRC, "/getBalance", {"token": sessiontoken});
+  var call = Uri.http(SRC, "/GetBal", {"token": sessiontoken});
   final packet = await http.get(call).timeout(const Duration(seconds: 5));
   return jsonDecode(packet.body)["BALANCE"];
 }
@@ -112,7 +113,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {}),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Slots()))),
           ]),
       Text("|",
           style: TextStyle(
@@ -120,6 +122,7 @@ App_Bar(context) {
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
       TextButton(
+
           child: Text('BALANCE: \$ ' + balance,
               style: TextStyle(
                   color: Colors.white,

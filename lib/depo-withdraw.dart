@@ -51,7 +51,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Deposit',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async{
+                onPressed: () async {
                   Deposit(depoWithText);
                   setState(() async {
                     balance = await balanceUpdate();
@@ -64,7 +64,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Withdrawal',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async{
+                onPressed: () async {
                   Withdraw(depoWithText);
                   setState(() async {
                     balance = await balanceUpdate();
@@ -97,6 +97,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                       depoWithText == '0.00' ||
                       depoWithText == '-0.00') {
                     depoWithText = '0.00';
+                    tempBalance = '';
                   }
                 });
               },
@@ -104,6 +105,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 if (depoWithText.isEmpty) return;
                 setState(() {
                   depoWithText = '0.00';
+                  tempBalance = '';
                 });
               },
               rightIcon: const Icon(
@@ -116,8 +118,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         ),
       ),
     );
-  }
-  
+  }  
   void Withdraw(String depoWithText) {
     request("Withdraw", {"token" :sessiontoken, "amount": depoWithText});
   }
