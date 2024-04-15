@@ -1,28 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:front_end/depowith-palette.dart';
-import 'package:front_end/generics.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:front_end/generics.dart';
 
 var currencyValue = new NumberFormat.compact();
 
-class DepoWithdraw extends StatefulWidget {
-  const DepoWithdraw({Key? key}) : super(key: key);
-
+class Slots extends StatefulWidget {
+  const Slots({Key? key}) : super(key: key);
   @override
-  State<DepoWithdraw> createState() => _DepoWithdrawState();
+  State<Slots> createState() => _SlotsState();
 }
 
-class _DepoWithdrawState extends State<DepoWithdraw> {
-  String depoWithText = '0.00';
-  String tempBalance = '';
+class _SlotsState extends State<Slots> {
+  var bet_input = "0.00";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Cooper Casino',
       debugShowCheckedModeBanner: false,
       theme: new ThemeData().copyWith(
-          scaffoldBackgroundColor: const Color(0xFF000000),
+          scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
           splashColor: Colors.white,
           focusColor: Colors.white,
           colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.white)),
@@ -31,7 +32,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 100.0),
-            Text('\$' + balance,
+            Text('\$' + bet_input,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 60.0,
@@ -39,7 +40,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
             SizedBox(
               height: 10.0,
             ),
-            Text('\$' + depoWithText,
+            Text('\$' + bet_input,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 40.0,
@@ -48,38 +49,32 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               TextButton(
                 style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Deposit',
+                child: Text('Play',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async{
-                  Deposit(depoWithText);
-                  setState(() {
-                    balance = (double.parse(balance) + double.parse(depoWithText))
-                        .toString();
-                  });
+                onPressed: () async {
+                  await Play_Slots(double.parse(bet_input));
                 },
               ),
               SizedBox(width: 20.0),
               TextButton(
                 style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Withdrawal',
+                child: Text('Clear',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async{
-                  Withdraw(depoWithText);
+                onPressed: () {
                   setState(() {
-                    balance = (double.parse(balance) - double.parse(depoWithText))
-                        .toString();
+                    bet_input = "0.00";
                   });
                 },
               ),
             ]),
             NumericKeyboard(
               onKeyboardTap: (String value) {
-                tempBalance =
-                    tempBalance + currencyValue.format(double.parse(value));
+                bet_input =
+                    bet_input + currencyValue.format(double.parse(value));
                 setState(() {
-                  depoWithText = tempBalance;
+                  bet_input = bet_input;
                 });
               },
               mainAxisAlignment: MainAxisAlignment.center,
@@ -88,24 +83,23 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                   fontSize: 40.0,
                   fontWeight: FontWeight.bold),
               rightButtonFn: () {
-                if (depoWithText.isEmpty ||
-                    depoWithText == '0.00' ||
-                    depoWithText == '-0.00') return;
+                if (bet_input.isEmpty ||
+                    bet_input == '0.00' ||
+                    bet_input == '-0.00') return;
                 setState(() {
-                  depoWithText =
-                      depoWithText.substring(0, depoWithText.length - 1);
-                  tempBalance = depoWithText;
-                  if (depoWithText.isEmpty ||
-                      depoWithText == '0.00' ||
-                      depoWithText == '-0.00') {
-                    depoWithText = '0.00';
+                  bet_input =
+                      bet_input.substring(0, bet_input.length - 1);
+                  if (bet_input.isEmpty ||
+                      bet_input == '0.00' ||
+                      bet_input == '-0.00') {
+                    bet_input = '0.00';
                   }
                 });
               },
               rightButtonLongPressFn: () {
-                if (depoWithText.isEmpty) return;
+                if (bet_input.isEmpty) return;
                 setState(() {
-                  depoWithText = '0.00';
+                  bet_input = '0.00';
                 });
               },
               rightIcon: const Icon(
@@ -119,12 +113,19 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
       ),
     );
   }
-  
-  void Withdraw(String depoWithText) {
 
-  }
-  
-  void Deposit(String depoWithText) {
-
+  Future<void> Play_Slots(double bet) async {
+    var reqs = {"userID": '1', "bet": bet.toString()};
+    if (bet > double.parse(balance)) {
+      request("PlaySlots", reqs);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Bet Too Large!",
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          webPosition: "center",
+          webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
+          fontSize: 40);
+    }
   }
 }
