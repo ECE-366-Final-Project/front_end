@@ -14,8 +14,10 @@ import 'dart:convert';
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
-const SRC = "localhost:8080";
 
+var feed = <Widget>[];
+
+const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
     {Toast = true}) async {
   var call;

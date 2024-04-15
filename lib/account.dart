@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/generics.dart';
 
-var feed = <Widget>[
-  accountItems("Slots", r"+ $ 4,946.00", "Win"),
-  accountItems("Transaction", r"+ $ 5,428.00", "Deposit"),
-  accountItems("Transaction", r"- $ 746.00", "Withdrawal"),
-  accountItems("Blackjack", r"- $ 4,526.00", "Loss"),
-  accountItems("Action", r"+ $ 0.00", "Credit"),
-];
+// var feed = <Widget>[
+//   accountItems("Slots", r"+ $ 4,946.00", "Win"),
+//   accountItems("Transaction", r"+ $ 5,428.00", "Deposit"),
+//   accountItems("Transaction", r"- $ 746.00", "Withdrawal"),
+//   accountItems("Blackjack", r"- $ 4,526.00", "Loss"),
+//   accountItems("Action", r"+ $ 0.00", "Credit"),
+// ];
 
 redGreenFont(String type, String charge) {
   if (type == "Win" || type == "Deposit") {
@@ -132,19 +132,6 @@ class _Account extends State<Account> {
                         color: Colors.white,
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
-                SizedBox(height: 20.0),
-                IconButton(
-                    onPressed: () => {
-                          setState(() {
-                            feed.removeAt(0);
-                            feed.add(
-                                accountItems("Action", r"+ $ 0.00", "Credit"));
-                          })
-                        },
-                    icon: Icon(Icons.refresh,
-                        color: Colors.white,
-                        size: 30.0,
-                        semanticLabel: 'Refresh History')),
                 SizedBox(height: 20.0),
                 displayAccoutList(),
                 SizedBox(height: 100.0),

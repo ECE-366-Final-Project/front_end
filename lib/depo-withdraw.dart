@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/generics.dart';
 import 'package:intl/intl.dart';
@@ -52,10 +53,13 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  await Deposit(depoWithText);
+                  int status = await Deposit(depoWithText);
                   var data = await balanceUpdate();
                     setState(() {
                       balance = data;
+                      if(status == 200) {
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Deposit"));
+                      }
                     });
                 },
               ),
@@ -66,10 +70,13 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  await Withdraw(depoWithText);
+                  int status = await Withdraw(depoWithText);
                   String data = await balanceUpdate();
                   setState(() {
                     balance = data;
+                    if(status == 200) {
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Withdrawal"));
+                      }
                   });
                 },
               ),
@@ -122,13 +129,13 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
     );
   }
 
-  Future<void> Withdraw(String depoWithText) async {
-    await request("Withdraw", {"token": sessiontoken, "amount": depoWithText});
-    return;
+  Future<int> Withdraw(String depoWithText) async {
+    var data = await request("Withdraw", {"token": sessiontoken, "amount": depoWithText});
+    return data[0];
   }
 
-  Future<void> Deposit(String depoWithText) async {
-    await request("Deposit", {"token": sessiontoken, "amount": depoWithText});
-    return;
+  Future<int> Deposit(String depoWithText) async {
+    var data = await request("Deposit", {"token": sessiontoken, "amount": depoWithText});
+    return data[0];
   }
 }
