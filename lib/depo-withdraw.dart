@@ -51,12 +51,12 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Deposit',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async{
-                  Deposit(depoWithText);
-                  setState(() {
-                    balance = (double.parse(balance) + double.parse(depoWithText))
-                        .toString();
-                  });
+                onPressed: () async {
+                  await Deposit(depoWithText);
+                  var data = await balanceUpdate();
+                    setState(() {
+                      balance = data;
+                    });
                 },
               ),
               SizedBox(width: 20.0),
@@ -65,11 +65,11 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 child: Text('Withdrawal',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async{
-                  Withdraw(depoWithText);
+                onPressed: () async {
+                  await Withdraw(depoWithText);
+                  String data = await balanceUpdate();
                   setState(() {
-                    balance = (double.parse(balance) - double.parse(depoWithText))
-                        .toString();
+                    balance = data;
                   });
                 },
               ),
@@ -99,6 +99,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                       depoWithText == '0.00' ||
                       depoWithText == '-0.00') {
                     depoWithText = '0.00';
+                    tempBalance = '';
                   }
                 });
               },
@@ -106,6 +107,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 if (depoWithText.isEmpty) return;
                 setState(() {
                   depoWithText = '0.00';
+                  tempBalance = '';
                 });
               },
               rightIcon: const Icon(
@@ -119,12 +121,14 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
       ),
     );
   }
-  
-  void Withdraw(String depoWithText) {
 
+  Future<void> Withdraw(String depoWithText) async {
+    await request("Withdraw", {"token": sessiontoken, "amount": depoWithText});
+    return;
   }
-  
-  void Deposit(String depoWithText) {
 
+  Future<void> Deposit(String depoWithText) async {
+    await request("Deposit", {"token": sessiontoken, "amount": depoWithText});
+    return;
   }
 }

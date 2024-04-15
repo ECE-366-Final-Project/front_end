@@ -19,6 +19,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   http: ^1.2.1
   fluttertoast: ^8.2.4
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -27,9 +28,8 @@ dev_dependencies:
 flutter:
 
   assets:
-    - lib/assets/images/login_logo.png
-    - lib/assets/images/card-deck.png
-    - lib/assets/images/roulette.png
-    - lib/assets/images/slot-machine.png
+    - assets/images/
+    - assets/sprites/
+    - assets/sprites/slots-symbols/
 
   uses-material-design: true

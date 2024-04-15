@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:front_end/generics.dart';
 import "package:front_end/slots.dart";
@@ -34,8 +33,7 @@ class Home extends StatelessWidget {
                             width: 200.0,
                             color: Colors.white,
                             child: IconButton(
-                                icon: Image.asset(
-                                    'lib/assets/images/card-deck.png',
+                                icon: Image.asset('assets/images/card-deck.png',
                                     color: Colors.black,
                                     height: 128.0,
                                     width: 128.0),
@@ -58,7 +56,7 @@ class Home extends StatelessWidget {
                               color: Colors.white,
                               child: IconButton(
                                   icon: Image.asset(
-                                      'lib/assets/images/roulette.png',
+                                      'assets/images/roulette.png',
                                       color: Colors.black,
                                       height: 128.0,
                                       width: 128.0),
@@ -82,7 +80,7 @@ class Home extends StatelessWidget {
                               color: Colors.white,
                               child: IconButton(
                                   icon: Image.asset(
-                                      'lib/assets/images/slot-machine.png',
+                                      'assets/images/slot-machine.png',
                                       color: Colors.black,
                                       height: 128.0,
                                       width: 128.0),

@@ -113,7 +113,7 @@ class _Account extends State<Account> {
                   child: SizedBox(
                       width: 200,
                       height: 150,
-                      child: Image.asset('lib/assets/images/login_logo.png')),
+                      child: Image.asset('assets/images/login_logo.png')),
                 ),
                 SizedBox(height: 40.0),
                 TextButton(

@@ -1,7 +1,19 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:front_end/generics.dart';
 import 'package:front_end/home.dart';
+import 'package:front_end/account-login.dart';
 
 class AccountCreation extends StatelessWidget {
+  String username = "";
+  String password1 = "";
+  String password2 = "";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +47,7 @@ class AccountCreation extends StatelessWidget {
                 child: SizedBox(
                     width: 200,
                     height: 150,
-                    child: Image.asset('lib/assets/images/login_logo.png')),
+                    child: Image.asset('assets/images/login_logo.png')),
               ),
             ),
             SizedBox(height: 40),
@@ -55,6 +67,11 @@ class AccountCreation extends StatelessWidget {
                           borderSide: BorderSide(color: Colors.white)),
                       labelText: 'Username',
                       hintText: 'Enter your username'),
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      username = value;
+                    }
+                  },
                 ),
               ),
             ),
@@ -73,6 +90,11 @@ class AccountCreation extends StatelessWidget {
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       hintText: 'Enter your password'),
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      password1 = value;
+                    }
+                  },
                 ),
               ),
             ),
@@ -92,6 +114,11 @@ class AccountCreation extends StatelessWidget {
                       border: OutlineInputBorder(),
                       labelText: 'Re-Enter Your Password',
                       hintText: 'Re-enter your password'),
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      password2 = value;
+                    }
+                  },
                 ),
               ),
             ),
@@ -103,8 +130,7 @@ class AccountCreation extends StatelessWidget {
                   color: Colors.black, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                  create_user(username, password1, password2, context);
                 },
                 child: const Text(
                   'CREATE YOUR ACCOUNT',
@@ -119,5 +145,31 @@ class AccountCreation extends StatelessWidget {
         )),
       ),
     );
+  }
+}
+
+create_user(username, password1, password2, context) async {
+  print(username);
+  print(password1);
+  print(password2);
+  if (password1 == password2) {
+    final salt = "imposter";
+    String passkey =
+        sha256.convert(utf8.encode(username + password1 + salt)).toString();
+    Map<String, String> args = {"username": username, "passkey": passkey};
+    var data = await request("CreateUser", args);
+    if (data[0] == 200) {
+      print("User Created!");
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AccountLogin()));
+    }
+  } else {
+    Fluttertoast.showToast(
+        msg: "PASSWORDS DO NOT MATCH",
+        gravity: ToastGravity.BOTTOM,
+        textColor: Colors.white,
+        webPosition: "center",
+        webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
+        fontSize: 40);
   }
 }
