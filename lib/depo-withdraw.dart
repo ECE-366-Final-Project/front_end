@@ -4,11 +4,6 @@ import 'package:front_end/generics.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 
-String text = '0.00';
-String depoWithText = '0.00';
-String tempBalance = '';
-//Todo: Get this live
-String userID = "1";
 var currencyValue = new NumberFormat.compact();
 
 class DepoWithdraw extends StatefulWidget {
@@ -19,6 +14,8 @@ class DepoWithdraw extends StatefulWidget {
 }
 
 class _DepoWithdrawState extends State<DepoWithdraw> {
+  String depoWithText = '0.00';
+  String tempBalance = '';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +31,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 100.0),
-            Text('\$' + text,
+            Text('\$' + balance,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 60.0,
@@ -56,9 +53,8 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   Deposit(depoWithText);
-                  setState(() {
-                    text = (double.parse(text) + double.parse(depoWithText))
-                        .toString();
+                  setState(() async {
+                    balance = await balanceUpdate();
                   });
                 },
               ),
@@ -70,9 +66,8 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   Withdraw(depoWithText);
-                  setState(() {
-                    text = (double.parse(text) - double.parse(depoWithText))
-                        .toString();
+                  setState(() async {
+                    balance = await balanceUpdate();
                   });
                 },
               ),
@@ -123,9 +118,12 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         ),
       ),
     );
+  }  
+  void Withdraw(String depoWithText) {
+    request("Withdraw", {"token" :sessiontoken, "amount": depoWithText});
   }
-
-  void Withdraw(String depoWithText) {}
-
-  void Deposit(String depoWithText) {}
+  
+  void Deposit(String depoWithText) {
+    request("Deposit", {"token" :sessiontoken, "amount": depoWithText});
+  }
 }

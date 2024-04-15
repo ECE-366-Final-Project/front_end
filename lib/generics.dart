@@ -9,40 +9,55 @@ import 'package:front_end/slots.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
+import 'dart:convert';
 
-Future<List> request(String command, Map<String, dynamic> args,
+String balance = '0.00';
+String user_reference = "";
+String sessiontoken = '0.00';
+const SRC = "localhost:8080";
+
+Future<List> request(String command, Map<String, String> args,
     {Toast = true}) async {
-  const SRC = "localhost:8080";
   var call;
+  await Timer(Duration(seconds: 1), () {
+    print("Delay");
+  });
+  String body = "";
+  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
   } else {
     call = Uri.http(SRC, "/" + command);
   }
   int status = 0;
-  var txt = "";
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
   try {
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
     status = packet.statusCode;
-    txt = packet.body;
-    if (!Toast) {}
+    body = packet.body;
+    if (status > 400) {
+      col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
+    }
   } on TimeoutException {
-    txt = "Failed to Connect to Server";
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
-    print("Failed Call!");
   }
-  Toast
-      ? Fluttertoast.showToast(
-          msg: txt,
-          gravity: ToastGravity.BOTTOM,
-          textColor: Colors.white,
-          webPosition: "center",
-          webBgColor: col_str,
-          fontSize: 40)
-      : Null;
-  return [status.toString(), txt];
+  var map = jsonDecode(body);
+  if (Toast) {
+    Fluttertoast.showToast(
+        msg: map["MESSAGE"]!,
+        gravity: ToastGravity.BOTTOM,
+        textColor: Colors.white,
+        webPosition: "center",
+        webBgColor: col_str,
+        fontSize: 40);
+  }
+  return [status, map];
+}
+
+Future<String> balanceUpdate() async {
+  var call = Uri.http(SRC, "/GetBal", {"token": sessiontoken});
+  final packet = await http.get(call).timeout(const Duration(seconds: 5));
+  return jsonDecode(packet.body)["BALANCE"];
 }
 
 App_Bar(context) {
@@ -107,7 +122,8 @@ App_Bar(context) {
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
       TextButton(
-          child: Text('BALANCE: \$ ' + text,
+
+          child: Text('BALANCE: \$ ' + balance,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 25.0,
@@ -126,7 +142,6 @@ App_Bar(context) {
           onPressed: () async {
             request("Ping", {});
           }),
-
       IconButton(
           icon: const Icon(Icons.account_circle,
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
