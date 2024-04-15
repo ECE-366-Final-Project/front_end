@@ -103,7 +103,7 @@ class _Account extends State<Account> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 110.0),
-                Text('USERNAME',
+                Text(user_reference,
                     style: TextStyle(
                         color: const Color.fromRGBO(255, 255, 255, 1),
                         fontSize: 40.0,
