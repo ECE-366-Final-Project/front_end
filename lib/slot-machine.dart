@@ -13,8 +13,8 @@ class SlotMachineController {
 }
 
 class SlotMachine extends StatefulWidget {
-  const SlotMachine({
-    Key? key,
+  SlotMachine({
+    super.key,
     required this.rollItems,
     this.multiplyNumberOfSlotItems = 2,
     this.shuffle = true,
@@ -26,7 +26,7 @@ class SlotMachine extends StatefulWidget {
     this.reelSpacing = 8,
     required this.onCreated,
     required this.onFinished,
-  }) : super(key: key);
+  });
 
   final List<RollItem> rollItems;
   final int multiplyNumberOfSlotItems;
@@ -41,10 +41,10 @@ class SlotMachine extends StatefulWidget {
   final Function(List<int> resultIndexes) onFinished;
 
   @override
-  State<SlotMachine> createState() => _SlotMachineState();
+  State<SlotMachine> createState() => SlotMachineState();
 }
 
-class _SlotMachineState extends State<SlotMachine> {
+class SlotMachineState extends State<SlotMachine> {
   late SlotMachineController _slotMachineController;
   Map<int, _ReelController> _reelControllers = {};
   List<RollItem> _actualRollItems = [];
@@ -189,10 +189,10 @@ class _Reel extends StatefulWidget {
   final Function(_ReelController) onCreated;
 
   @override
-  State<_Reel> createState() => __ReelState();
+  State<_Reel> createState() => _ReelState();
 }
 
-class __ReelState extends State<_Reel> {
+class _ReelState extends State<_Reel> {
   late Timer timer;
   late _ReelController _laneController;
   final _scrollController = FixedExtentScrollController(initialItem: 0);
@@ -250,20 +250,24 @@ class __ReelState extends State<_Reel> {
   }
 
   _stop({required int to}) {
-    timer.cancel();
-    final hitItemIndex =
-        _actualRollItems.indexWhere((item) => item.index == to);
+    try {
+      timer.cancel();
+      final hitItemIndex =
+          _actualRollItems.indexWhere((item) => item.index == to);
 
-    final mod = (-counter) % _actualRollItems.length - 1;
-    final addCount = (_actualRollItems.length - mod) +
-        (_actualRollItems.length - hitItemIndex) -
-        1;
+      final mod = (-counter) % _actualRollItems.length - 1;
+      final addCount = (_actualRollItems.length - mod) +
+          (_actualRollItems.length - hitItemIndex) -
+          1;
 
-    _scrollController.animateToItem(
-      counter - addCount,
-      duration: const Duration(milliseconds: 750),
-      curve: Curves.decelerate,
-    );
+      _scrollController.animateToItem(
+        counter - addCount,
+        duration: const Duration(milliseconds: 750),
+        curve: Curves.decelerate,
+      );
+    } finally {
+      print("Something went wrong, we should probably fix that :)");
+    }
   }
 }
 

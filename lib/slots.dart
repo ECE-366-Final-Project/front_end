@@ -11,6 +11,7 @@ import 'package:front_end/slot-machine.dart';
 var currencyValue = new NumberFormat.compact();
 String slotBetText = "0.00";
 String slotTempBalance = "";
+bool play = false;
 
 class Slots extends StatefulWidget {
   const Slots({Key? key}) : super(key: key);
@@ -59,44 +60,44 @@ class _SlotsState extends State<Slots> {
                 rollItems: [
                   RollItem(
                       index: 0,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/1xbar.png')),
+                      child:
+                          img_getter('assets/sprites/slots-symbols/1xbar.png')),
                   RollItem(
                       index: 1,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/2xbar.png')),
+                      child:
+                          img_getter('assets/sprites/slots-symbols/2xbar.png')),
                   RollItem(
                       index: 2,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/3xbar.png')),
+                      child:
+                          img_getter('assets/sprites/slots-symbols/3xbar.png')),
                   RollItem(
                       index: 3,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/cherry.png')),
+                      child: img_getter(
+                          'assets/sprites/slots-symbols/cherry.png')),
                   RollItem(
                       index: 4,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/clover.png')),
+                      child: img_getter(
+                          'assets/sprites/slots-symbols/clover.png')),
                   RollItem(
                       index: 5,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/lemon.png')),
+                      child:
+                          img_getter('assets/sprites/slots-symbols/lemon.png')),
                   RollItem(
                       index: 6,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/seven.png')),
+                      child:
+                          img_getter('assets/sprites/slots-symbols/seven.png')),
                   RollItem(
                       index: 7,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/bell.png')),
+                      child:
+                          img_getter('assets/sprites/slots-symbols/bell.png')),
                   RollItem(
-                      index: 6,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/gem.png')),
+                      index: 8,
+                      child:
+                          img_getter('assets/sprites/slots-symbols/gem.png')),
                   RollItem(
-                      index: 7,
-                      child: Image.asset(
-                          'lib/assets/sprites/slots-symbols/jackpot_style_2.png')),
+                      index: 9,
+                      child: img_getter(
+                          'assets/sprites/slots-symbols/jackpot_style_2.png')),
                 ],
                 onCreated: (controller) {
                   _controller = controller;
@@ -196,6 +197,10 @@ class _SlotsState extends State<Slots> {
         ),
       ),
     );
+  }
+
+  Image img_getter(String path) {
+    return Image.asset(path);
   }
 
   Future<void> Play_Slots(double bet) async {
