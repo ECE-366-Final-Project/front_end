@@ -225,9 +225,9 @@ void output_roll_data(List roll_data, double bet) {
   var Json = roll_data[1];
   var winnings = Json["WINNINGS"];
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
-  var msg = "You won \$" + winnings.toString() + "!";
+  var msg = "You won \$" + winnings.toStringAsFixed(2) + "!";
   if(winnings < bet) {
-      msg = "You won \$" + winnings.toString() + ". Better luck next time!";
+      msg = "You won \$" + winnings.toStringAsFixed(2) + ". Better luck next time!";
       col_str = "linear-gradient(to right, #ced111, #ced111)";
   }  
 Future.delayed(Duration(seconds: 10), () {
