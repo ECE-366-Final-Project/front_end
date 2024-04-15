@@ -19,17 +19,15 @@ const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
     {Toast = true}) async {
   var call;
-  await Timer(Duration(seconds: 1), () {
-    print("Delay");
-  });
-  String body = "";
+  String body = "{Message: Failed!}";
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
   } else {
     call = Uri.http(SRC, "/" + command);
   }
-  int status = 0;
+  int status = 405;
+  print(call);
   try {
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
     status = packet.statusCode;
@@ -41,8 +39,9 @@ Future<List> request(String command, Map<String, String> args,
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
   }
-  var map = jsonDecode(body);
-  if (Toast) {
+  var map = json.decode(body);
+  print(map);
+  if (Toast || status > 400) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
         gravity: ToastGravity.BOTTOM,
@@ -57,7 +56,7 @@ Future<List> request(String command, Map<String, String> args,
 Future<String> balanceUpdate() async {
   var call = Uri.http(SRC, "/GetBal", {"token": sessiontoken});
   final packet = await http.get(call).timeout(const Duration(seconds: 5));
-  return jsonDecode(packet.body)["BALANCE"];
+  return json.decode(packet.body)["BALANCE"].toString();
 }
 
 App_Bar(context) {

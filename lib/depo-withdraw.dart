@@ -52,10 +52,11 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  Deposit(depoWithText);
-                  setState(() async {
-                    balance = await balanceUpdate();
-                  });
+                  await Deposit(depoWithText);
+                  var data = await balanceUpdate();
+                    setState(() {
+                      balance = data;
+                    });
                 },
               ),
               SizedBox(width: 20.0),
@@ -65,9 +66,10 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  Withdraw(depoWithText);
-                  setState(() async {
-                    balance = await balanceUpdate();
+                  await Withdraw(depoWithText);
+                  String data = await balanceUpdate();
+                  setState(() {
+                    balance = data;
                   });
                 },
               ),
@@ -118,12 +120,15 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         ),
       ),
     );
-  }  
-  void Withdraw(String depoWithText) {
-    request("Withdraw", {"token" :sessiontoken, "amount": depoWithText});
   }
-  
-  void Deposit(String depoWithText) {
-    request("Deposit", {"token" :sessiontoken, "amount": depoWithText});
+
+  Future<void> Withdraw(String depoWithText) async {
+    await request("Withdraw", {"token": sessiontoken, "amount": depoWithText});
+    return;
+  }
+
+  Future<void> Deposit(String depoWithText) async {
+    await request("Deposit", {"token": sessiontoken, "amount": depoWithText});
+    return;
   }
 }

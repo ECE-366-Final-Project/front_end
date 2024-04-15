@@ -138,6 +138,7 @@ log_in(username, password, context) async {
   if (data[0] == 200) {
     sessiontoken = data[1]["TOKEN"];
     user_reference = username;
+    balance = await balanceUpdate();
     Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 }
