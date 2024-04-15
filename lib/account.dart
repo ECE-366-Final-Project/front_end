@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/generics.dart';
-
+import 'package:front_end/account-login.dart';
 // var feed = <Widget>[
 //   accountItems("Slots", r"+ $ 4,946.00", "Win"),
 //   accountItems("Transaction", r"+ $ 5,428.00", "Deposit"),
@@ -28,7 +28,7 @@ redGreenFont(String type, String charge) {
 displayAccoutList() {
   return Container(
     width: 400,
-    child: Column(children: feed),
+    child: Column(children: feed.reversed.toList()),
   );
 }
 
@@ -132,6 +132,21 @@ class _Account extends State<Account> {
                         color: Colors.white,
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
+                SizedBox(height: 20.0),
+                IconButton(
+                    onPressed: () {
+                      balance = '0.00';
+                      sessiontoken = "";
+                      user_reference = "";
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AccountLogin()));
+                    },
+                    icon: Icon(Icons.logout_rounded,
+                        color: Colors.white,
+                        size: 30.0,
+                        semanticLabel: 'Refresh History')),
                 SizedBox(height: 20.0),
                 displayAccoutList(),
                 SizedBox(height: 100.0),

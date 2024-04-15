@@ -138,12 +138,6 @@ App_Bar(context) {
               fontWeight: FontWeight.bold)),
       // This is to test the server connection quickly:
       IconButton(
-          icon: Icon(Icons.network_wifi,
-              color: Colors.white, size: 40.0, semanticLabel: 'Server Check'),
-          onPressed: () async {
-            request("Ping", {});
-          }),
-      IconButton(
           icon: const Icon(Icons.account_circle,
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
           onPressed: () => Navigator.push(
