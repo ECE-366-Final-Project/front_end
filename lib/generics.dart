@@ -66,12 +66,8 @@ Future<String> balanceUpdate() async {
 App_Bar(context) {
   return AppBar(
     automaticallyImplyLeading: false,
-    title: TextButton(
-        child: Text('COOPER CASINO',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold)),
+    leading: IconButton(
+        icon: Image.asset('images/login_logo.png'),
         onPressed: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => Home()))),
     backgroundColor: const Color(0xFF000000),

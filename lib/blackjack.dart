@@ -101,7 +101,8 @@ class _BlackjackState extends State<Blackjack> {
                           slotTempBalance = '';
                         });
                       },
-                    ),                    SizedBox(width: 20.0),
+                    ),
+                    SizedBox(width: 20.0),
                     TextButton(
                       style: ButtonStyle(backgroundColor: DWPalette()),
                       child: Text('Rejoin Game',
@@ -109,8 +110,7 @@ class _BlackjackState extends State<Blackjack> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
                       onPressed: () async {
-                        var payload =
-                            await RejoinBlackjack();
+                        var payload = await RejoinBlackjack();
                         if (payload[0] < 400) {
                           setState(() {
                             play = true;
@@ -146,7 +146,8 @@ class _BlackjackState extends State<Blackjack> {
                         onPressed: () async {
                           bool data = await blackjack_call("double_down");
                           State_Setter(data);
-                        }),    ]),
+                        }),
+                  ]),
             !play
                 ? NumericKeyboard(
                     onKeyboardTap: (String value) {
@@ -198,12 +199,12 @@ class _BlackjackState extends State<Blackjack> {
   }
 
   Future<void> State_Setter(bool game_running) async {
-    if(!game_running){
+    if (!game_running) {
       var temp_bal = await balanceUpdate();
-      setState((){
+      setState(() {
         balance = temp_bal;
       });
-    } 
+    }
     setState(() {
       play = game_running;
     });
@@ -211,7 +212,7 @@ class _BlackjackState extends State<Blackjack> {
 }
 
 void render(var json) {
-  //TODO: MAke
+  //TODO: Make
   String str = "";
   if (json["GAME_ENDED"] == "true") {
     str = "Game over! Winner: " + json["WINNER"];
