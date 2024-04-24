@@ -1,8 +1,18 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:front_end/home.dart';
 import 'package:front_end/account-creation.dart';
+import 'package:front_end/generics.dart';
+import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountLogin extends StatelessWidget {
+  String username = "DEFAULT_USERNAME";
+  String password = "DEFAULT_PASSWORD";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,17 +56,21 @@ class AccountLogin extends StatelessWidget {
               child: SizedBox(
                 width: 350,
                 child: TextFormField(
-                  style: TextStyle(
-                      color: Colors.white, decorationColor: Colors.white),
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      hoverColor: Colors.white,
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)),
-                      labelText: 'Username',
-                      hintText: 'Enter your username'),
-                ),
+                    style: TextStyle(
+                        color: Colors.white, decorationColor: Colors.white),
+                    cursorColor: Colors.white,
+                    decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        hoverColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
+                        labelText: 'Username',
+                        hintText: 'Enter your username'),
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        username = value;
+                      }
+                    }),
               ),
             ),
             Padding(
@@ -74,6 +88,11 @@ class AccountLogin extends StatelessWidget {
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       hintText: 'Enter your password'),
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      password = value;
+                    }
+                  },
                 ),
               ),
             ),
@@ -84,10 +103,7 @@ class AccountLogin extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.black, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
-                },
+                onPressed: () => {log_in(username, password, context)},
                 child: const Text(
                   'LOGIN',
                   style: TextStyle(
@@ -112,5 +128,23 @@ class AccountLogin extends StatelessWidget {
         )),
       ),
     );
+  }
+}
+
+log_in(username, password, context) async {
+  final salt = "imposter";
+  String passkey = sha256.convert(utf8.encode(username + password + salt)).toString();
+  Map<String,String> args = {"username": username, "passkey": passkey};
+  var data = await request("LogIn", args);
+  if (data[0] == 200) {
+    final prefs = await SharedPreferences.getInstance();
+    sessiontoken = data[1]["TOKEN"];
+    await prefs.setString('token', sessiontoken);
+    print("SAVED TO LOCAL MEMORY!");
+    print(prefs.getString('token'));
+
+    user_reference = username;
+    balance = await balanceUpdate();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 }

@@ -8,7 +8,7 @@ class SlotMachineController {
     required this.stop,
   });
 
-  final Function({required int? hitRollItemIndex}) start;
+  final Function({required int? hitRollItemIndex,required List<int> result}) start;
   final Function({required int reelIndex}) stop;
 }
 
@@ -112,7 +112,8 @@ class SlotMachineState extends State<SlotMachine> {
     );
   }
 
-  _start({required int? hitRollItemIndex}) {
+  _start({required int? hitRollItemIndex, required List<int> result}) {
+    _setIndexes = result;
     _stopCounter = 0;
     _resultIndexes = [];
 

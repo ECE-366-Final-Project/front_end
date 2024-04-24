@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/generics.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 
-String text = '0.00';
-String depoWithText = '0.00';
-String tempBalance = '';
-//Todo: Get this live
-String userID = "1";
 var currencyValue = new NumberFormat.compact();
 
 class DepoWithdraw extends StatefulWidget {
@@ -19,6 +15,8 @@ class DepoWithdraw extends StatefulWidget {
 }
 
 class _DepoWithdrawState extends State<DepoWithdraw> {
+  String depoWithText = '0.00';
+  String tempBalance = '';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +32,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 100.0),
-            Text('\$' + text,
+            Text('\$' + balance,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 60.0,
@@ -55,11 +53,14 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  Deposit(depoWithText);
-                  setState(() {
-                    text = (double.parse(text) + double.parse(depoWithText))
-                        .toString();
-                  });
+                  int status = await Deposit(depoWithText);
+                  var data = await balanceUpdate();
+                    setState(() {
+                      balance = data;
+                      if(status == 200) {
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Deposit"));
+                      }
+                    });
                 },
               ),
               SizedBox(width: 20.0),
@@ -69,10 +70,13 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  Withdraw(depoWithText);
+                  int status = await Withdraw(depoWithText);
+                  String data = await balanceUpdate();
                   setState(() {
-                    text = (double.parse(text) - double.parse(depoWithText))
-                        .toString();
+                    balance = data;
+                    if(status == 200) {
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Withdrawal"));
+                      }
                   });
                 },
               ),
@@ -125,7 +129,13 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
     );
   }
 
-  void Withdraw(String depoWithText) {}
+  Future<int> Withdraw(String depoWithText) async {
+    var data = await request("Withdraw", {"token": sessiontoken, "amount": depoWithText});
+    return data[0];
+  }
 
-  void Deposit(String depoWithText) {}
+  Future<int> Deposit(String depoWithText) async {
+    var data = await request("Deposit", {"token": sessiontoken, "amount": depoWithText});
+    return data[0];
+  }
 }

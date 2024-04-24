@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/account-login.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:front_end/generics.dart';
+import 'package:front_end/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+// final List<String> imgList = [
+//   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+//   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+//   'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+// ];
 final List<String> imgList = [
   'assets/images/pixelated-blackjack.png',
   'assets/images/pixelated-roulette.png',
@@ -96,19 +104,27 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AccountLogin()));
+                    child: const Text('PLAY NOW!',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      final token = prefs.getString('token') ?? "";
+                      print("This statement is being read");
+                      if (token != "") {
+                        sessiontoken = token;
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Home()));
+                      } else {
+                        print("There was no token, sending user to login");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AccountLogin()));
+                      }
                     },
-                    child: const Text(
-                      'PLAY NOW!',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
                   ),
                 ),
               ],

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/generics.dart';
-
-var feed = <Widget>[
-  accountItems("Slots", r"+ $ 4,946.00", "Win"),
-  accountItems("Transaction", r"+ $ 5,428.00", "Deposit"),
-  accountItems("Transaction", r"- $ 746.00", "Withdrawal"),
-  accountItems("Blackjack", r"- $ 4,526.00", "Loss"),
-  accountItems("Action", r"+ $ 0.00", "Credit"),
-];
+import 'package:front_end/account-login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// var feed = <Widget>[
+//   accountItems("Slots", r"+ $ 4,946.00", "Win"),
+//   accountItems("Transaction", r"+ $ 5,428.00", "Deposit"),
+//   accountItems("Transaction", r"- $ 746.00", "Withdrawal"),
+//   accountItems("Blackjack", r"- $ 4,526.00", "Loss"),
+//   accountItems("Action", r"+ $ 0.00", "Credit"),
+// ];
 
 redGreenFont(String type, String charge) {
   if (type == "Win" || type == "Deposit") {
@@ -28,7 +29,7 @@ redGreenFont(String type, String charge) {
 displayAccoutList() {
   return Container(
     width: 400,
-    child: Column(children: feed),
+    child: Column(children: feed.reversed.toList()),
   );
 }
 
@@ -103,7 +104,7 @@ class _Account extends State<Account> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 110.0),
-                Text('USERNAME',
+                Text(user_reference,
                     style: TextStyle(
                         color: const Color.fromRGBO(255, 255, 255, 1),
                         fontSize: 40.0,
@@ -117,7 +118,7 @@ class _Account extends State<Account> {
                 ),
                 SizedBox(height: 40.0),
                 TextButton(
-                    child: Text('\$' + text,
+                    child: Text('\$' + balance,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 30.0,
@@ -134,14 +135,20 @@ class _Account extends State<Account> {
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: 20.0),
                 IconButton(
-                    onPressed: () => {
-                          setState(() {
-                            feed.removeAt(0);
-                            feed.add(
-                                accountItems("Action", r"+ $ 0.00", "Credit"));
-                          })
-                        },
-                    icon: Icon(Icons.refresh,
+                    onPressed: () async {
+                      balance = '0.00';
+                      sessiontoken = "";
+                      final prefs = await SharedPreferences.getInstance();
+                      print("This is the token!");
+                      print(prefs.getString('token'));
+                      await prefs.remove('token');
+                      user_reference = "";
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AccountLogin()));
+                    },
+                    icon: Icon(Icons.logout_rounded,
                         color: Colors.white,
                         size: 30.0,
                         semanticLabel: 'Refresh History')),
