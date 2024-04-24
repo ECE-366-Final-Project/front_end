@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/generics.dart';
 import 'package:front_end/account-login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // var feed = <Widget>[
 //   accountItems("Slots", r"+ $ 4,946.00", "Win"),
 //   accountItems("Transaction", r"+ $ 5,428.00", "Deposit"),
@@ -134,9 +135,13 @@ class _Account extends State<Account> {
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: 20.0),
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       balance = '0.00';
                       sessiontoken = "";
+                      final prefs = await SharedPreferences.getInstance();
+                      print("This is the token!");
+                      print(prefs.getString('token'));
+                      await prefs.remove('token');
                       user_reference = "";
                       Navigator.push(
                           context,

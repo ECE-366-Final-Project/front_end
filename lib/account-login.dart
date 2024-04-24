@@ -7,6 +7,7 @@ import 'package:front_end/home.dart';
 import 'package:front_end/account-creation.dart';
 import 'package:front_end/generics.dart';
 import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountLogin extends StatelessWidget {
   String username = "DEFAULT_USERNAME";
@@ -136,7 +137,12 @@ log_in(username, password, context) async {
   Map<String,String> args = {"username": username, "passkey": passkey};
   var data = await request("LogIn", args);
   if (data[0] == 200) {
+    final prefs = await SharedPreferences.getInstance();
     sessiontoken = data[1]["TOKEN"];
+    await prefs.setString('token', sessiontoken);
+    print("SAVED TO LOCAL MEMORY!");
+    print(prefs.getString('token'));
+
     user_reference = username;
     balance = await balanceUpdate();
     Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));

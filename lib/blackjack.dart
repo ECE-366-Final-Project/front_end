@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
@@ -83,7 +81,7 @@ class _BlackjackState extends State<Blackjack> {
                         ratelimit = curtime;
                         var payload =
                             await StartBlackjack(double.parse(bj_bet_text));
-                        if(payload[0] < 400) {
+                        if (payload[0] < 400) {
                           setState(() {
                             play = true;
                           });
@@ -103,7 +101,23 @@ class _BlackjackState extends State<Blackjack> {
                           slotTempBalance = '';
                         });
                       },
-                    ),
+                    ),                    SizedBox(width: 20.0),
+                    TextButton(
+                      style: ButtonStyle(backgroundColor: DWPalette()),
+                      child: Text('Rejoin Game',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () async {
+                        var payload =
+                            await RejoinBlackjack();
+                        if (payload[0] < 400) {
+                          setState(() {
+                            play = true;
+                          });
+                        }
+                      },
+                    )
                   ])
                 : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     IconButton(
@@ -113,9 +127,7 @@ class _BlackjackState extends State<Blackjack> {
                             semanticLabel: 'Hit'),
                         onPressed: () async {
                           bool data = await blackjack_call("hit");
-                          setState(() {
-                            play = data;
-                          });
+                          State_Setter(data);
                         }),
                     IconButton(
                         icon: const Icon(Icons.stop_circle_rounded,
@@ -124,10 +136,7 @@ class _BlackjackState extends State<Blackjack> {
                             semanticLabel: 'Stand'),
                         onPressed: () async {
                           bool data = await blackjack_call("stand");
-                          setState(() {
-                            play = data;
-                          });
-
+                          State_Setter(data);
                         }),
                     IconButton(
                         icon: const Icon(Icons.exposure_plus_2_rounded,
@@ -135,21 +144,9 @@ class _BlackjackState extends State<Blackjack> {
                             size: 40.0,
                             semanticLabel: 'Double Down'),
                         onPressed: () async {
-                            bool data = await blackjack_call("double_down");
-                          setState(() {
-                            play = data;
-                          });
-
-                        }),
-                    IconButton(
-                        icon: const Icon(Icons.exposure_plus_2,
-                            color: Colors.yellow,
-                            size: 40.0,
-                            semanticLabel: 'Split'),
-                        onPressed: () {
-                          //TODO: implement split if time
-                        }),
-                  ]),
+                          bool data = await blackjack_call("double_down");
+                          State_Setter(data);
+                        }),    ]),
             !play
                 ? NumericKeyboard(
                     onKeyboardTap: (String value) {
@@ -199,36 +196,51 @@ class _BlackjackState extends State<Blackjack> {
       ),
     );
   }
+
+  Future<void> State_Setter(bool game_running) async {
+    if(!game_running){
+      var temp_bal = await balanceUpdate();
+      setState((){
+        balance = temp_bal;
+      });
+    } 
+    setState(() {
+      play = game_running;
+    });
+  }
 }
 
 void render(var json) {
+  //TODO: MAke
   String str = "";
-  if(json["GAME_ENDED"] == "true"){
+  if (json["GAME_ENDED"] == "true") {
     str = "Game over! Winner: " + json["WINNER"];
   }
   str += "\n Your Hand: " + json["PLAYERS_CARDS"];
   str += "\n Dealer Hand: " + json["DEALERS_CARDS"];
   Fluttertoast.showToast(
-    msg: str,
-    gravity: ToastGravity.BOTTOM,
-    textColor: Colors.black,
-    webPosition: "center",
-    fontSize: 40);
+      msg: str,
+      gravity: ToastGravity.BOTTOM,
+      textColor: Colors.black,
+      webPosition: "center",
+      fontSize: 40,
+      timeInSecForIosWeb: 10);
 }
 
 Future<bool> blackjack_call(String s) async {
   var reqs = {"token": sessiontoken, "move": s};
   var data = await request("UpdateBlackjack", reqs, Toast: false);
-  if(data[0] == 200){
+  if (data[0] == 200) {
     render(data[1]);
   }
-  return (data[1]["GAME_ENDED"] == "true");
+  print(data[1]["GAME_ENDED"]);
+  return (!(data[1]["GAME_ENDED"] == "true"));
 }
 
 Future<List> RejoinBlackjack() async {
   var reqs = {"token": sessiontoken};
   var data = await request("RejoinBlackjack", reqs, Toast: false);
-  if(data[0] == 200){
+  if (data[0] == 200) {
     render(data[1]);
   }
   return data;
@@ -237,10 +249,9 @@ Future<List> RejoinBlackjack() async {
 Future<List> StartBlackjack(double bet) async {
   var reqs = {"token": sessiontoken, "bet": bet.toString()};
   var data = await request("NewBlackjack", reqs, Toast: false);
-  if(data[0] == 200){
+  if (data[0] == 200) {
     render(data[1]);
-  }
-  else if (data[0] == 412) {
+  } else if (data[0] == 412) {
     return RejoinBlackjack();
   }
   return data;
