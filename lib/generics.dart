@@ -10,16 +10,17 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
 import 'dart:convert';
+import 'package:front_end/blackjack.dart';
 
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
+var ratelimit = DateTime.utc(1989, 11, 9);
 
 var feed = <Widget>[];
 
 const SRC = "localhost:8080";
-Future<List> request(String command, Map<String, String> args,
-    {Toast = true}) async {
+Future<List> request(String command, Map<String, String> args, {bool Toast = true}) async {
   var call;
   String body = "{Message: Failed!}";
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
@@ -34,7 +35,7 @@ Future<List> request(String command, Map<String, String> args,
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
     status = packet.statusCode;
     body = packet.body;
-    if (status > 400) {
+    if (status == 400) {
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
@@ -43,7 +44,7 @@ Future<List> request(String command, Map<String, String> args,
   }
   var map = json.decode(body);
   print(map);
-  if (Toast || status > 400) {
+  if (Toast || status == 400) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
         gravity: ToastGravity.BOTTOM,
@@ -100,7 +101,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {}),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Blackjack()))),
             TextButton(
                 child: Text('ROULETTE',
                     style: TextStyle(
@@ -123,7 +125,6 @@ App_Bar(context) {
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
       TextButton(
-
           child: Text('BALANCE: \$ ' + balance,
               style: TextStyle(
                   color: Colors.white,
@@ -136,7 +137,6 @@ App_Bar(context) {
               color: Colors.white,
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
-      // This is to test the server connection quickly:
       IconButton(
           icon: const Icon(Icons.account_circle,
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
