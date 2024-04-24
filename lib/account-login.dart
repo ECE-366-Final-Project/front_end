@@ -133,13 +133,15 @@ class AccountLogin extends StatelessWidget {
 
 log_in(username, password, context) async {
   final salt = "imposter";
-  String passkey = sha256.convert(utf8.encode(username + password + salt)).toString();
-  Map<String,String> args = {"username": username, "passkey": passkey};
+  String passkey =
+      sha256.convert(utf8.encode(username + password + salt)).toString();
+  Map<String, String> args = {"username": username, "passkey": passkey};
   var data = await request("LogIn", args);
   if (data[0] == 200) {
     final prefs = await SharedPreferences.getInstance();
     sessiontoken = data[1]["TOKEN"];
     await prefs.setString('token', sessiontoken);
+    await prefs.setString('username', username);
     print("SAVED TO LOCAL MEMORY!");
     print(prefs.getString('token'));
 
