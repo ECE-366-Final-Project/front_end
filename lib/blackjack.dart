@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,9 @@ String bj_bet_text = "0.00";
 String slotTempBalance = "";
 bool play = false;
 String backOfCard = 'sprites/cards/face-pngs/background_default.png';
+String dealerCard = '1C';
+String playerCard = '1D';
+Random random = new Random();
 List<String> deck = [
   'sprites/cards/face-pngs/1C.png',
   'sprites/cards/face-pngs/1D.png',
@@ -67,6 +71,8 @@ List<String> deck = [
 ];
 List<Image> dealerCards = [];
 List<Image> playerCards = [];
+List<Widget> renderDealCards = [];
+List<Widget> renderPlayerCards = [];
 
 cardChange(List<Image> deck, String face, String command) {
   if (command == "add") {
@@ -76,16 +82,21 @@ cardChange(List<Image> deck, String face, String command) {
   }
 }
 
-cardFlip(List<Image> deck, int index) {
-  if (deck.elementAt(index).toString() != backOfCard) {
-    //flip to back of card
+cardFlip(List<Image> deck, String face, int index) {
+  if (deck[index] != Image.asset(backOfCard)) {
+    deck[index] = Image.asset(backOfCard);
   } else {
-    //flip to front of card
+    deck[index] = Image.asset(face);
   }
 }
 
-Row cardItems() {
-  return Row(children: []);
+Column cardItems(List<Widget> renderCards) {
+  return Column(children: [
+    new Container(
+      child:
+          new ListView(scrollDirection: Axis.horizontal, children: renderCards),
+    )
+  ]);
 }
 
 class Blackjack extends StatefulWidget {
@@ -98,6 +109,10 @@ class _BlackjackState extends State<Blackjack> {
   @override
   void initState() {
     super.initState();
+    dealerCards.add(Image.asset(backOfCard));
+    dealerCards.add(Image.asset(dealerCard));
+    playerCards.add(Image.asset(deck.elementAt(random.nextInt(deck.length))));
+    playerCards.add(Image.asset(playerCard));
   }
 
   @override
@@ -232,11 +247,75 @@ class _BlackjackState extends State<Blackjack> {
                                     State_Setter(data);
                                   }),
                             ]),
-                        SizedBox(height: 50.0),
-                        ListView(
-                            scrollDirection: Axis.horizontal, children: []),
+                        SizedBox(height: 20.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    cardChange(dealerCards, dealerCard, 'add');
+                                  });
+                                },
+                                child: Text('D - Add')),
+                            TextButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    cardChange(
+                                        dealerCards, dealerCard, 'remove');
+                                  });
+                                },
+                                child: Text('D - Rm')),
+                            TextButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    cardFlip(dealerCards, dealerCard, 0);
+                                  });
+                                },
+                                child: Text('D - flip'))
+                          ],
+                        ),
+                        SizedBox(height: 40.0),
+                        cardItems(renderDealCards),
+                        SizedBox(height: 80.0),
+                        Container(
+                          height: 108.33,
+                          width: 148.33,
+                          child: Image.asset(
+                              fit: BoxFit.fill,
+                              'sprites/cards/face-pngs/horizontal-card-decoration.png'),
+                        ),
+                        SizedBox(height: 80.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    cardChange(playerCards, playerCard, 'add');
+                                  });
+                                },
+                                child: Text('P - Add')),
+                            TextButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    cardChange(
+                                        playerCards, playerCard, 'remove');
+                                  });
+                                },
+                                child: Text('P - Rm')),
+                            TextButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    cardFlip(playerCards, playerCard, 0);
+                                  });
+                                },
+                                child: Text('P - flip'))
+                          ],
+                        ),
+                        SizedBox(height: 40.0),
+                        cardItems(renderPlayerCards),
                         SizedBox(height: 100.0),
-                        ListView(scrollDirection: Axis.horizontal, children: [])
                       ],
                     ),
                   ),
