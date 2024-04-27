@@ -6,15 +6,17 @@ import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flip_card/flip_card_controller.dart';
+import 'package:flip_card/flip_card.dart';
 
 var currencyValue = new NumberFormat.compact();
 String bj_bet_text = "0.00";
 String slotTempBalance = "";
 bool play = false;
+FlipCardController _controller = FlipCardController();
+ScrollController _scrollController = ScrollController();
 String backOfCard = 'sprites/cards/face-pngs/background_default.png';
-String dealerCard = '1C';
-String playerCard = '1D';
-Random random = new Random();
 List<String> deck = [
   'sprites/cards/face-pngs/1C.png',
   'sprites/cards/face-pngs/1D.png',
@@ -74,29 +76,64 @@ List<Image> playerCards = [];
 List<Widget> renderDealCards = [];
 List<Widget> renderPlayerCards = [];
 
-cardChange(List<Image> deck, String face, String command) {
-  if (command == "add") {
-    deck.add(Image.asset(face));
-  } else if (command == "remove") {
-    deck.remove(Image.asset(face));
-  }
+cardAdd(List<Image> imageDeck, List<Widget> displayDeck, String face) {
+  imageDeck.add(Image.asset(face));
+  displayDeck.add(const SizedBox(width: 5.0));
+  displayDeck.add(card(imageDeck[imageDeck.length - 1]));
 }
 
-cardFlip(List<Image> deck, String face, int index) {
-  if (deck[index] != Image.asset(backOfCard)) {
-    deck[index] = Image.asset(backOfCard);
-  } else {
-    deck[index] = Image.asset(face);
-  }
+clearDeck() {
+  dealerCards.clear();
+  playerCards.clear();
+  renderDealCards.clear();
+  renderPlayerCards.clear();
+  dealerCards.add(Image.asset(backOfCard));
+  dealerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
+  playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
+  playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
+  renderDealCards.add(coverCard(deck[Random().nextInt(deck.length)]));
+  renderDealCards.add(const SizedBox(width: 5.0));
+  renderDealCards.add(card(dealerCards[1]));
+  renderPlayerCards.add(card(playerCards[0]));
+  renderPlayerCards.add(const SizedBox(width: 5.0));
+  renderPlayerCards.add(card(playerCards[1]));
 }
 
-Column cardItems(List<Widget> renderCards) {
-  return Column(children: [
-    new Container(
-      child:
-          new ListView(scrollDirection: Axis.horizontal, children: renderCards),
-    )
-  ]);
+FlipCard coverCard(String cardFace) {
+  return FlipCard(
+      controller: _controller,
+      flipOnTouch: false,
+      fill: Fill.fillBack,
+      direction: FlipDirection.HORIZONTAL,
+      front: SizedBox(
+        height: 148.33,
+        width: 108.33,
+        child: Image.asset(fit: BoxFit.fill, cardFace),
+      ),
+      back: SizedBox(
+        height: 148.33,
+        width: 108.33,
+        child: Image.asset(
+            fit: BoxFit.fill, 'sprites/cards/face-pngs/background_default.png'),
+      ));
+}
+
+SizedBox card(Image face) {
+  return SizedBox(height: 148.33, width: 108.33, child: face);
+}
+
+SizedBox cardItems(List<Widget> renderCards) {
+  return SizedBox(
+    width: 453.33,
+    child: Center(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        controller: _scrollController,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, children: renderCards),
+      ),
+    ),
+  );
 }
 
 class Blackjack extends StatefulWidget {
@@ -110,9 +147,15 @@ class _BlackjackState extends State<Blackjack> {
   void initState() {
     super.initState();
     dealerCards.add(Image.asset(backOfCard));
-    dealerCards.add(Image.asset(dealerCard));
-    playerCards.add(Image.asset(deck.elementAt(random.nextInt(deck.length))));
-    playerCards.add(Image.asset(playerCard));
+    dealerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
+    playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
+    playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
+    renderDealCards.add(coverCard(deck[Random().nextInt(deck.length)]));
+    renderDealCards.add(const SizedBox(width: 5.0));
+    renderDealCards.add(card(dealerCards[1]));
+    renderPlayerCards.add(card(playerCards[0]));
+    renderPlayerCards.add(const SizedBox(width: 5.0));
+    renderPlayerCards.add(card(playerCards[1]));
   }
 
   @override
@@ -125,6 +168,10 @@ class _BlackjackState extends State<Blackjack> {
           splashColor: Colors.white,
           focusColor: Colors.white,
           colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.white)),
+      scrollBehavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      }),
       home: Scaffold(
         appBar: App_Bar(context),
         body: SingleChildScrollView(
@@ -254,68 +301,59 @@ class _BlackjackState extends State<Blackjack> {
                             TextButton(
                                 onPressed: () async {
                                   setState(() {
-                                    cardChange(dealerCards, dealerCard, 'add');
+                                    cardAdd(dealerCards, renderDealCards,
+                                        deck[Random().nextInt(deck.length)]);
                                   });
                                 },
-                                child: Text('D - Add')),
+                                child: const Text('D - Add')),
                             TextButton(
                                 onPressed: () async {
                                   setState(() {
-                                    cardChange(
-                                        dealerCards, dealerCard, 'remove');
+                                    _controller.toggleCard();
                                   });
                                 },
-                                child: Text('D - Rm')),
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    cardFlip(dealerCards, dealerCard, 0);
-                                  });
-                                },
-                                child: Text('D - flip'))
+                                child: const Text('D - flip'))
                           ],
                         ),
-                        SizedBox(height: 40.0),
+                        const SizedBox(height: 20.0),
                         cardItems(renderDealCards),
-                        SizedBox(height: 80.0),
-                        Container(
+                        const SizedBox(height: 80.0),
+                        SizedBox(
                           height: 108.33,
                           width: 148.33,
                           child: Image.asset(
                               fit: BoxFit.fill,
                               'sprites/cards/face-pngs/horizontal-card-decoration.png'),
                         ),
-                        SizedBox(height: 80.0),
+                        const SizedBox(height: 80.0),
+                        cardItems(renderPlayerCards),
+                        const SizedBox(height: 20.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextButton(
                                 onPressed: () async {
                                   setState(() {
-                                    cardChange(playerCards, playerCard, 'add');
+                                    cardAdd(playerCards, renderPlayerCards,
+                                        deck[Random().nextInt(deck.length)]);
                                   });
                                 },
-                                child: Text('P - Add')),
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    cardChange(
-                                        playerCards, playerCard, 'remove');
-                                  });
-                                },
-                                child: Text('P - Rm')),
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    cardFlip(playerCards, playerCard, 0);
-                                  });
-                                },
-                                child: Text('P - flip'))
+                                child: const Text('P - Add'))
                           ],
                         ),
-                        SizedBox(height: 40.0),
-                        cardItems(renderPlayerCards),
-                        SizedBox(height: 100.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    clearDeck();
+                                  });
+                                },
+                                child: const Text('CLEAR GAME'))
+                          ],
+                        ),
+                        const SizedBox(height: 100.0),
                       ],
                     ),
                   ),
@@ -383,7 +421,6 @@ class _BlackjackState extends State<Blackjack> {
 }
 
 void render(var json) {
-  //TODO: Make
   String str = "";
   if (json["GAME_ENDED"] == "true") {
     str = "Game over! Winner: " + json["WINNER"];
