@@ -136,6 +136,19 @@ App_Bar(context) {
               color: Colors.white,
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
+      TextButton(
+          child: Text('BALANCE: \$ ' + balance,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold)),
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DepoWithdraw()))),
+      Text("|",
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 25.0,
+              fontWeight: FontWeight.bold)),
       // This is to test the server connection quickly:
       IconButton(
           icon: Icon(Icons.network_wifi,
