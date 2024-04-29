@@ -20,6 +20,7 @@ dependencies:
   http: ^1.2.1
   fluttertoast: ^8.2.4
   crypto: ^3.0.3
+  roulette: ^0.1.5
 
 dev_dependencies:
   flutter_test:

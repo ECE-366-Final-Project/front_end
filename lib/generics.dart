@@ -6,6 +6,7 @@ import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/color-palette.dart';
 import 'package:front_end/slots.dart';
+import 'package:front_end/roulette.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
@@ -107,7 +108,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {}),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Roulette()))),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(
@@ -124,19 +126,6 @@ App_Bar(context) {
               fontWeight: FontWeight.bold)),
       TextButton(
 
-          child: Text('BALANCE: \$ ' + balance,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold)),
-          onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => DepoWithdraw()))),
-      Text("|",
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold)),
-      TextButton(
           child: Text('BALANCE: \$ ' + balance,
               style: TextStyle(
                   color: Colors.white,
