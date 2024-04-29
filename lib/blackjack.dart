@@ -17,60 +17,7 @@ bool play = false;
 FlipCardController _controller = FlipCardController();
 ScrollController _scrollController = ScrollController();
 String backOfCard = 'sprites/cards/face-pngs/background_default.png';
-List<String> deck = [
-  'sprites/cards/face-pngs/1C.png',
-  'sprites/cards/face-pngs/1D.png',
-  'sprites/cards/face-pngs/1H.png',
-  'sprites/cards/face-pngs/1S.png',
-  'sprites/cards/face-pngs/2C.png',
-  'sprites/cards/face-pngs/2D.png',
-  'sprites/cards/face-pngs/2H.png',
-  'sprites/cards/face-pngs/2S.png',
-  'sprites/cards/face-pngs/3C.png',
-  'sprites/cards/face-pngs/3D.png',
-  'sprites/cards/face-pngs/3H.png',
-  'sprites/cards/face-pngs/3S.png',
-  'sprites/cards/face-pngs/4C.png',
-  'sprites/cards/face-pngs/4D.png',
-  'sprites/cards/face-pngs/4H.png',
-  'sprites/cards/face-pngs/4S.png',
-  'sprites/cards/face-pngs/5C.png',
-  'sprites/cards/face-pngs/5D.png',
-  'sprites/cards/face-pngs/5H.png',
-  'sprites/cards/face-pngs/5S.png',
-  'sprites/cards/face-pngs/6C.png',
-  'sprites/cards/face-pngs/6D.png',
-  'sprites/cards/face-pngs/6H.png',
-  'sprites/cards/face-pngs/6S.png',
-  'sprites/cards/face-pngs/7C.png',
-  'sprites/cards/face-pngs/7D.png',
-  'sprites/cards/face-pngs/7H.png',
-  'sprites/cards/face-pngs/7S.png',
-  'sprites/cards/face-pngs/8C.png',
-  'sprites/cards/face-pngs/8D.png',
-  'sprites/cards/face-pngs/8H.png',
-  'sprites/cards/face-pngs/8S.png',
-  'sprites/cards/face-pngs/9C.png',
-  'sprites/cards/face-pngs/9D.png',
-  'sprites/cards/face-pngs/9H.png',
-  'sprites/cards/face-pngs/9S.png',
-  'sprites/cards/face-pngs/AC.png',
-  'sprites/cards/face-pngs/AD.png',
-  'sprites/cards/face-pngs/AH.png',
-  'sprites/cards/face-pngs/AS.png',
-  'sprites/cards/face-pngs/JC.png',
-  'sprites/cards/face-pngs/JD.png',
-  'sprites/cards/face-pngs/JH.png',
-  'sprites/cards/face-pngs/JS.png',
-  'sprites/cards/face-pngs/KC.png',
-  'sprites/cards/face-pngs/KD.png',
-  'sprites/cards/face-pngs/KH.png',
-  'sprites/cards/face-pngs/KS.png',
-  'sprites/cards/face-pngs/QC.png',
-  'sprites/cards/face-pngs/QD.png',
-  'sprites/cards/face-pngs/QH.png',
-  'sprites/cards/face-pngs/QS.png',
-];
+
 List<Image> dealerCards = [];
 List<Image> playerCards = [];
 List<Widget> renderDealCards = [];
@@ -87,16 +34,6 @@ clearDeck() {
   playerCards.clear();
   renderDealCards.clear();
   renderPlayerCards.clear();
-  dealerCards.add(Image.asset(backOfCard));
-  dealerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
-  playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
-  playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
-  renderDealCards.add(coverCard(deck[Random().nextInt(deck.length)]));
-  renderDealCards.add(const SizedBox(width: 5.0));
-  renderDealCards.add(card(dealerCards[1]));
-  renderPlayerCards.add(card(playerCards[0]));
-  renderPlayerCards.add(const SizedBox(width: 5.0));
-  renderPlayerCards.add(card(playerCards[1]));
 }
 
 FlipCard coverCard(String cardFace) {
@@ -146,16 +83,8 @@ class _BlackjackState extends State<Blackjack> {
   @override
   void initState() {
     super.initState();
-    dealerCards.add(Image.asset(backOfCard));
-    dealerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
-    playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
-    playerCards.add(Image.asset(deck[Random().nextInt(deck.length)]));
-    renderDealCards.add(coverCard(deck[Random().nextInt(deck.length)]));
     renderDealCards.add(const SizedBox(width: 5.0));
-    renderDealCards.add(card(dealerCards[1]));
-    renderPlayerCards.add(card(playerCards[0]));
     renderPlayerCards.add(const SizedBox(width: 5.0));
-    renderPlayerCards.add(card(playerCards[1]));
   }
 
   @override
@@ -208,8 +137,7 @@ class _BlackjackState extends State<Blackjack> {
                           var col_str =
                               "linear-gradient(to right, #ced111, #ced111)";
                           Fluttertoast.showToast(
-                              msg:
-                                  "The current round is not over. Please wait before rolling again",
+                              msg: "Please slow down your queries",
                               gravity: ToastGravity.BOTTOM,
                               textColor: Colors.black,
                               // webPosition: "center", // :3 I Was here
@@ -294,69 +222,23 @@ class _BlackjackState extends State<Blackjack> {
                                     State_Setter(data);
                                   }),
                             ]),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    cardAdd(dealerCards, renderDealCards,
-                                        deck[Random().nextInt(deck.length)]);
-                                  });
-                                },
-                                child: const Text('D - Add')),
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    _controller.toggleCard();
-                                  });
-                                },
-                                child: const Text('D - flip'))
-                          ],
-                        ),
-                        const SizedBox(height: 20.0),
-                        cardItems(renderDealCards),
-                        const SizedBox(height: 80.0),
-                        SizedBox(
-                          height: 108.33,
-                          width: 148.33,
-                          child: Image.asset(
-                              fit: BoxFit.fill,
-                              'sprites/cards/face-pngs/horizontal-card-decoration.png'),
-                        ),
-                        const SizedBox(height: 80.0),
-                        cardItems(renderPlayerCards),
-                        const SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    cardAdd(playerCards, renderPlayerCards,
-                                        deck[Random().nextInt(deck.length)]);
-                                  });
-                                },
-                                child: const Text('P - Add'))
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    clearDeck();
-                                  });
-                                },
-                                child: const Text('CLEAR GAME'))
-                          ],
-                        ),
-                        const SizedBox(height: 100.0),
                       ],
                     ),
                   ),
+            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
+            cardItems(renderDealCards),
+            const SizedBox(height: 80.0),
+            SizedBox(
+              height: 108.33,
+              width: 148.33,
+              child: Image.asset(
+                  fit: BoxFit.fill,
+                  'sprites/cards/face-pngs/horizontal-card-decoration.png'),
+            ),
+            const SizedBox(height: 80.0),
+            cardItems(renderPlayerCards),
+            const SizedBox(height: 20.0),
             !play
                 ? NumericKeyboard(
                     onKeyboardTap: (String value) {
@@ -410,6 +292,7 @@ class _BlackjackState extends State<Blackjack> {
   Future<void> State_Setter(bool game_running) async {
     if (!game_running) {
       var temp_bal = await balanceUpdate();
+
       setState(() {
         balance = temp_bal;
       });
@@ -418,50 +301,74 @@ class _BlackjackState extends State<Blackjack> {
       play = game_running;
     });
   }
+
+  void render(var json) {
+    var new_player_cards = card_parser(json["PLAYERS_CARDS"]);
+    var new_dealer_cards = card_parser(json["DEALERS_CARDS"]);
+    setState(() {
+      for (String card in new_player_cards) {
+        String card_path = "sprites/cards/face-pngs/" + card + ".png";
+        if (!playerCards.contains(card_path)) {
+          cardAdd(playerCards, renderPlayerCards, card_path);
+        }
+      }
+      for (String card in new_dealer_cards) {
+        String card_path = "sprites/cards/face-pngs/" + card + ".png";
+        if (!dealerCards.contains(card_path)) {
+          cardAdd(dealerCards, renderDealCards, card_path);
+        }
+      }
+    });
+    if (json["GAME_ENDED"] == "true") {
+      Fluttertoast.showToast(
+          msg: "Game over! Winner: " + json["WINNER"],
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.black,
+          webPosition: "center",
+          fontSize: 40,
+          timeInSecForIosWeb: 10);
+      Future.delayed(Duration(seconds: 10), () {
+        clearDeck(); //
+      });
+    }
+  }
+
+  Future<bool> blackjack_call(String s) async {
+    var reqs = {"token": sessiontoken, "move": s};
+    var data = await request("UpdateBlackjack", reqs, Toast: false);
+    if (data[0] == 200) {
+      render(data[1]);
+    }
+    print(data[1]["GAME_ENDED"]);
+    return (!(data[1]["GAME_ENDED"] == "true"));
+  }
+
+  Future<List> RejoinBlackjack() async {
+    var reqs = {"token": sessiontoken};
+    var data = await request("RejoinBlackjack", reqs, Toast: false);
+    if (data[0] == 200) {
+      render(data[1]);
+    }
+    return data;
+  }
+
+  Future<List> StartBlackjack(double bet) async {
+    var reqs = {"token": sessiontoken, "bet": bet.toString()};
+    var data = await request("NewBlackjack", reqs, Toast: false);
+    if (data[0] == 200) {
+      render(data[1]);
+    } else if (data[0] == 412) {
+      return RejoinBlackjack();
+    }
+    return data;
+  }
 }
 
-void render(var json) {
-  String str = "";
-  if (json["GAME_ENDED"] == "true") {
-    str = "Game over! Winner: " + json["WINNER"];
+List<String> card_parser(cards) {
+  List<String> card_data = [];
+  for (int i = 0; i < cards.length; i += 2) {
+    card_data.add(cards.substring(i, i + 2));
   }
-  str += "\n Your Hand: " + json["PLAYERS_CARDS"];
-  str += "\n Dealer Hand: " + json["DEALERS_CARDS"];
-  Fluttertoast.showToast(
-      msg: str,
-      gravity: ToastGravity.BOTTOM,
-      textColor: Colors.black,
-      webPosition: "center",
-      fontSize: 40,
-      timeInSecForIosWeb: 10);
-}
-
-Future<bool> blackjack_call(String s) async {
-  var reqs = {"token": sessiontoken, "move": s};
-  var data = await request("UpdateBlackjack", reqs, Toast: false);
-  if (data[0] == 200) {
-    render(data[1]);
-  }
-  print(data[1]["GAME_ENDED"]);
-  return (!(data[1]["GAME_ENDED"] == "true"));
-}
-
-Future<List> RejoinBlackjack() async {
-  var reqs = {"token": sessiontoken};
-  var data = await request("RejoinBlackjack", reqs, Toast: false);
-  if (data[0] == 200) {
-    render(data[1]);
-  }
-  return data;
-}
-
-Future<List> StartBlackjack(double bet) async {
-  var reqs = {"token": sessiontoken, "bet": bet.toString()};
-  var data = await request("NewBlackjack", reqs, Toast: false);
-  if (data[0] == 200) {
-    render(data[1]);
-  } else if (data[0] == 412) {
-    return RejoinBlackjack();
-  }
-  return data;
+  print(card_data);
+  return card_data;
 }
