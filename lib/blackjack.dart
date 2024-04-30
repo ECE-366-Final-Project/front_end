@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
@@ -47,25 +46,25 @@ FlipCard coverCard(String cardFace) {
       fill: Fill.fillBack,
       direction: FlipDirection.HORIZONTAL,
       front: SizedBox(
-        height: 148.33,
-        width: 108.33,
+        height: 111.25,
+        width: 81.25,
         child: Image.asset(fit: BoxFit.fill, cardFace),
       ),
       back: SizedBox(
-        height: 148.33,
-        width: 108.33,
+        height: 111.25,
+        width: 81.25,
         child: Image.asset(
             fit: BoxFit.fill, 'sprites/cards/face-pngs/background_default.png'),
       ));
 }
 
 SizedBox card(Image face) {
-  return SizedBox(height: 148.33, width: 108.33, child: face);
+  return SizedBox(height: 111.25, width: 81.25, child: face);
 }
 
 SizedBox cardItems(List<Widget> renderCards) {
   return SizedBox(
-    width: 453.33,
+    width: 345,
     child: Center(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -193,41 +192,7 @@ class _BlackjackState extends State<Blackjack> {
                   ])
                 : SingleChildScrollView(
                     child: Column(
-                      children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                  icon: const Icon(Icons.add_circle_rounded,
-                                      color: Colors.green,
-                                      size: 40.0,
-                                      semanticLabel: 'Hit'),
-                                  onPressed: () async {
-                                    bool data = await blackjack_call("hit");
-                                    State_Setter(data);
-                                  }),
-                              IconButton(
-                                  icon: const Icon(Icons.stop_circle_rounded,
-                                      color: Colors.red,
-                                      size: 40.0,
-                                      semanticLabel: 'Stand'),
-                                  onPressed: () async {
-                                    bool data = await blackjack_call("stand");
-                                    State_Setter(data);
-                                  }),
-                              IconButton(
-                                  icon: const Icon(
-                                      Icons.exposure_plus_2_rounded,
-                                      color: Colors.green,
-                                      size: 40.0,
-                                      semanticLabel: 'Double Down'),
-                                  onPressed: () async {
-                                    bool data =
-                                        await blackjack_call("double_down");
-                                    State_Setter(data);
-                                  }),
-                            ]),
-                      ],
+                      children: [],
                     ),
                   ),
             !play
@@ -276,17 +241,42 @@ class _BlackjackState extends State<Blackjack> {
             SizedBox(height: 20.0),
             const SizedBox(height: 20.0),
             cardItems(renderDealCards),
-            const SizedBox(height: 80.0),
+            const SizedBox(height: 40.0),
             SizedBox(
-              height: 108.33,
-              width: 148.33,
+              height: 81.25,
+              width: 111.25,
               child: Image.asset(
                   fit: BoxFit.fill,
                   'sprites/cards/face-pngs/horizontal-card-decoration.png'),
             ),
-            const SizedBox(height: 80.0),
+            const SizedBox(height: 40.0),
             cardItems(renderPlayerCards),
             const SizedBox(height: 20.0),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              IconButton(
+                  icon: const Icon(Icons.add_circle_rounded,
+                      color: Colors.green, size: 40.0, semanticLabel: 'Hit'),
+                  onPressed: () async {
+                    bool data = await blackjack_call("hit");
+                    State_Setter(data);
+                  }),
+              IconButton(
+                  icon: const Icon(Icons.stop_circle_rounded,
+                      color: Colors.red, size: 40.0, semanticLabel: 'Stand'),
+                  onPressed: () async {
+                    bool data = await blackjack_call("stand");
+                    State_Setter(data);
+                  }),
+              IconButton(
+                  icon: const Icon(Icons.exposure_plus_2_rounded,
+                      color: Colors.green,
+                      size: 40.0,
+                      semanticLabel: 'Double Down'),
+                  onPressed: () async {
+                    bool data = await blackjack_call("double_down");
+                    State_Setter(data);
+                  }),
+            ]),
             SizedBox(height: 100.0)
           ]),
         ),
@@ -315,7 +305,7 @@ class _BlackjackState extends State<Blackjack> {
         if (!playerString.contains(card)) {
           playerString.add(card);
           String card_path = "sprites/cards/face-pngs/" + card + ".png";
-            cardAdd(playerCards, renderPlayerCards, card_path);
+          cardAdd(playerCards, renderPlayerCards, card_path);
         }
       }
       for (String card in new_dealer_cards) {
@@ -348,9 +338,9 @@ class _BlackjackState extends State<Blackjack> {
   }
 
   Future<List> RejoinBlackjack() async {
-      setState(() {
-        clearDeck(); //
-      });
+    setState(() {
+      clearDeck(); //
+    });
 
     var reqs = {"token": sessiontoken};
     var data = await request("RejoinBlackjack", reqs, Toast: false);
@@ -361,9 +351,9 @@ class _BlackjackState extends State<Blackjack> {
   }
 
   Future<List> StartBlackjack(double bet) async {
-      setState(() {
-        clearDeck(); //
-      });
+    setState(() {
+      clearDeck(); //
+    });
     var reqs = {"token": sessiontoken, "bet": bet.toString()};
     var data = await request("NewBlackjack", reqs, Toast: false);
     if (data[0] == 200) {

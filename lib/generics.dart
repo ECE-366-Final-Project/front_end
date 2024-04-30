@@ -44,7 +44,6 @@ Future<List> request(String command, Map<String, String> args,
     Toast = true;
   }
   var map = json.decode(body);
-  print(map);
   if (Toast || status == 400) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
