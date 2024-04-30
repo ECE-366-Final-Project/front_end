@@ -20,8 +20,10 @@ String backOfCard = 'sprites/cards/face-pngs/background_default.png';
 
 List<Image> dealerCards = [];
 List<Image> playerCards = [];
+List<String> playerString = [];
 List<Widget> renderDealCards = [];
 List<Widget> renderPlayerCards = [];
+List<String> dealerString = [];
 
 cardAdd(List<Image> imageDeck, List<Widget> displayDeck, String face) {
   imageDeck.add(Image.asset(face));
@@ -34,6 +36,8 @@ clearDeck() {
   playerCards.clear();
   renderDealCards.clear();
   renderPlayerCards.clear();
+  playerString.clear();
+  dealerString.clear();
 }
 
 FlipCard coverCard(String cardFace) {
@@ -164,6 +168,7 @@ class _BlackjackState extends State<Blackjack> {
                               fontWeight: FontWeight.bold)),
                       onPressed: () {
                         setState(() {
+                          clearDeck();
                           bj_bet_text = "0.00";
                           slotTempBalance = '';
                         });
@@ -225,20 +230,6 @@ class _BlackjackState extends State<Blackjack> {
                       ],
                     ),
                   ),
-            SizedBox(height: 20.0),
-            const SizedBox(height: 20.0),
-            cardItems(renderDealCards),
-            const SizedBox(height: 80.0),
-            SizedBox(
-              height: 108.33,
-              width: 148.33,
-              child: Image.asset(
-                  fit: BoxFit.fill,
-                  'sprites/cards/face-pngs/horizontal-card-decoration.png'),
-            ),
-            const SizedBox(height: 80.0),
-            cardItems(renderPlayerCards),
-            const SizedBox(height: 20.0),
             !play
                 ? NumericKeyboard(
                     onKeyboardTap: (String value) {
@@ -282,6 +273,20 @@ class _BlackjackState extends State<Blackjack> {
                     ),
                   )
                 : Container(),
+            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
+            cardItems(renderDealCards),
+            const SizedBox(height: 80.0),
+            SizedBox(
+              height: 108.33,
+              width: 148.33,
+              child: Image.asset(
+                  fit: BoxFit.fill,
+                  'sprites/cards/face-pngs/horizontal-card-decoration.png'),
+            ),
+            const SizedBox(height: 80.0),
+            cardItems(renderPlayerCards),
+            const SizedBox(height: 20.0),
             SizedBox(height: 100.0)
           ]),
         ),
@@ -292,11 +297,11 @@ class _BlackjackState extends State<Blackjack> {
   Future<void> State_Setter(bool game_running) async {
     if (!game_running) {
       var temp_bal = await balanceUpdate();
-
       setState(() {
         balance = temp_bal;
       });
     }
+
     setState(() {
       play = game_running;
     });
@@ -307,14 +312,16 @@ class _BlackjackState extends State<Blackjack> {
     var new_dealer_cards = card_parser(json["DEALERS_CARDS"]);
     setState(() {
       for (String card in new_player_cards) {
-        String card_path = "sprites/cards/face-pngs/" + card + ".png";
-        if (!playerCards.contains(card_path)) {
-          cardAdd(playerCards, renderPlayerCards, card_path);
+        if (!playerString.contains(card)) {
+          playerString.add(card);
+          String card_path = "sprites/cards/face-pngs/" + card + ".png";
+            cardAdd(playerCards, renderPlayerCards, card_path);
         }
       }
       for (String card in new_dealer_cards) {
-        String card_path = "sprites/cards/face-pngs/" + card + ".png";
-        if (!dealerCards.contains(card_path)) {
+        if (!dealerString.contains(card)) {
+          dealerString.add(card);
+          String card_path = "sprites/cards/face-pngs/" + card + ".png";
           cardAdd(dealerCards, renderDealCards, card_path);
         }
       }
@@ -327,9 +334,6 @@ class _BlackjackState extends State<Blackjack> {
           webPosition: "center",
           fontSize: 40,
           timeInSecForIosWeb: 10);
-      Future.delayed(Duration(seconds: 10), () {
-        clearDeck(); //
-      });
     }
   }
 
@@ -344,6 +348,10 @@ class _BlackjackState extends State<Blackjack> {
   }
 
   Future<List> RejoinBlackjack() async {
+      setState(() {
+        clearDeck(); //
+      });
+
     var reqs = {"token": sessiontoken};
     var data = await request("RejoinBlackjack", reqs, Toast: false);
     if (data[0] == 200) {
@@ -353,6 +361,9 @@ class _BlackjackState extends State<Blackjack> {
   }
 
   Future<List> StartBlackjack(double bet) async {
+      setState(() {
+        clearDeck(); //
+      });
     var reqs = {"token": sessiontoken, "bet": bet.toString()};
     var data = await request("NewBlackjack", reqs, Toast: false);
     if (data[0] == 200) {
