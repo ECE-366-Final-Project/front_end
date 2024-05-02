@@ -23,7 +23,7 @@ const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
     {bool Toast = true}) async {
   var call;
-  String body = "{Message: Failed!}";
+  String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
