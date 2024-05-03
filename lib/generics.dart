@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
 import 'dart:convert';
 import 'package:front_end/blackjack.dart';
+//import 'package:front_end/roulette.dart';
 
 String balance = '0.00';
 String user_reference = "";
@@ -31,15 +32,16 @@ Future<List> request(String command, Map<String, String> args,
     call = Uri.http(SRC, "/" + command);
   }
   int status = 405;
-  print(call);
   try {
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
     status = packet.statusCode;
     body = packet.body;
+    print(body);
     if (status == 400) {
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
+    body ='''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
   }

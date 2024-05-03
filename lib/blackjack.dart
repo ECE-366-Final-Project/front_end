@@ -15,7 +15,7 @@ String slotTempBalance = "";
 bool play = false;
 FlipCardController _controller = FlipCardController();
 ScrollController _scrollController = ScrollController();
-String backOfCard = 'sprites/cards/face-pngs/background_default.png';
+String backOfCard = 'sprites/cards/face-pngs/Playing_Card_Back.jpg';
 
 List<Image> dealerCards = [];
 List<Image> playerCards = [];
@@ -24,10 +24,14 @@ List<Widget> renderDealCards = [];
 List<Widget> renderPlayerCards = [];
 List<String> dealerString = [];
 
-cardAdd(List<Image> imageDeck, List<Widget> displayDeck, String face) {
+cardAdd(List<Image> imageDeck, List<Widget> displayDeck, String face) async {
   imageDeck.add(Image.asset(face));
-  displayDeck.add(const SizedBox(width: 5.0));
-  displayDeck.add(card(imageDeck[imageDeck.length - 1]));
+  // displayDeck.add(const SizedBox(width: 5.0));
+  // displayDeck.add(card(imageDeck[imageDeck.length - 1]));
+  Widget Card = coverCard(face);
+  displayDeck.add( const SizedBox(width: 5.0,));
+  displayDeck.add(Card);
+  await Future.delayed(Duration(seconds: 1));
 }
 
 clearDeck() {
@@ -45,17 +49,18 @@ FlipCard coverCard(String cardFace) {
       flipOnTouch: false,
       fill: Fill.fillBack,
       direction: FlipDirection.HORIZONTAL,
-      front: SizedBox(
+      back: SizedBox(
         height: 111.25,
         width: 81.25,
         child: Image.asset(fit: BoxFit.fill, cardFace),
       ),
-      back: SizedBox(
+      front: SizedBox(
         height: 111.25,
         width: 81.25,
         child: Image.asset(
-            fit: BoxFit.fill, 'sprites/cards/face-pngs/background_default.png'),
-      ));
+            fit: BoxFit.fill, backOfCard),
+      ),
+      autoFlipDuration: const Duration(seconds: 1));
 }
 
 SizedBox card(Image face) {
@@ -63,6 +68,11 @@ SizedBox card(Image face) {
 }
 
 SizedBox cardItems(List<Widget> renderCards) {
+  List<Widget> render_children = List.from(renderCards);
+  if(renderCards.length <= 2) {
+      render_children.add(const SizedBox(width: 5.0));
+      render_children.add(card(Image.asset(backOfCard)));
+  }
   return SizedBox(
     width: 345,
     child: Center(
@@ -70,7 +80,7 @@ SizedBox cardItems(List<Widget> renderCards) {
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, children: renderCards),
+            mainAxisAlignment: MainAxisAlignment.center, children: render_children),
       ),
     ),
   );
@@ -247,11 +257,12 @@ class _BlackjackState extends State<Blackjack> {
               width: 111.25,
               child: Image.asset(
                   fit: BoxFit.fill,
-                  'sprites/cards/face-pngs/horizontal-card-decoration.png'),
+                  'sprites/cards/face-pngs/Rotated_Card_Back.gif'),
             ),
             const SizedBox(height: 40.0),
             cardItems(renderPlayerCards),
             const SizedBox(height: 20.0),
+            play ?
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               IconButton(
                   icon: const Icon(Icons.add_circle_rounded,
@@ -276,7 +287,7 @@ class _BlackjackState extends State<Blackjack> {
                     bool data = await blackjack_call("double_down");
                     State_Setter(data);
                   }),
-            ]),
+            ]) : Container(),
             SizedBox(height: 100.0)
           ]),
         ),
@@ -290,32 +301,38 @@ class _BlackjackState extends State<Blackjack> {
       setState(() {
         balance = temp_bal;
       });
+      await Future.delayed(Duration(seconds: 5), () {
+        setState(() {
+          play = game_running;
+        });
+      });
+    } else {
+      setState(() {
+        play = game_running;
+      });
     }
-
-    setState(() {
-      play = game_running;
-    });
   }
 
-  void render(var json) {
+  Future<void> render(var json) async {
     var new_player_cards = card_parser(json["PLAYERS_CARDS"]);
     var new_dealer_cards = card_parser(json["DEALERS_CARDS"]);
-    setState(() {
       for (String card in new_player_cards) {
         if (!playerString.contains(card)) {
           playerString.add(card);
           String card_path = "sprites/cards/face-pngs/" + card + ".png";
-          cardAdd(playerCards, renderPlayerCards, card_path);
+          await cardAdd(playerCards, renderPlayerCards, card_path);
         }
       }
       for (String card in new_dealer_cards) {
         if (!dealerString.contains(card)) {
           dealerString.add(card);
           String card_path = "sprites/cards/face-pngs/" + card + ".png";
-          cardAdd(dealerCards, renderDealCards, card_path);
+          await cardAdd(dealerCards, renderDealCards, card_path);
         }
       }
-    });
+
+    setState(() {});
+    await Future.delayed(Duration(seconds: 3));
     if (json["GAME_ENDED"] == "true") {
       Fluttertoast.showToast(
           msg: "Game over! Winner: " + json["WINNER"],
