@@ -11,14 +11,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
 import 'dart:convert';
 import 'package:front_end/blackjack.dart';
+import 'package:front_end/roulette.dart';
 //import 'package:front_end/roulette.dart';
 
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
 var ratelimit = DateTime.utc(1989, 11, 9);
-
-var feed = <Widget>[];
 
 const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
@@ -37,7 +36,7 @@ Future<List> request(String command, Map<String, String> args,
     status = packet.statusCode;
     body = packet.body;
     print(body);
-    if (status == 400) {
+    if (status > 400) {
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
@@ -46,7 +45,7 @@ Future<List> request(String command, Map<String, String> args,
     Toast = true;
   }
   var map = json.decode(body);
-  if (Toast || status == 400) {
+  if (Toast || status != 200) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
         gravity: ToastGravity.BOTTOM,
@@ -107,7 +106,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {}),
+                onPressed: () => {Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Roulette()))}),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(

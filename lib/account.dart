@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/generics.dart';
 import 'package:front_end/account-login.dart';
@@ -10,6 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 //   accountItems("Blackjack", r"- $ 4,526.00", "Loss"),
 //   accountItems("Action", r"+ $ 0.00", "Credit"),
 // ];
+
+List<Widget> account_feed = <Widget>[];
+List<Widget> blackjack_feed = <Widget>[];
+List<Widget> roulette_feed = <Widget>[];
+List<Widget> slots_feed = <Widget>[];
+
 
 redGreenFont(String type, String charge) {
   if (type == "Win" || type == "Deposit") {
@@ -26,17 +33,49 @@ redGreenFont(String type, String charge) {
   }
 }
 
-displayAccoutList() {
-  return Container(
-    width: 400,
-    child: Column(children: feed.reversed.toList()),
+displayAccountList(BuildContext context) {
+  return DefaultTabController(
+    length: 4,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          width: 500,
+          child: TabBar(tabs: [
+            Tab(text: "User"),
+            Tab(text: "Slots"),
+            Tab(text: "Blackjack"),
+            Tab(text: "Roulette"),
+          ]),
+        ),
+        Container( 
+          //Add this to give height
+          height: MediaQuery.of(context).size.height,
+          width: 500,
+          child: TabBarView(children: [
+            Column(
+              children: account_feed,
+            ),
+            Column(
+              children: slots_feed,
+            ),
+            Column(
+              children:blackjack_feed,
+            ),
+            Column(
+              children: roulette_feed),
+          ]),
+        ),
+      ],
+    ),
   );
 }
 
 Column accountItems(String item, String charge, String type,
-        {Color oddColour = Colors.white}) =>
+{Color oddColour = Colors.white}) =>
     Column(
       children: [
+        SizedBox(height: 10.0),
         Container(
           decoration: BoxDecoration(
               color: oddColour,
@@ -70,7 +109,6 @@ Column accountItems(String item, String charge, String type,
             ],
           ),
         ),
-        SizedBox(height: 10.0),
       ],
     );
 
@@ -83,6 +121,8 @@ class _Account extends State<Account> {
   @override
   void initState() {
     super.initState();
+    load_feeds();
+    print("Initialized State!");
   }
 
   Widget build(BuildContext context) {
@@ -153,7 +193,7 @@ class _Account extends State<Account> {
                         size: 30.0,
                         semanticLabel: 'Refresh History')),
                 SizedBox(height: 20.0),
-                displayAccoutList(),
+                displayAccountList(context),
                 SizedBox(height: 100.0),
               ],
             ),
@@ -162,4 +202,10 @@ class _Account extends State<Account> {
       ),
     );
   }
+}
+
+void load_feeds() {
+  var feed_raw = request("", args);
+
+
 }

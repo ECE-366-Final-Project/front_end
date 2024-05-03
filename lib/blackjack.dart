@@ -285,6 +285,7 @@ class _BlackjackState extends State<Blackjack> {
                       semanticLabel: 'Double Down'),
                   onPressed: () async {
                     bool data = await blackjack_call("double_down");
+
                     State_Setter(data);
                   }),
             ]) : Container(),
@@ -296,15 +297,13 @@ class _BlackjackState extends State<Blackjack> {
   }
 
   Future<void> State_Setter(bool game_running) async {
+    var temp_bal = await balanceUpdate();
     if (!game_running) {
-      var temp_bal = await balanceUpdate();
-      setState(() {
-        balance = temp_bal;
-      });
       await Future.delayed(Duration(seconds: 5), () {
-        setState(() {
+          setState(() {
+          balance = temp_bal;
           play = game_running;
-        });
+      });
       });
     } else {
       setState(() {
