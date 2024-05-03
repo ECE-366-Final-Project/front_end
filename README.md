@@ -22,4 +22,4 @@ Two chrome extensions are also necessary in this situation:
 https://chromewebstore.google.com/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino
 https://chromewebstore.google.com/detail/dart-debug-extension/eljbmlghnomdjgdjmbdekegdkbabckhm
 
-The first extension allows the frontend to make localhost calls, whilst the second enables the dart debug environment in the browser. These are not necessary when running the production build. 
+The first extension allows the frontend to make localhost calls, whilst the second enables the dart debug environment in the browser. These are not necessary when accessing the production build. 
