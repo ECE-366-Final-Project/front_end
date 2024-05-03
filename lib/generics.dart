@@ -19,6 +19,8 @@ String user_reference = "";
 String sessiontoken = '0.00';
 var ratelimit = DateTime.utc(2023, 1, 1);
 
+
+
 const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
     {bool Toast = true}) async {
@@ -32,6 +34,7 @@ Future<List> request(String command, Map<String, String> args,
   } else {
     call = Uri.http(SRC, "/" + command);
   }
+  print(call);
   int status = 405;
   try {
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
@@ -42,7 +45,8 @@ Future<List> request(String command, Map<String, String> args,
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
-    body ='''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
+    body =
+        '''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
   }
@@ -58,6 +62,9 @@ Future<List> request(String command, Map<String, String> args,
   }
   return [status, map];
 }
+
+
+
 
 Future<String> balanceUpdate() async {
   //Easy wrapper for the balance, as it's called in the appbar below
@@ -110,8 +117,10 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Roulette()))}),
+                onPressed: () => {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Roulette()))
+                    }),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(
@@ -142,8 +151,11 @@ App_Bar(context) {
       IconButton(
           icon: const Icon(Icons.account_circle,
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Account()))),
+          onPressed: () async {
+            await load_feeds();
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Account()));
+          }),
     ],
   );
 }
