@@ -17,11 +17,13 @@ import 'package:front_end/roulette.dart';
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
-var ratelimit = DateTime.utc(1989, 11, 9);
+var ratelimit = DateTime.utc(2023, 1, 1);
 
 const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
     {bool Toast = true}) async {
+//This function grabs our request from the database, returning the json as a map.
+// It also displays error or status messages with an optional flag
   var call;
   String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
@@ -58,12 +60,14 @@ Future<List> request(String command, Map<String, String> args,
 }
 
 Future<String> balanceUpdate() async {
+  //Easy wrapper for the balance, as it's called in the appbar below
   var call = Uri.http(SRC, "/GetBal", {"token": sessiontoken});
   final packet = await http.get(call).timeout(const Duration(seconds: 5));
   return json.decode(packet.body)["BALANCE"].toString();
 }
 
 App_Bar(context) {
+  //This appbar persists on all pages, so it lives here to allow for persistence.
   return AppBar(
     automaticallyImplyLeading: false,
     leading: IconButton(

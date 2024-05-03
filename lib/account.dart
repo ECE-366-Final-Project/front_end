@@ -205,7 +205,10 @@ class _Account extends State<Account> {
 }
 
 void load_feeds() {
-  var feed_raw = request("", args);
+  var reqs = {"token": sessiontoken};
+  var feed_raw = request("GetUserHistory", reqs);
+  //This is the datadump of all 5 latest transactions for each category. 
+  print(feed_raw);
 
 
 }

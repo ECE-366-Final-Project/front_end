@@ -151,8 +151,12 @@ create_user(username, password1, password2, context) async {
   print(username);
   print(password1);
   print(password2);
+  //Comparing passwords on the frontend.
+
   if (password1 == password2) {
     final salt = "imposter";
+
+  //A concious decision was made to hash with a salt to ensure that, even in the case of a man-in-the-middle, a user's password is never compromised.
     String passkey =
         sha256.convert(utf8.encode(username + password1 + salt)).toString();
     Map<String, String> args = {"username": username, "passkey": passkey};

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/generics.dart';
 import 'package:intl/intl.dart';
