@@ -1,56 +1,135 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
+import 'package:front_end/arrow.dart';
 import 'package:roulette/roulette.dart';
 
 var currencyValue = new NumberFormat.compact();
 String rouletteBetText = "0.00";
 String rouletteTempBalance = "";
 bool play = false;
+List<Widget> betTable = [];
 
 final units = [
-  RouletteUnit.text('00', color: Colors.green),
-  RouletteUnit.text('27', color: Colors.red),
-  RouletteUnit.text('10', color: Colors.black),
-  RouletteUnit.text('35', color: Colors.red),
-  RouletteUnit.text('29', color: Colors.black),
-  RouletteUnit.text('12', color: Colors.red),
-  RouletteUnit.text('8', color: Colors.black),
-  RouletteUnit.text('19', color: Colors.red),
-  RouletteUnit.text('31', color: Colors.black),
-  RouletteUnit.text('18', color: Colors.red),
-  RouletteUnit.text('6', color: Colors.black),
-  RouletteUnit.text('21', color: Colors.red),
-  RouletteUnit.text('33', color: Colors.black),
-  RouletteUnit.text('16', color: Colors.red),
-  RouletteUnit.text('4', color: Colors.black),
-  RouletteUnit.text('23', color: Colors.red),
-  RouletteUnit.text('35', color: Colors.black),
-  RouletteUnit.text('14', color: Colors.red),
-  RouletteUnit.text('2', color: Colors.black),
-  RouletteUnit.text('0', color: Colors.green),
-  RouletteUnit.text('28', color: Colors.black),
-  RouletteUnit.text('9', color: Colors.red),
-  RouletteUnit.text('26', color: Colors.black),
-  RouletteUnit.text('30', color: Colors.red),
-  RouletteUnit.text('11', color: Colors.black),
-  RouletteUnit.text('7', color: Colors.red),
-  RouletteUnit.text('20', color: Colors.black),
-  RouletteUnit.text('32', color: Colors.red),
-  RouletteUnit.text('17', color: Colors.black),
-  RouletteUnit.text('5', color: Colors.red),
-  RouletteUnit.text('22', color: Colors.black),
-  RouletteUnit.text('34', color: Colors.red),
-  RouletteUnit.text('15', color: Colors.black),
-  RouletteUnit.text('3', color: Colors.red),
-  RouletteUnit.text('24', color: Colors.black),
-  RouletteUnit.text('36', color: Colors.red),
-  RouletteUnit.text('13', color: Colors.black),
-  RouletteUnit.text('1', color: Colors.red),
+  RouletteUnit.text('00',
+      textStyle: TextStyle(color: Colors.white), color: Colors.green),
+  RouletteUnit.text('27',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('10',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('35',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('29',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('12',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('8',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('19',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('31',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('18',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('6',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('21',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('33',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('16',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('4',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('23',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('35',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('14',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('2',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('0',
+      textStyle: TextStyle(color: Colors.white), color: Colors.green),
+  RouletteUnit.text('28',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('9',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('26',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('30',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('11',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('7',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('20',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('32',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('17',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('5',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('22',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('34',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('15',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('3',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('24',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('36',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+  RouletteUnit.text('13',
+      textStyle: TextStyle(color: Colors.white), color: Colors.black),
+  RouletteUnit.text('1',
+      textStyle: TextStyle(color: Colors.white), color: Colors.red),
+];
+List<bool> tappedIn = [
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
 ];
 
 class RouletteClass extends StatefulWidget {
@@ -174,7 +253,7 @@ class _RouletteState extends State<RouletteClass>
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  await controller.rollTo(2);
+                  await controller.rollTo(2, offset: Random().nextDouble());
                   var curtime = DateTime.now();
                   if (ratelimit.difference(curtime).inSeconds > 10) {
                     var col_str = "linear-gradient(to right, #ced111, #ced111)";
@@ -234,15 +313,641 @@ class _RouletteState extends State<RouletteClass>
                 },
               ),
             ]),
-            SizedBox(height: 20.0),
-            Row(children: [
-              SizedBox(width: 30.0),
-            ]),
+            SizedBox(height: 30.0),
+            SizedBox(
+                child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                SizedBox(
+                  height: 350.0,
+                  width: 350.0,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 30.0),
+                    child: Roulette(
+                      controller: controller,
+                      style: const RouletteStyle(
+                        dividerThickness: 0.0,
+                        dividerColor: Colors.white,
+                        centerStickSizePercent: 0.05,
+                        centerStickerColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                const Arrow(),
+              ],
+            )),
+            SizedBox(height: 50.0),
+            Container(
+              decoration:
+                  BoxDecoration(border: Border.all(color: Colors.white)),
+              height: 90.0,
+              width: 360.0,
+              child: GridView.count(
+                crossAxisCount: 12,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        tappedIn[0] = !tappedIn[0];
+                      });
+                    },
+                    child: Container(
+                      height: 30.0,
+                      width: 30.0,
+                      color: tappedIn[0] ? Colors.white : Colors.red,
+                      child: Center(
+                        child: Text('3',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        tappedIn[1] = !tappedIn[1];
+                      });
+                    },
+                    child: Container(
+                      height: 30.0,
+                      width: 30.0,
+                      color: tappedIn[1] ? Colors.white : Colors.black,
+                      child: Center(
+                        child: Text('6',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        tappedIn[2] = !tappedIn[2];
+                      });
+                    },
+                    child: Container(
+                      height: 30.0,
+                      width: 30.0,
+                      color: tappedIn[2] ? Colors.white : Colors.red,
+                      child: Center(
+                        child: Text('9',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        tappedIn[3] = !tappedIn[3];
+                      });
+                    },
+                    child: Container(
+                      height: 30.0,
+                      width: 30.0,
+                      color: tappedIn[3] ? Colors.white : Colors.red,
+                      child: Center(
+                        child: Text('12',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[4] = !tappedIn[4];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[4] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('15',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[5] = !tappedIn[5];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[5] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('18',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[6] = !tappedIn[6];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[6] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('21',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[7] = !tappedIn[7];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[7] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('24',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[8] = !tappedIn[8];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[8] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('27',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[9] = !tappedIn[9];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[9] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('30',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[10] = !tappedIn[10];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[10] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('33',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[11] = !tappedIn[11];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[11] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('36',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[12] = !tappedIn[12];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[12] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('2',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[13] = !tappedIn[13];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[13] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('5',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[14] = !tappedIn[14];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[14] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('8',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[15] = !tappedIn[15];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[15] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('11',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[16] = !tappedIn[16];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[16] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('14',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[17] = !tappedIn[17];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[17] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('17',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[18] = !tappedIn[18];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[18] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('20',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[19] = !tappedIn[19];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[19] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('23',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[20] = !tappedIn[20];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[20] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('26',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[21] = !tappedIn[21];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[21] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('29',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[22] = !tappedIn[22];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[22] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('32',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[23] = !tappedIn[23];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[23] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('35',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[24] = !tappedIn[24];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[24] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('1',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[25] = !tappedIn[25];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[25] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('4',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[26] = !tappedIn[26];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[26] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('7',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[27] = !tappedIn[27];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[27] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('10',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[28] = !tappedIn[28];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[28] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('13',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[29] = !tappedIn[29];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[29] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('16',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[30] = !tappedIn[30];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[30] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('19',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[31] = !tappedIn[31];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[31] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('22',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[32] = !tappedIn[32];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[32] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('25',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[33] = !tappedIn[33];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[33] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('28',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[34] = !tappedIn[34];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[34] ? Colors.white : Colors.black,
+                          child: Center(
+                              child: Text('31',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          tappedIn[35] = !tappedIn[35];
+                        });
+                      },
+                      child: Container(
+                          height: 30.0,
+                          width: 30.0,
+                          color: tappedIn[35] ? Colors.white : Colors.red,
+                          child: Center(
+                              child: Text('34',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))))),
+                ],
+              ),
+            ),
             SizedBox(height: 100.0)
           ]),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   Future<int> Withdraw(String depoWithText) async {
