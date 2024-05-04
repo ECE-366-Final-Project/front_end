@@ -22,6 +22,7 @@ dependencies:
   crypto: ^3.0.3
   shared_preferences: ^2.2.3
   flip_card: ^0.7.0
+  roulette: ^0.1.5
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/generics.dart';
 import "package:front_end/slots.dart";
 import 'package:front_end/blackjack.dart';
+import 'package:front_end/roulette.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -67,7 +68,13 @@ class Home extends StatelessWidget {
                                       color: Colors.black,
                                       height: 128.0,
                                       width: 128.0),
-                                  onPressed: (() => {})))),
+                                  onPressed: (() => {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RouletteClass()))
+                                      })))),
                       SizedBox(height: 10.0),
                       Text('ROULETTE',
                           style: TextStyle(

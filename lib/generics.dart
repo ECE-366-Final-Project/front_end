@@ -11,7 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
 import 'dart:convert';
 import 'package:front_end/blackjack.dart';
-//import 'package:front_end/roulette.dart';
+import 'package:front_end/roulette.dart';
 
 String balance = '0.00';
 String user_reference = "";
@@ -41,7 +41,8 @@ Future<List> request(String command, Map<String, String> args,
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
-    body ='''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
+    body =
+        '''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
   }
@@ -107,7 +108,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {}),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RouletteClass()))),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(

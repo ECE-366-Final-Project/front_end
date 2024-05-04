@@ -1,47 +1,75 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
-import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
-import 'package:front_end/slot-machine.dart';
+import 'package:roulette/roulette.dart';
 
 var currencyValue = new NumberFormat.compact();
-String slotBetText = "0.00";
-String slotTempBalance = "";
+String rouletteBetText = "0.00";
+String rouletteTempBalance = "";
 bool play = false;
 
-class Slots extends StatefulWidget {
-  const Slots({Key? key}) : super(key: key);
+final units = [
+  RouletteUnit.text('00', color: Colors.green),
+  RouletteUnit.text('27', color: Colors.red),
+  RouletteUnit.text('10', color: Colors.black),
+  RouletteUnit.text('35', color: Colors.red),
+  RouletteUnit.text('29', color: Colors.black),
+  RouletteUnit.text('12', color: Colors.red),
+  RouletteUnit.text('8', color: Colors.black),
+  RouletteUnit.text('19', color: Colors.red),
+  RouletteUnit.text('31', color: Colors.black),
+  RouletteUnit.text('18', color: Colors.red),
+  RouletteUnit.text('6', color: Colors.black),
+  RouletteUnit.text('21', color: Colors.red),
+  RouletteUnit.text('33', color: Colors.black),
+  RouletteUnit.text('16', color: Colors.red),
+  RouletteUnit.text('4', color: Colors.black),
+  RouletteUnit.text('23', color: Colors.red),
+  RouletteUnit.text('35', color: Colors.black),
+  RouletteUnit.text('14', color: Colors.red),
+  RouletteUnit.text('2', color: Colors.black),
+  RouletteUnit.text('0', color: Colors.green),
+  RouletteUnit.text('28', color: Colors.black),
+  RouletteUnit.text('9', color: Colors.red),
+  RouletteUnit.text('26', color: Colors.black),
+  RouletteUnit.text('30', color: Colors.red),
+  RouletteUnit.text('11', color: Colors.black),
+  RouletteUnit.text('7', color: Colors.red),
+  RouletteUnit.text('20', color: Colors.black),
+  RouletteUnit.text('32', color: Colors.red),
+  RouletteUnit.text('17', color: Colors.black),
+  RouletteUnit.text('5', color: Colors.red),
+  RouletteUnit.text('22', color: Colors.black),
+  RouletteUnit.text('34', color: Colors.red),
+  RouletteUnit.text('15', color: Colors.black),
+  RouletteUnit.text('3', color: Colors.red),
+  RouletteUnit.text('24', color: Colors.black),
+  RouletteUnit.text('36', color: Colors.red),
+  RouletteUnit.text('13', color: Colors.black),
+  RouletteUnit.text('1', color: Colors.red),
+];
+
+class RouletteClass extends StatefulWidget {
+  const RouletteClass({Key? key}) : super(key: key);
   @override
-  _SlotsState createState() => _SlotsState();
+  _RouletteState createState() => _RouletteState();
 }
 
-class _SlotsState extends State<Slots> {
-  late SlotMachineController _controller;
+class _RouletteState extends State<RouletteClass>
+    with SingleTickerProviderStateMixin {
+  late RouletteController controller;
 
   @override
   void initState() {
     super.initState();
+    controller = RouletteController(vsync: this, group: RouletteGroup(units));
   }
 
-  void onStart(List<int> result) {
-    final index = Random().nextInt(20);
-    _controller.start(
-        hitRollItemIndex: index < 5 ? index : null, result: result);
-    Timer(Duration(seconds: 3), () {
-      _controller.stop(reelIndex: 0);
-    });
-    Timer(Duration(seconds: 6), () {
-      _controller.stop(reelIndex: 1);
-    });
-    Timer(Duration(seconds: 9), () {
-      _controller.stop(reelIndex: 2);
-    });
-  }
+  void onStart(List<int> result) {}
 
   @override
   Widget build(BuildContext context) {
@@ -58,58 +86,6 @@ class _SlotsState extends State<Slots> {
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 100.0),
-            SlotMachine(
-                rollItems: [
-                  RollItem(
-                      index: 0,
-                      child:
-                          img_getter('assets/sprites/slots-symbols/1xbar.png')),
-                  RollItem(
-                      index: 1,
-                      child:
-                          img_getter('assets/sprites/slots-symbols/2xbar.png')),
-                  RollItem(
-                      index: 2,
-                      child:
-                          img_getter('assets/sprites/slots-symbols/3xbar.png')),
-                  RollItem(
-                      index: 3,
-                      child: img_getter(
-                          'assets/sprites/slots-symbols/cherry.png')),
-                  RollItem(
-                      index: 4,
-                      child: img_getter(
-                          'assets/sprites/slots-symbols/clover.png')),
-                  RollItem(
-                      index: 5,
-                      child:
-                          img_getter('assets/sprites/slots-symbols/lemon.png')),
-                  RollItem(
-                      index: 6,
-                      child:
-                          img_getter('assets/sprites/slots-symbols/seven.png')),
-                  RollItem(
-                      index: 7,
-                      child:
-                          img_getter('assets/sprites/slots-symbols/bell.png')),
-                  RollItem(
-                      index: 8,
-                      child:
-                          img_getter('assets/sprites/slots-symbols/gem.png')),
-                  RollItem(
-                      index: 9,
-                      child: img_getter(
-                          'assets/sprites/slots-symbols/jackpot_style_2.png')),
-                ],
-                onCreated: (controller) {
-                  _controller = controller;
-                },
-                onFinished: (resultIndexes) {
-                  print('Result: $resultIndexes');
-                }),
-            SizedBox(
-              height: 10.0,
-            ),
             Text('\$' + balance,
                 style: TextStyle(
                     color: Colors.white,
@@ -118,11 +94,78 @@ class _SlotsState extends State<Slots> {
             SizedBox(
               height: 10.0,
             ),
-            Text('\$' + slotBetText,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    onPressed: () async {
+                      int status = await Withdraw('1');
+                      String data = await balanceUpdate();
+                      setState(() {
+                        balance = data;
+                        if (status == 200) {
+                          feed.add(
+                              accountItems("Roulette", r"$" + '1', "Loss"));
+                        }
+                      });
+                    },
+                    child: Text('\$1',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                SizedBox(width: 20.0),
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    onPressed: () async {
+                      int status = await Withdraw('5');
+                      String data = await balanceUpdate();
+                      setState(() {
+                        balance = data;
+                        if (status == 200) {
+                          feed.add(
+                              accountItems("Roulette", r"$" + '5', "Loss"));
+                        }
+                      });
+                    },
+                    child: Text('\$5',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                SizedBox(width: 20.0),
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    onPressed: () async {
+                      int status = await Withdraw('10');
+                      String data = await balanceUpdate();
+                      setState(() {
+                        balance = data;
+                        if (status == 200) {
+                          feed.add(
+                              accountItems("Roulette", r"$" + '10', "Loss"));
+                        }
+                      });
+                    },
+                    child: Text('\$10',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                SizedBox(width: 20.0),
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    onPressed: () async {
+                      int status = await Withdraw('50');
+                      String data = await balanceUpdate();
+                      setState(() {
+                        balance = data;
+                        if (status == 200) {
+                          feed.add(
+                              accountItems("Roulette", r"$" + '50', "Loss"));
+                        }
+                      });
+                    },
+                    child: Text('\$50',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)))
+              ],
+            ),
             SizedBox(height: 20.0),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               TextButton(
@@ -131,6 +174,7 @@ class _SlotsState extends State<Slots> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
+                  await controller.rollTo(2);
                   var curtime = DateTime.now();
                   if (ratelimit.difference(curtime).inSeconds > 10) {
                     var col_str = "linear-gradient(to right, #ced111, #ced111)";
@@ -145,12 +189,13 @@ class _SlotsState extends State<Slots> {
                   } else {
                     ratelimit = curtime;
                     //TODO: Make this one function call, no logic should be completed in this area
-                    var roll_data = await Play_Slots(double.parse(slotBetText));
+                    var roll_data =
+                        await Play_Roulette(double.parse(rouletteBetText));
                     if (roll_data[0] == 200) {
                       setState(() {
-                        balance =
-                            (double.parse(balance) - double.parse(slotBetText))
-                                .toString();
+                        balance = (double.parse(balance) -
+                                double.parse(rouletteBetText))
+                            .toString();
                       });
                       String roll_reference =
                           roll_data[1]["PAYOUT_ID"].toString();
@@ -161,7 +206,8 @@ class _SlotsState extends State<Slots> {
                         roll_labels.add(int.parse(string_roll));
                       }
                       onStart(roll_labels);
-                      output_roll_data(roll_data, double.parse(slotBetText));
+                      output_roll_data(
+                          roll_data, double.parse(rouletteBetText));
                       var newbal;
                       await Future.delayed(Duration(seconds: 10), () async {
                         newbal = await balanceUpdate(); //
@@ -182,53 +228,16 @@ class _SlotsState extends State<Slots> {
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () {
                   setState(() {
-                    slotBetText = "0.00";
-                    slotTempBalance = '';
+                    rouletteBetText = "0.00";
+                    rouletteTempBalance = '';
                   });
                 },
               ),
             ]),
-            NumericKeyboard(
-              onKeyboardTap: (String value) {
-                slotTempBalance =
-                    slotTempBalance + currencyValue.format(double.parse(value));
-                setState(() {
-                  slotBetText = slotTempBalance;
-                });
-              },
-              mainAxisAlignment: MainAxisAlignment.center,
-              textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold),
-              rightButtonFn: () {
-                if (slotBetText.isEmpty ||
-                    slotBetText == '0.00' ||
-                    slotBetText == '-0.00') return;
-                setState(() {
-                  slotBetText =
-                      slotBetText.substring(0, slotBetText.length - 1);
-                  slotTempBalance = slotBetText;
-                  if (slotBetText.isEmpty ||
-                      slotBetText == '0.00' ||
-                      slotBetText == '-0.00') {
-                    slotBetText = '0.00';
-                    slotTempBalance = '';
-                  }
-                });
-              },
-              rightButtonLongPressFn: () {
-                if (slotBetText.isEmpty) return;
-                setState(() {
-                  slotBetText = '0.00';
-                  slotTempBalance = '';
-                });
-              },
-              rightIcon: const Icon(
-                Icons.backspace_outlined,
-                color: Colors.white,
-              ),
-            ),
+            SizedBox(height: 20.0),
+            Row(children: [
+              SizedBox(width: 30.0),
+            ]),
             SizedBox(height: 100.0)
           ]),
         ),
@@ -236,11 +245,17 @@ class _SlotsState extends State<Slots> {
     );
   }
 
+  Future<int> Withdraw(String depoWithText) async {
+    var data = await request(
+        "Withdraw", {"token": sessiontoken, "amount": depoWithText});
+    return data[0];
+  }
+
   Image img_getter(String path) {
     return Image.asset(path);
   }
 
-  Future<List> Play_Slots(double bet) async {
+  Future<List> Play_Roulette(double bet) async {
     var reqs = {"token": sessiontoken, "bet": bet.toString()};
     var data = await request("PlayRoulette", reqs, Toast: false);
     return data;
@@ -267,7 +282,7 @@ void output_roll_data(List roll_data, double bet) {
         webPosition: "center",
         webBgColor: col_str,
         fontSize: 40);
-    feed.add(accountItems("Slots", r"$" + str_wins, status));
+    feed.add(accountItems("Roulette", r"$" + str_wins, status));
 
     // Do something
   });
