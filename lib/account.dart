@@ -1,65 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/generics.dart';
-import 'package:front_end/account-login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 
-List<Widget> account_feed = <Widget>[];
-List<Widget> blackjack_feed = <Widget>[];
-List<Widget> roulette_feed = <Widget>[];
-List<Widget> slots_feed = <Widget>[];
+// var feed = <Widget>[
+//   accountItems("Slots", r"+ $ 4,946.00", "Win"),
+//   accountItems("Transaction", r"+ $ 5,428.00", "Deposit"),
+//   accountItems("Transaction", r"- $ 746.00", "Withdrawal"),
+//   accountItems("Blackjack", r"- $ 4,526.00", "Loss"),
+//   accountItems("Action", r"+ $ 0.00", "Credit"),
+// ];
 
 redGreenFont(String type, String charge) {
-  if (charge[0] + charge[1] == r"$-" || type == "WITHDRAWAL") {
-    return Text(charge,
-        style: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.red));
-  } else if (charge[0] == r"$" || type == "DEPOSIT") {
+  if (type == "Win" || type == "Deposit") {
     return Text(charge,
         style: TextStyle(
             fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.green));
-  }
- else {
+  } else if (type == "Loss" || type == "Withdrawal") {
+    return Text(charge,
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.red));
+  } else {
     return Text(charge,
         style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold));
   }
 }
 
-displayAccountList(BuildContext context) {
-  return DefaultTabController(
-    length: 4,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          width: 500,
-          child: TabBar(tabs: [
-            Tab(text: "User"),
-            Tab(text: "Slots"),
-            Tab(text: "Blackjack"),
-            Tab(text: "Roulette"),
-          ]),
-        ),
-        Container(
-          //Add this to give height
-          height: MediaQuery.of(context).size.height,
-          width: 450,
-          child: TabBarView(children: [
-            Column(
-              children: account_feed,
-            ),
-            Column(
-              children: slots_feed,
-            ),
-            Column(
-              children: blackjack_feed,
-            ),
-            Column(children: roulette_feed),
-          ]),
-        ),
-      ],
-    ),
+displayAccoutList() {
+  return Container(
+    width: 400,
+    child: Column(children: feed),
   );
 }
 
@@ -67,7 +36,6 @@ Column accountItems(String item, String charge, String type,
         {Color oddColour = Colors.white}) =>
     Column(
       children: [
-        SizedBox(height: 10.0),
         Container(
           decoration: BoxDecoration(
               color: oddColour,
@@ -82,7 +50,7 @@ Column accountItems(String item, String charge, String type,
                   Text(item,
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.bold)),
-                  redGreenFont(item, charge)
+                  redGreenFont(type, charge)
                 ],
               ),
               SizedBox(
@@ -101,6 +69,7 @@ Column accountItems(String item, String charge, String type,
             ],
           ),
         ),
+        SizedBox(height: 10.0),
       ],
     );
 
@@ -112,9 +81,7 @@ class Account extends StatefulWidget {
 class _Account extends State<Account> {
   @override
   void initState() {
-    //Prevents Duplicates
     super.initState();
-    print("Initialized State!");
   }
 
   Widget build(BuildContext context) {
@@ -166,26 +133,7 @@ class _Account extends State<Account> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: 20.0),
-                IconButton(
-                    onPressed: () async {
-                      balance = '0.00';
-                      sessiontoken = "";
-                      final prefs = await SharedPreferences.getInstance();
-                      print("This is the token!");
-                      print(prefs.getString('token'));
-                      await prefs.remove('token');
-                      user_reference = "";
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AccountLogin()));
-                    },
-                    icon: Icon(Icons.logout_rounded,
-                        color: Colors.white,
-                        size: 30.0,
-                        semanticLabel: 'Refresh History')),
-                SizedBox(height: 20.0),
-                displayAccountList(context),
+                displayAccoutList(),
                 SizedBox(height: 100.0),
               ],
             ),
@@ -194,58 +142,4 @@ class _Account extends State<Account> {
       ),
     );
   }
-}
-
-Future<void> load_feeds() async {
-  blackjack_feed.clear();
-  slots_feed.clear();
-  roulette_feed.clear();
-  account_feed.clear();
-
-  var reqs = {"token": sessiontoken};
-  var feed_raw = await request("GetUserHistory", reqs, Toast: false);
-  if (feed_raw[0] == 200) {
-    blackjack_feed = game_extract(feed_raw[1]["Blackjack"]);
-    slots_feed = game_extract(feed_raw[1]["Slots"]);
-    roulette_feed = game_extract(feed_raw[1]["Roulette"]);
-    account_feed = transaction_extract(feed_raw[1]["Transactions"]);
-  }
-}
-
-List<Widget> game_extract(List<dynamic>? feed) {
-  if (feed == null) {
-    return [Container()];
-  }
-  List<Widget> ret_list = <Widget>[];
-
-  for (var object in feed) {
-    var bet = "Bet: " + r'$' + object["bet"].toString();
-    var winnings = "Game in Progress";
-    if (object["winnings"] != null) {
-      winnings = r"$" + (object["winnings"] - object["bet"]).toString();
-    }
-    var time_label = DateTime.parse(object["time"]).toLocal();
-    var formatted_time = DateFormat("MM-dd-yyyy - hh:mm a").format(time_label);
-    ret_list.add(accountItems(bet, winnings, formatted_time));
-
-
-    print(object);
-  }
-  return ret_list;
-
-}
-
-List<Widget> transaction_extract(List<dynamic>? feed) {
-  if (feed == null) {
-    return [Container()];
-  }
-  List<Widget> ret_list = <Widget>[];
-  //This is the datadump of all 5 latest transactions for each category.
-  for (var object in feed) {
-    var time_label = DateTime.parse(object["time"]).toLocal();
-    var formatted_time = DateFormat("MM-dd-yyyy - hh:mm a").format(time_label);
-    ret_list.add(accountItems(object["transaction_type"],
-        r"$" + object["amount"].toString(), formatted_time));
-  }
-  return ret_list;
 }

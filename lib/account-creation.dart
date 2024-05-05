@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
+import 'package:front_end/home.dart';
 import 'package:front_end/account-login.dart';
 
 class AccountCreation extends StatelessWidget {
@@ -135,7 +136,7 @@ class AccountCreation extends StatelessWidget {
                   'CREATE YOUR ACCOUNT',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 20,
                   ),
                 ),
               ),
@@ -151,12 +152,8 @@ create_user(username, password1, password2, context) async {
   print(username);
   print(password1);
   print(password2);
-  //Comparing passwords on the frontend.
-
   if (password1 == password2) {
     final salt = "imposter";
-
-  //A concious decision was made to hash with a salt to ensure that, even in the case of a man-in-the-middle, a user's password is never compromised.
     String passkey =
         sha256.convert(utf8.encode(username + password1 + salt)).toString();
     Map<String, String> args = {"username": username, "passkey": passkey};

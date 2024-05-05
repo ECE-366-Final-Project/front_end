@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/generics.dart';
 import 'package:intl/intl.dart';
@@ -57,7 +58,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                     setState(() {
                       balance = data;
                       if(status == 200) {
-                        // feed.add(accountItems("Transaction", r"$" + depoWithText, "Deposit"));
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Deposit"));
                       }
                     });
                 },
@@ -74,7 +75,7 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                   setState(() {
                     balance = data;
                     if(status == 200) {
-                        // feed.add(accountItems("Transaction", r"$" + depoWithText, "Withdrawal"));
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Withdrawal"));
                       }
                   });
                 },

@@ -10,48 +10,40 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
 import 'dart:convert';
-import 'package:front_end/blackjack.dart';
-import 'package:front_end/roulette.dart';
-//import 'package:front_end/roulette.dart';
 
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
-var ratelimit = DateTime.utc(2023, 1, 1);
 
-
+var feed = <Widget>[];
 
 const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
-    {bool Toast = true}) async {
-//This function grabs our request from the database, returning the json as a map.
-// It also displays error or status messages with an optional flag
+    {Toast = true}) async {
   var call;
-  String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
+  String body = "{Message: Failed!}";
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
   } else {
     call = Uri.http(SRC, "/" + command);
   }
-  print(call);
   int status = 405;
+  print(call);
   try {
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
     status = packet.statusCode;
     body = packet.body;
-    print(body);
     if (status > 400) {
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
-    body =
-        '''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
   }
   var map = json.decode(body);
-  if (Toast || status != 200) {
+  print(map);
+  if (Toast || status > 400) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
         gravity: ToastGravity.BOTTOM,
@@ -63,22 +55,21 @@ Future<List> request(String command, Map<String, String> args,
   return [status, map];
 }
 
-
-
-
 Future<String> balanceUpdate() async {
-  //Easy wrapper for the balance, as it's called in the appbar below
   var call = Uri.http(SRC, "/GetBal", {"token": sessiontoken});
   final packet = await http.get(call).timeout(const Duration(seconds: 5));
   return json.decode(packet.body)["BALANCE"].toString();
 }
 
 App_Bar(context) {
-  //This appbar persists on all pages, so it lives here to allow for persistence.
   return AppBar(
     automaticallyImplyLeading: false,
-    leading: IconButton(
-        icon: Image.asset('images/login_logo.png'),
+    title: TextButton(
+        child: Text('COOPER CASINO',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold)),
         onPressed: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => Home()))),
     backgroundColor: const Color(0xFF000000),
@@ -109,18 +100,14 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Blackjack()))),
+                onPressed: () => {}),
             TextButton(
                 child: Text('ROULETTE',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Roulette()))
-                    }),
+                onPressed: () => {}),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(
@@ -136,6 +123,7 @@ App_Bar(context) {
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
       TextButton(
+
           child: Text('BALANCE: \$ ' + balance,
               style: TextStyle(
                   color: Colors.white,
@@ -148,14 +136,18 @@ App_Bar(context) {
               color: Colors.white,
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
+      // This is to test the server connection quickly:
+      IconButton(
+          icon: Icon(Icons.network_wifi,
+              color: Colors.white, size: 40.0, semanticLabel: 'Server Check'),
+          onPressed: () async {
+            request("Ping", {});
+          }),
       IconButton(
           icon: const Icon(Icons.account_circle,
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
-          onPressed: () async {
-            await load_feeds();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Account()));
-          }),
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Account()))),
     ],
   );
 }
