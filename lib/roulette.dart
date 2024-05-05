@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
@@ -6,154 +7,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
 import 'package:front_end/arrow.dart';
 import 'package:roulette/roulette.dart';
-
-
+import "package:front_end/roulette_generators.dart";
 var currencyValue = new NumberFormat.compact();
 String rouletteBetText = "0.00";
 String rouletteTempBalance = "";
 bool play = false;
 List<Widget> betTable = [];
 
-final units = [
-  RouletteUnit.text('00',
-      textStyle: TextStyle(color: Colors.white), color: Colors.green),
-  RouletteUnit.text('27',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('10',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('35',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('29',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('12',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('8',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('19',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('31',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('18',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('6',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('21',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('33',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('16',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('4',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('23',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('35',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('14',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('2',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('0',
-      textStyle: TextStyle(color: Colors.white), color: Colors.green),
-  RouletteUnit.text('28',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('9',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('26',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('30',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('11',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('7',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('20',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('32',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('17',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('5',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('22',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('34',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('15',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('3',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('24',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('36',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-  RouletteUnit.text('13',
-      textStyle: TextStyle(color: Colors.white), color: Colors.black),
-  RouletteUnit.text('1',
-      textStyle: TextStyle(color: Colors.white), color: Colors.red),
-];
-List<bool> tappedIn = [
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false
-];
+final units = Roulette_Generator();
+
+List<bool> tappedIn = List.filled(59, false);
 
 class RouletteClass extends StatefulWidget {
   const RouletteClass({Key? key}) : super(key: key);
@@ -207,10 +70,6 @@ class _RouletteState extends State<RouletteClass>
                       String data = await balanceUpdate();
                       setState(() {
                         balance = data;
-                        if (status == 200) {
-                          feed.add(
-                              accountItems("Roulette", r"$" + '1', "Loss"));
-                        }
                       });
                     },
                     child: Text('\$1',
@@ -224,10 +83,6 @@ class _RouletteState extends State<RouletteClass>
                       String data = await balanceUpdate();
                       setState(() {
                         balance = data;
-                        if (status == 200) {
-                          feed.add(
-                              accountItems("Roulette", r"$" + '5', "Loss"));
-                        }
                       });
                     },
                     child: Text('\$5',
@@ -241,10 +96,6 @@ class _RouletteState extends State<RouletteClass>
                       String data = await balanceUpdate();
                       setState(() {
                         balance = data;
-                        if (status == 200) {
-                          feed.add(
-                              accountItems("Roulette", r"$" + '10', "Loss"));
-                        }
                       });
                     },
                     child: Text('\$10',
@@ -258,10 +109,6 @@ class _RouletteState extends State<RouletteClass>
                       String data = await balanceUpdate();
                       setState(() {
                         balance = data;
-                        if (status == 200) {
-                          feed.add(
-                              accountItems("Roulette", r"$" + '50', "Loss"));
-                        }
                       });
                     },
                     child: Text('\$50',
