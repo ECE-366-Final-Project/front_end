@@ -42,17 +42,23 @@ var Roulette_Order = [
   '2'
 ];
 
-List<RouletteUnit> Roulette_Generator(){
+List<RouletteUnit> Roulette_Generator() {
   List<RouletteUnit> output = <RouletteUnit>[];
-  Color num_color = Colors.red;
-  for (String i in Roulette_Order){
-    var num = int.parse(i);
-    if(num == 0) {
-      num_color = Colors.green;
-    } else if(num % 2 == 0 && (num < 10 || 19 < num && num < 28) ) {
-      num_color = Colors.black;
-    }
-    output.add(RouletteUnit.text(i, textStyle: TextStyle(color: Colors.white), color: num_color));
+  for (String i in Roulette_Order) {
+    int num = int.parse(i);
+    output.add(RouletteUnit.text(i,
+        textStyle: TextStyle(color: Colors.white), color: color_finder(num)));
   }
   return output;
+}
+
+Color color_finder(int num) {
+  Color num_color = Colors.red;
+  if (num == 0) {
+    num_color = Colors.green;
+  } else if ((num % 2 == 0 && (num <= 10 || 19 <= num && num <= 28)) ||
+      (num % 2 != 0 && (num >= 29 || 11 <= num && num <= 18))) {
+    num_color = Colors.black;
+  }
+  return num_color;
 }
