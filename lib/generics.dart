@@ -13,16 +13,19 @@ import 'dart:convert';
 import 'package:front_end/blackjack.dart';
 import 'package:front_end/roulette.dart';
 
+
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
-var ratelimit = DateTime.utc(1989, 11, 9);
+var ratelimit = DateTime.utc(2023, 1, 1);
 
-var feed = <Widget>[];
+
 
 const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
     {bool Toast = true}) async {
+//This function grabs our request from the database, returning the json as a map.
+// It also displays error or status messages with an optional flag
   var call;
   String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
@@ -31,13 +34,14 @@ Future<List> request(String command, Map<String, String> args,
   } else {
     call = Uri.http(SRC, "/" + command);
   }
+  print(call);
   int status = 405;
   try {
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
     status = packet.statusCode;
     body = packet.body;
     print(body);
-    if (status == 400) {
+    if (status > 400) {
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
@@ -47,7 +51,7 @@ Future<List> request(String command, Map<String, String> args,
     Toast = true;
   }
   var map = json.decode(body);
-  if (Toast || status == 400) {
+  if (Toast || status != 200) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
         gravity: ToastGravity.BOTTOM,
@@ -59,13 +63,18 @@ Future<List> request(String command, Map<String, String> args,
   return [status, map];
 }
 
+
+
+
 Future<String> balanceUpdate() async {
+  //Easy wrapper for the balance, as it's called in the appbar below
   var call = Uri.http(SRC, "/GetBal", {"token": sessiontoken});
   final packet = await http.get(call).timeout(const Duration(seconds: 5));
   return json.decode(packet.body)["BALANCE"].toString();
 }
 
 App_Bar(context) {
+  //This appbar persists on all pages, so it lives here to allow for persistence.
   return AppBar(
     automaticallyImplyLeading: false,
     leading: IconButton(
@@ -140,8 +149,11 @@ App_Bar(context) {
       IconButton(
           icon: const Icon(Icons.account_circle,
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Account()))),
+          onPressed: () async {
+            await load_feeds();
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Account()));
+          }),
     ],
   );
 }

@@ -81,6 +81,7 @@ class Home extends StatelessWidget {
                               color: Colors.white,
                               fontSize: 25.0,
                               fontWeight: FontWeight.bold)),
+                              
                     ],
                   ),
                   SizedBox(width: 50),

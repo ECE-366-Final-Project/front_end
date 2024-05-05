@@ -143,7 +143,8 @@ log_in(username, password, context) async {
     await prefs.setString('token', sessiontoken);
     await prefs.setString('username', username);
     print("SAVED TO LOCAL MEMORY!");
-    print(prefs.getString('token'));
+    //SharedPreferences means that the user remains logged in regardless of browser session, with the sessiontoken stored in the browser itself.
+    //This is not a security risk as session tokens expire on the backend side
 
     user_reference = username;
     balance = await balanceUpdate();

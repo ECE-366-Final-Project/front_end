@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
 import 'package:front_end/arrow.dart';
 import 'package:roulette/roulette.dart';
+
 
 var currencyValue = new NumberFormat.compact();
 String rouletteBetText = "0.00";
@@ -158,6 +157,7 @@ List<bool> tappedIn = [
 
 class RouletteClass extends StatefulWidget {
   const RouletteClass({Key? key}) : super(key: key);
+
   @override
   _RouletteState createState() => _RouletteState();
 }
@@ -1631,9 +1631,7 @@ void output_roll_data(List roll_data, double bet) {
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
   var str_wins = winnings.toStringAsFixed(2);
   var msg = "You won \$" + str_wins + "!";
-  var status = "Win";
   if (winnings < bet) {
-    status = "Loss";
     msg = "You won \$" + str_wins + ". Better luck next time!";
     col_str = "linear-gradient(to right, #ced111, #ced111)";
   }
@@ -1645,8 +1643,6 @@ void output_roll_data(List roll_data, double bet) {
         webPosition: "center",
         webBgColor: col_str,
         fontSize: 40);
-    feed.add(accountItems("Roulette", r"$" + str_wins, status));
-
     // Do something
   });
 }
