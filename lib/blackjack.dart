@@ -274,7 +274,7 @@ class _BlackjackState extends State<Blackjack> {
                             size: 40.0,
                             semanticLabel: 'Hit'),
                         onPressed: () async {
-                           await blackjack_call("hit");
+                          await blackjack_call("hit");
                         }),
                     IconButton(
                         icon: const Icon(Icons.stop_circle_rounded,
@@ -283,7 +283,6 @@ class _BlackjackState extends State<Blackjack> {
                             semanticLabel: 'Stand'),
                         onPressed: () async {
                           await blackjack_call("stand");
-
                         }),
                     IconButton(
                         icon: const Icon(Icons.exposure_plus_2_rounded,
@@ -313,6 +312,7 @@ class _BlackjackState extends State<Blackjack> {
       });
     } else {
       setState(() {
+        balance = temp_bal;
         play = game_running;
       });
     }
@@ -353,9 +353,7 @@ class _BlackjackState extends State<Blackjack> {
     }
   }
 
-  Future<void> blackjack_call(
-    String s,
-  ) async {
+  Future<void> blackjack_call(String s) async {
     if (stopwatch.elapsedMilliseconds < 2000) {
       Fluttertoast.showToast(
           msg: "Your call is coming in too quickly, Please slow down.",
@@ -367,14 +365,14 @@ class _BlackjackState extends State<Blackjack> {
           timeInSecForIosWeb: 2);
       return;
     } else {
-    stopwatch.reset();
-    var reqs = {"token": sessiontoken, "move": s};
-    var data = await request("UpdateBlackjack", reqs, Toast: false);
-    if (data[0] == 200) {
-      render(data[1]);
-    }
-    await Future.delayed(Duration(seconds: 3));
-    State_Setter(!(data[1]["GAME_ENDED"] == "true"));
+      stopwatch.reset();
+      var reqs = {"token": sessiontoken, "move": s};
+      var data = await request("UpdateBlackjack", reqs, Toast: false);
+      if (data[0] == 200) {
+        render(data[1]);
+      }
+      await Future.delayed(Duration(seconds: 3));
+      State_Setter(!(data[1]["GAME_ENDED"] == "true"));
     }
   }
 
