@@ -143,7 +143,6 @@ class _SlotsState extends State<Slots> {
                         fontSize: 40);
                   } else {
                     ratelimit = curtime;
-                    //TODO: Make this one function call, no logic should be completed in this area
                     var roll_data = await Play_Slots(double.parse(slotBetText));
                     if (roll_data[0] == 200) {
                       setState(() {

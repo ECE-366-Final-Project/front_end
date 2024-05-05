@@ -12,7 +12,7 @@ import 'package:front_end/home.dart';
 import 'dart:convert';
 import 'package:front_end/blackjack.dart';
 import 'package:front_end/roulette.dart';
-//import 'package:front_end/roulette.dart';
+
 
 String balance = '0.00';
 String user_reference = "";
@@ -117,10 +117,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Roulette()))
-                    }),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RouletteClass()))),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(
