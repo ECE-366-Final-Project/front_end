@@ -16,6 +16,7 @@ bool play = true;
 List<Widget> betTable = [];
 final units = Roulette_Generator();
 Map<dynamic, dynamic> data = {};
+double scale = 1.0;
 
 class RouletteClass extends StatefulWidget {
   const RouletteClass({Key? key}) : super(key: key);
@@ -39,8 +40,7 @@ class _RouletteState extends State<RouletteClass>
 
   @override
   Widget build(BuildContext context) {
-    double scale = 1;
-    if(!kIsWeb){
+    if (!kIsWeb) {
       scale = 0.8;
     }
     return MaterialApp(
@@ -55,10 +55,8 @@ class _RouletteState extends State<RouletteClass>
         home: Scaffold(
             appBar: App_Bar(context),
             body: SingleChildScrollView(
-                child: Transform.scale(
-                  scale: scale,
-                  child:
-                //This child is the selector for placing bets
+                child:
+                    //This child is the selector for placing bets
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -91,7 +89,7 @@ class _RouletteState extends State<RouletteClass>
                   )),
                   SizedBox(height: 50.0),
                   play ? Board() : Leaderboard(),
-                ])))));
+                ]))));
   }
 
   @override
@@ -192,160 +190,186 @@ class _RouletteState extends State<RouletteClass>
       Container(height: tile_dim, width: tile_dim)
     ], mainAxisAlignment: MainAxisAlignment.center);
 
-    return Column(
-      children: [
-        upper_row,
-        middle_row,
-        bottom_row,
-        SizedBox(height: 20.0),
-        play
-            ? Text('Balance: \$' + temp_balance,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold))
-            : Container(),
-        play ? SizedBox(height: 10.0) : Container(),
-        play
-            ? Text('\$' + rouletteBet,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold))
-            : Container(),
-        SizedBox(
-          height: 10.0,
-        ),
-        play
-            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    child: Text('Clear',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
-                    onPressed: () {
-                      setState(() {
-                        temp_balance = balance;
-                        tappedIn = List.filled(64, false);
-                        bet_data = {
-                          "single": {"1": "0"},
-                          "horizontal": {"1": "0"},
-                          "vertical": {"1": "0"},
-                          "red": "0",
-                          "black": "0",
-                          "first_half": "0",
-                          "second_half": "0",
-                          "first_dozen": "0",
-                          "second_dozen": "0",
-                          "third_dozen": "0"
-                        };
-                      });
-                    }),
-                SizedBox(width: 20.0),
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () {
-                      setState(() {
-                        rouletteBet = "0";
-                      });
-                    },
-                    child: Text('\$0',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                SizedBox(width: 20.0),
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () {
-                      setState(() {
-                        rouletteBet = "1";
-                      });
-                    },
-                    child: Text('\$1',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                SizedBox(width: 20.0),
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () {
-                      setState(() {
-                        rouletteBet = "5";
-                      });
-                    },
-                    child: Text('\$5',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                SizedBox(width: 20.0),
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () {
-                      setState(() {
-                        rouletteBet = "10";
-                      });
-                    },
-                    child: Text('\$10',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                SizedBox(width: 20.0),
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () async {
-                      setState(() {
-                        rouletteBet = "50";
-                      });
-                    },
-                    child: Text('\$50',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-              ])
-            : Container(),
-        SizedBox(height: 20.0),
-        play
-            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                TextButton(
-                  style: ButtonStyle(backgroundColor: DWPalette()),
-                  child: Text('Play Singleplayer',
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
-                  onPressed: () async {
-                    //Get Time left
-                    print(bet_data);
-                    //TODO: Implement API Connections & Expand
-                    List<dynamic> game_data = await Play_Roulette();
-                    if (game_data[0] == 200) {
-                      print(game_data[1]);
-                      int index =
-                          Roll_Finder(game_data[1]["ROLLED_NUMBER"].toString());
-                      await controller.rollTo(index);
-                      output_roll_data(game_data,
-                          double.parse(balance) - double.parse(temp_balance));
-                    }
-                    setState(() {
-                      balanceUpdate();
-                    });
-                  },
-                ),
-                // SizedBox(width: 20.0),
-                // TextButton(
-                //     style: ButtonStyle(backgroundColor: DWPalette()),
-                //     child: Text('Play Multiplayer',
-                //         style: TextStyle(
-                //             color: Colors.black, fontWeight: FontWeight.bold)),
-                //     onPressed: () async {
-                //       //Get Time left
-                //       print(bet_data);
-                //       //TODO: Implement API Connections & Expand
-                //       var game_data = await Play_Roulette(multiplayer: true);
-                //       print(game_data);
-                //       setState(() {
-                //         play = false;
-                //         timeout;
-                //       });
-                //     })
-              ])
-            : Container(),
-      ],
-      mainAxisAlignment: MainAxisAlignment.center,
-    );
+    return Transform.scale(
+        scale: scale,
+        child: Column(
+          children: [
+            upper_row,
+            middle_row,
+            bottom_row,
+            SizedBox(height: 20.0),
+            play
+                ? Text('Balance: \$' + temp_balance,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.bold))
+                : Container(),
+            play ? SizedBox(height: 10.0) : Container(),
+            play
+                ? Text('\$' + rouletteBet,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.bold))
+                : Container(),
+            SizedBox(
+              height: 10.0,
+            ),
+            play
+                ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    TextButton(
+                        style: ButtonStyle(backgroundColor: DWPalette()),
+                        child: Text('Clear',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          setState(() {
+                            temp_balance = balance;
+                            tappedIn = List.filled(64, false);
+                            bet_data = {
+                              "single": {"1": "0"},
+                              "horizontal": {"1": "0"},
+                              "vertical": {"1": "0"},
+                              "red": "0",
+                              "black": "0",
+                              "first_half": "0",
+                              "second_half": "0",
+                              "first_dozen": "0",
+                              "second_dozen": "0",
+                              "third_dozen": "0"
+                            };
+                          });
+                        }),
+                    SizedBox(width: 20.0),
+                    TextButton(
+                        style: ButtonStyle(backgroundColor: DWPalette()),
+                        onPressed: () {
+                          setState(() {
+                            rouletteBet = "0";
+                          });
+                        },
+                        child: Text('\$0',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))),
+                    SizedBox(width: 20.0),
+                    TextButton(
+                        style: ButtonStyle(backgroundColor: DWPalette()),
+                        onPressed: () {
+                          setState(() {
+                            rouletteBet = "1";
+                          });
+                        },
+                        child: Text('\$1',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))),
+                    SizedBox(width: 20.0),
+                    TextButton(
+                        style: ButtonStyle(backgroundColor: DWPalette()),
+                        onPressed: () {
+                          setState(() {
+                            rouletteBet = "5";
+                          });
+                        },
+                        child: Text('\$5',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))),
+                    SizedBox(width: 20.0),
+                    TextButton(
+                        style: ButtonStyle(backgroundColor: DWPalette()),
+                        onPressed: () {
+                          setState(() {
+                            rouletteBet = "10";
+                          });
+                        },
+                        child: Text('\$10',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))),
+                    SizedBox(width: 20.0),
+                    TextButton(
+                        style: ButtonStyle(backgroundColor: DWPalette()),
+                        onPressed: () async {
+                          setState(() {
+                            rouletteBet = "50";
+                          });
+                        },
+                        child: Text('\$50',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))),
+                  ])
+                : Container(),
+            SizedBox(height: 20.0),
+            play
+                ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    TextButton(
+                      style: ButtonStyle(backgroundColor: DWPalette()),
+                      child: Text('Play Singleplayer',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () async {
+                        //Get Time left
+                        print(bet_data);
+                        //TODO: Implement API Connections & Expand
+                        List<dynamic> game_data = await Play_Roulette();
+                        if (game_data[0] == 200) {
+                          print(game_data[1]);
+                          int index = Roll_Finder(
+                              game_data[1]["ROLLED_NUMBER"].toString());
+                          await controller.rollTo(index);
+                          output_roll_data(
+                              game_data,
+                              double.parse(balance) -
+                                  double.parse(temp_balance));
+                        }
+                        var newbal = await balanceUpdate();
+                        setState(() {
+                          balance = newbal;
+                          temp_balance = balance;
+                          tappedIn = List.filled(64, false);
+                          bet_data = {
+                            "single": {"1": "0"},
+                            "horizontal": {"1": "0"},
+                            "vertical": {"1": "0"},
+                            "red": "0",
+                            "black": "0",
+                            "first_half": "0",
+                            "second_half": "0",
+                            "first_dozen": "0",
+                            "second_dozen": "0",
+                            "third_dozen": "0"
+                          };
+                        });
+                      },
+                    ),
+                    // SizedBox(width: 20.0),
+                    // TextButton(
+                    //     style: ButtonStyle(backgroundColor: DWPalette()),
+                    //     child: Text('Play Multiplayer',
+                    //         style: TextStyle(
+                    //             color: Colors.black, fontWeight: FontWeight.bold)),
+                    //     onPressed: () async {
+                    //       //Get Time left
+                    //       print(bet_data);
+                    //       //TODO: Implement API Connections & Expand
+                    //       var game_data = await Play_Roulette(multiplayer: true);
+                    //       print(game_data);
+                    //       setState(() {
+                    //         play = false;
+                    //         timeout;
+                    //       });
+                    //     })
+                  ])
+                : Container(),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ));
   }
 
   InkWell inkwell_gen(String msg, Color color, int pos, double h, double w,
@@ -412,7 +436,7 @@ class _RouletteState extends State<RouletteClass>
             }
           });
           double toastsize = 40.0;
-          if(kIsWeb){
+          if (kIsWeb) {
             toastsize = 20.0;
           }
           Fluttertoast.showToast(

@@ -204,7 +204,7 @@ class _Account extends State<Account> {
     var reqs = {"token": sessiontoken};
     var feed_raw = await request("GetUserHistory", reqs, Toast: false);
     if (feed_raw[0] == 200) {
-      blackjack_feed = game_extract(feed_raw[1]["Blackjack"]);
+      blackjack_feed = game_extract(feed_raw[1]["Blackjack"], blackjack: true);
       slots_feed = game_extract(feed_raw[1]["Slots"]);
       roulette_feed = game_extract(feed_raw[1]["Roulette"]);
       account_feed = transaction_extract(feed_raw[1]["Transactions"]);
@@ -213,7 +213,7 @@ class _Account extends State<Account> {
   }
 }
 
-List<Widget> game_extract(List<dynamic>? feed) {
+List<Widget> game_extract(List<dynamic>? feed, {bool blackjack: false}) {
   if (feed == null) {
     return [Container()];
   }
@@ -222,11 +222,17 @@ List<Widget> game_extract(List<dynamic>? feed) {
   for (var object in feed) {
     var bet = "Bet: " + r'$' + object["bet"].toString();
     var winnings = "Game Refunded";
-    if (object["active"]) {
-      winnings = "Game In Progress";
+    if (blackjack) {
+      if (object["active"]) {
+        winnings = "Game In Progress";
+      } else {
+        winnings = "Game Refunded";
+      }
     }
+
     if (object["winnings"] != null) {
-      winnings = r"$" + (object["winnings"] - object["bet"]).toString();
+      final oCcy = new NumberFormat("#,##0.00", "en_US");
+      winnings = r"$" + (oCcy.format(object["winnings"] - object["bet"]));
     }
     var time_label = DateTime.parse(object["time"]).toLocal();
     var formatted_time = DateFormat("MM-dd-yyyy - hh:mm a").format(time_label);
