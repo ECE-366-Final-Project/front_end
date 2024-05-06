@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,7 @@ String bjTempBalance = "";
 bool play = false;
 FlipCardController _controller = FlipCardController();
 ScrollController _scrollController = ScrollController();
-String backOfCard = 'sprites/cards/face-pngs/Playing_Card_Back.jpg';
+String backOfCard = 'assets/sprites/cards/face-pngs/Playing_Card_Back.jpg';
 final stopwatch = Stopwatch();
 
 List<Image> dealerCards = [];
@@ -148,6 +149,11 @@ class _BlackjackState extends State<Blackjack> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
                       onPressed: () async {
+                        double toastsize = 20.0;
+                        if (kIsWeb) {
+                          toastsize = 40.0;
+                        }
+
                         var curtime = DateTime.now();
                         if (ratelimit.difference(curtime).inSeconds > 10) {
                           var col_str =
@@ -156,9 +162,10 @@ class _BlackjackState extends State<Blackjack> {
                               msg: "Please slow down your queries",
                               gravity: ToastGravity.BOTTOM,
                               textColor: Colors.white,
+                              backgroundColor: Colors.red,
                               // webPosition: "center", // :3 I Was here
                               webBgColor: col_str,
-                              fontSize: 40);
+                              fontSize: toastsize);
                           return;
                         }
                         ratelimit = curtime;
@@ -215,6 +222,11 @@ class _BlackjackState extends State<Blackjack> {
                       bjTempBalance = bjTempBalance +
                           currencyValue.format(double.parse(value));
                       setState(() {
+                        double toastsize = 20.0;
+                        if (kIsWeb) {
+                          toastsize = 40.0;
+                        }
+
                         bj_bet_text = bjTempBalance;
                       });
                     },
@@ -261,7 +273,7 @@ class _BlackjackState extends State<Blackjack> {
               width: 111.25,
               child: Image.asset(
                   fit: BoxFit.fill,
-                  'sprites/cards/face-pngs/Rotated_Card_Back.gif'),
+                  'assets/sprites/cards/face-pngs/Rotated_Card_Back.gif'),
             ),
             const SizedBox(height: 40.0),
             cardItems(renderPlayerCards),
@@ -326,7 +338,7 @@ class _BlackjackState extends State<Blackjack> {
         await Future.delayed(Duration(seconds: 1));
         setState(() {
           playerString.add(card);
-          String card_path = "sprites/cards/face-pngs/" + card + ".png";
+          String card_path = "assets/sprites/cards/face-pngs/" + card + ".png";
           cardAdd(playerCards, renderPlayerCards, card_path);
         });
       }
@@ -340,33 +352,44 @@ class _BlackjackState extends State<Blackjack> {
         }
         setState(() {
           dealerString.add(card);
-          String card_path = "sprites/cards/face-pngs/" + card + ".png";
+          String card_path = "assets/sprites/cards/face-pngs/" + card + ".png";
           cardAdd(dealerCards, renderDealCards, card_path);
         });
       }
     }
     await Future.delayed(Duration(seconds: dealerString.length - 1));
     if (json["GAME_ENDED"] == "true") {
+      double toastsize = 20.0;
+      if (kIsWeb) {
+        toastsize = 40.0;
+      }
+
       Fluttertoast.showToast(
           msg: "Game over! Winner: " + json["WINNER"],
           gravity: ToastGravity.BOTTOM,
           textColor: Colors.white,
           webPosition: "center",
-          fontSize: 40,
+          fontSize: toastsize,
           timeInSecForIosWeb: 6,
+          backgroundColor: const Color(0xff4E6A54),
           webBgColor: "linear-gradient(to right, #4E6A54, #4E6A54)");
     }
   }
 
   Future<void> blackjack_call(String s, {render_delay = true}) async {
+    double toastsize = 20.0;
+    if (kIsWeb) {
+      toastsize = 40.0;
+    }
     if (stopwatch.elapsedMilliseconds < 2000) {
       Fluttertoast.showToast(
           msg: "Your call is coming in too quickly, Please slow down.",
           gravity: ToastGravity.BOTTOM,
           textColor: Colors.white,
           webPosition: "center",
-          fontSize: 40,
+          fontSize: toastsize,
           webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
+          backgroundColor: const Color(0xffdc1c13),
           timeInSecForIosWeb: 2);
       return;
     } else {
@@ -378,7 +401,7 @@ class _BlackjackState extends State<Blackjack> {
       }
       await Future.delayed(Duration(seconds: 3));
       State_Setter(!(data[1]["GAME_ENDED"] == "true"));
-      if(data[1]["MESSAGE"] == "USER DOES NOT HAVE ACTIVE GAMES"){
+      if (data[1]["MESSAGE"] == "USER DOES NOT HAVE ACTIVE GAMES") {
         State_Setter(false);
       }
     }

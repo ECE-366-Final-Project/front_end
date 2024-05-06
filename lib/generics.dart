@@ -1,6 +1,7 @@
 //This file holds things that are commonly shared amongst different pages:
 //EG: The homebar, special functions (the HTTP get system), and global variables that are shared and should be updated as one.
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
@@ -12,18 +13,23 @@ import 'package:front_end/home.dart';
 import 'dart:convert';
 import 'package:front_end/blackjack.dart';
 import 'package:front_end/roulette.dart';
-//import 'package:front_end/roulette.dart';
 
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
 var ratelimit = DateTime.utc(1989, 11, 9);
 
-const SRC = "localhost:8080";
+const SRC = "cheesegrater.jptrlanding.dev:8080";
 Future<List> request(String command, Map<String, String> args,
     {bool Toast = true}) async {
+  double toastsize = 20.0;
+  if (kIsWeb) {
+    toastsize = 40.0;
+  }
+
   var call;
   String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
+  var color = const Color(0xff00b09b);
   var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
@@ -38,10 +44,13 @@ Future<List> request(String command, Map<String, String> args,
     body = packet.body;
     print(body);
     if (status > 400) {
+      color = const Color(0xffdc1c13);
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
-    body ='''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
+    body =
+        '''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
+    color = const Color(0xffdc1c13);
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
   }
@@ -52,8 +61,9 @@ Future<List> request(String command, Map<String, String> args,
         gravity: ToastGravity.BOTTOM,
         textColor: Colors.white,
         webPosition: "center",
+        backgroundColor: color,
         webBgColor: col_str,
-        fontSize: 40);
+        fontSize: toastsize);
   }
   return [status, map];
 }
@@ -68,7 +78,7 @@ App_Bar(context) {
   return AppBar(
     automaticallyImplyLeading: false,
     leading: IconButton(
-        icon: Image.asset('images/login_logo.png'),
+        icon: Image.asset('assets/images/login_logo.png'),
         onPressed: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => Home()))),
     backgroundColor: const Color(0xFF000000),
@@ -107,8 +117,12 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => RouletteClass()))}),
+                onPressed: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RouletteClass()))
+                    }),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(

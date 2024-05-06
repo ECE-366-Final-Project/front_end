@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/depowith-palette.dart';
@@ -38,6 +39,10 @@ class _RouletteState extends State<RouletteClass>
 
   @override
   Widget build(BuildContext context) {
+    double scale = 1;
+    if(!kIsWeb){
+      scale = 0.8;
+    }
     return MaterialApp(
         title: 'Cooper Casino',
         debugShowCheckedModeBanner: false,
@@ -50,7 +55,10 @@ class _RouletteState extends State<RouletteClass>
         home: Scaffold(
             appBar: App_Bar(context),
             body: SingleChildScrollView(
-                child: //This child is the selector for placing bets
+                child: Transform.scale(
+                  scale: scale,
+                  child:
+                //This child is the selector for placing bets
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -83,7 +91,7 @@ class _RouletteState extends State<RouletteClass>
                   )),
                   SizedBox(height: 50.0),
                   play ? Board() : Leaderboard(),
-                ]))));
+                ])))));
   }
 
   @override
@@ -191,7 +199,7 @@ class _RouletteState extends State<RouletteClass>
         bottom_row,
         SizedBox(height: 20.0),
         play
-            ? Text('Balance Remaining: \$' + temp_balance,
+            ? Text('Balance: \$' + temp_balance,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 40.0,
@@ -361,6 +369,7 @@ class _RouletteState extends State<RouletteClass>
           String user_message = "Bet Placed!";
           String input = msg;
           label != null ? input = label : input = msg;
+          var color = const Color(0xff4E6A54);
           String col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
           var bet_value = rouletteBet;
           setState(() {
@@ -373,6 +382,7 @@ class _RouletteState extends State<RouletteClass>
               if (tappedIn[pos] ||
                   tmp_bal < 0 ||
                   double.parse(rouletteBet) == 0) {
+                color = const Color(0xffdc1c13);
                 col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
                 bet_value = "0";
                 user_message = "Bet Not Placed";
@@ -387,6 +397,7 @@ class _RouletteState extends State<RouletteClass>
               if (tappedIn[pos] ||
                   tmp_bal < 0 ||
                   double.parse(rouletteBet) == 0) {
+                color = const Color(0xffdc1c13);
                 col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
                 bet_value = "0";
                 user_message = "Bet Not Placed";
@@ -400,12 +411,17 @@ class _RouletteState extends State<RouletteClass>
               tappedIn[pos] = !tappedIn[pos];
             }
           });
+          double toastsize = 40.0;
+          if(kIsWeb){
+            toastsize = 20.0;
+          }
           Fluttertoast.showToast(
               msg: user_message,
               gravity: ToastGravity.BOTTOM,
               textColor: Colors.white,
               webPosition: "center",
-              fontSize: 40,
+              fontSize: toastsize,
+              backgroundColor: color,
               webBgColor: col_str,
               timeInSecForIosWeb: 1);
         });
