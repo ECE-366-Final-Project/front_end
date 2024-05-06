@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
@@ -169,13 +168,6 @@ class _SlotsState extends State<Slots> {
                         balance = newbal;
                       });
                     }
-                  String newbal = await balanceUpdate();                    //
-                    onStart(roll_labels);
-                    output_roll_data(roll_data,double.parse(slotBetText));
-                    //after 
-                      setState(() {
-                    balance = newbal;
-                  });
                   }
                 },
               ),

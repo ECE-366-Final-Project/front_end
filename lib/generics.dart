@@ -17,7 +17,7 @@ import 'package:front_end/roulette.dart';
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
-
+DateTime ratelimit = DateTime(2023);
 var feed = <Widget>[];
 
 const SRC = "localhost:8080";
@@ -104,7 +104,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {}),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Blackjack()))),
             TextButton(
                 child: Text('ROULETTE',
                     style: TextStyle(

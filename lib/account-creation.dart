@@ -6,7 +6,6 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
-import 'package:front_end/home.dart';
 import 'package:front_end/account-login.dart';
 
 class AccountCreation extends StatelessWidget {
