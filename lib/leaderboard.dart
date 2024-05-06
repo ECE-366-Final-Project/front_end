@@ -61,7 +61,7 @@ Column playerItems(String name, String item, String charge,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(item,
+                  Text(name,
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.bold)),
                   redGreenFont(charge)
