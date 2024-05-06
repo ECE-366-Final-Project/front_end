@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/color-palette.dart';
+import 'package:front_end/leaderboard.dart';
 import 'package:front_end/slots.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,7 +20,7 @@ String user_reference = "";
 String sessiontoken = '0.00';
 var ratelimit = DateTime.utc(1989, 11, 9);
 
-const SRC = "cheesegrater.jptrlanding.dev:8080";
+const SRC = "cheesegrater.ee.cooper.edu:8080";
 Future<List> request(String command, Map<String, String> args,
     {bool Toast = true}) async {
   double toastsize = 20.0;
@@ -155,6 +156,16 @@ App_Bar(context) {
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
           onPressed: () => Navigator.push(
               context, MaterialPageRoute(builder: (context) => Account()))),
+      Text("|",
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 25.0,
+              fontWeight: FontWeight.bold)),
+      IconButton(
+          icon: const Icon(Icons.leaderboard,
+              color: Colors.white, size: 40.0, semanticLabel: 'Leaderboard'),
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Leaderboard()))),
     ],
   );
 }
