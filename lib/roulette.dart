@@ -237,17 +237,6 @@ class _RouletteState extends State<RouletteClass>
                     style: ButtonStyle(backgroundColor: DWPalette()),
                     onPressed: () {
                       setState(() {
-                        rouletteBet = "0";
-                      });
-                    },
-                    child: Text('\$0',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                SizedBox(width: 20.0),
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () {
-                      setState(() {
                         rouletteBet = "1";
                       });
                     },
@@ -285,6 +274,17 @@ class _RouletteState extends State<RouletteClass>
                       });
                     },
                     child: Text('\$50',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                SizedBox(width: 20.0),
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    onPressed: () {
+                      setState(() {
+                        rouletteBet = "100";
+                      });
+                    },
+                    child: Text('\$100',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
               ])
