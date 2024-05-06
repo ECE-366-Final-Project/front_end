@@ -23,3 +23,7 @@ https://chromewebstore.google.com/detail/cors-unblock/lfhmikememgdcahcdlaciloanc
 https://chromewebstore.google.com/detail/dart-debug-extension/eljbmlghnomdjgdjmbdekegdkbabckhm
 
 The first extension allows the frontend to make localhost calls, whilst the second enables the dart debug environment in the browser. These are not necessary when accessing the production build. 
+
+## Android Release
+For android, the Android Studio IDE is needed, alongside necessary plugins: See these instructions for more information: https://docs.flutter.dev/get-started/install/windows/mobile?tab=physical
+Once you've set up the IDE, run ```flutter create .``` in a suitable development environment to create an android manifest: This then allows any android device with USB Debugging to execute the application.
