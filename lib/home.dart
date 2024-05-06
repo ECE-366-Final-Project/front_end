@@ -72,7 +72,7 @@ class Home extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  Roulette()))
+                                                  RouletteClass()))
                                     })))),
                       SizedBox(height: 10.0),
                       Text('ROULETTE',

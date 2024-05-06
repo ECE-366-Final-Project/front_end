@@ -11,11 +11,12 @@ import 'package:flip_card/flip_card.dart';
 
 var currencyValue = new NumberFormat.compact();
 String bj_bet_text = "0.00";
-String slotTempBalance = "";
+String bjTempBalance = "";
 bool play = false;
 FlipCardController _controller = FlipCardController();
 ScrollController _scrollController = ScrollController();
 String backOfCard = 'sprites/cards/face-pngs/Playing_Card_Back.jpg';
+final stopwatch = Stopwatch();
 
 List<Image> dealerCards = [];
 List<Image> playerCards = [];
@@ -29,9 +30,10 @@ cardAdd(List<Image> imageDeck, List<Widget> displayDeck, String face) async {
   // displayDeck.add(const SizedBox(width: 5.0));
   // displayDeck.add(card(imageDeck[imageDeck.length - 1]));
   Widget Card = coverCard(face);
-  displayDeck.add( const SizedBox(width: 5.0,));
+  displayDeck.add(const SizedBox(
+    width: 5.0,
+  ));
   displayDeck.add(Card);
-  await Future.delayed(Duration(seconds: 1));
 }
 
 clearDeck() {
@@ -57,8 +59,7 @@ FlipCard coverCard(String cardFace) {
       front: SizedBox(
         height: 111.25,
         width: 81.25,
-        child: Image.asset(
-            fit: BoxFit.fill, backOfCard),
+        child: Image.asset(fit: BoxFit.fill, backOfCard),
       ),
       autoFlipDuration: const Duration(seconds: 1));
 }
@@ -69,9 +70,9 @@ SizedBox card(Image face) {
 
 SizedBox cardItems(List<Widget> renderCards) {
   List<Widget> render_children = List.from(renderCards);
-  if(renderCards.length <= 2) {
-      render_children.add(const SizedBox(width: 5.0));
-      render_children.add(card(Image.asset(backOfCard)));
+  if (renderCards.length <= 2) {
+    render_children.add(const SizedBox(width: 5.0));
+    render_children.add(card(Image.asset(backOfCard)));
   }
   return SizedBox(
     width: 345,
@@ -80,7 +81,8 @@ SizedBox cardItems(List<Widget> renderCards) {
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, children: render_children),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: render_children),
       ),
     ),
   );
@@ -95,6 +97,7 @@ class Blackjack extends StatefulWidget {
 class _BlackjackState extends State<Blackjack> {
   @override
   void initState() {
+    stopwatch.start();
     super.initState();
     renderDealCards.add(const SizedBox(width: 5.0));
     renderPlayerCards.add(const SizedBox(width: 5.0));
@@ -152,7 +155,7 @@ class _BlackjackState extends State<Blackjack> {
                           Fluttertoast.showToast(
                               msg: "Please slow down your queries",
                               gravity: ToastGravity.BOTTOM,
-                              textColor: Colors.black,
+                              textColor: Colors.white,
                               // webPosition: "center", // :3 I Was here
                               webBgColor: col_str,
                               fontSize: 40);
@@ -161,7 +164,8 @@ class _BlackjackState extends State<Blackjack> {
                         ratelimit = curtime;
                         var payload =
                             await StartBlackjack(double.parse(bj_bet_text));
-                        if (payload[0] < 400) {
+                        if (payload[0] < 400 &&
+                            payload[1]["GAME_ENDED"] == "false") {
                           setState(() {
                             play = true;
                           });
@@ -179,7 +183,7 @@ class _BlackjackState extends State<Blackjack> {
                         setState(() {
                           clearDeck();
                           bj_bet_text = "0.00";
-                          slotTempBalance = '';
+                          bjTempBalance = '';
                         });
                       },
                     ),
@@ -208,10 +212,10 @@ class _BlackjackState extends State<Blackjack> {
             !play
                 ? NumericKeyboard(
                     onKeyboardTap: (String value) {
-                      slotTempBalance = slotTempBalance +
+                      bjTempBalance = bjTempBalance +
                           currencyValue.format(double.parse(value));
                       setState(() {
-                        bj_bet_text = slotTempBalance;
+                        bj_bet_text = bjTempBalance;
                       });
                     },
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -226,12 +230,12 @@ class _BlackjackState extends State<Blackjack> {
                       setState(() {
                         bj_bet_text =
                             bj_bet_text.substring(0, bj_bet_text.length - 1);
-                        slotTempBalance = bj_bet_text;
+                        bjTempBalance = bj_bet_text;
                         if (bj_bet_text.isEmpty ||
                             bj_bet_text == '0.00' ||
                             bj_bet_text == '-0.00') {
                           bj_bet_text = '0.00';
-                          slotTempBalance = '';
+                          bjTempBalance = '';
                         }
                       });
                     },
@@ -239,7 +243,7 @@ class _BlackjackState extends State<Blackjack> {
                       if (bj_bet_text.isEmpty) return;
                       setState(() {
                         bj_bet_text = '0.00';
-                        slotTempBalance = '';
+                        bjTempBalance = '';
                       });
                     },
                     rightIcon: const Icon(
@@ -262,33 +266,34 @@ class _BlackjackState extends State<Blackjack> {
             const SizedBox(height: 40.0),
             cardItems(renderPlayerCards),
             const SizedBox(height: 20.0),
-            play ?
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              IconButton(
-                  icon: const Icon(Icons.add_circle_rounded,
-                      color: Colors.green, size: 40.0, semanticLabel: 'Hit'),
-                  onPressed: () async {
-                    bool data = await blackjack_call("hit");
-                    State_Setter(data);
-                  }),
-              IconButton(
-                  icon: const Icon(Icons.stop_circle_rounded,
-                      color: Colors.red, size: 40.0, semanticLabel: 'Stand'),
-                  onPressed: () async {
-                    bool data = await blackjack_call("stand");
-                    State_Setter(data);
-                  }),
-              IconButton(
-                  icon: const Icon(Icons.exposure_plus_2_rounded,
-                      color: Colors.green,
-                      size: 40.0,
-                      semanticLabel: 'Double Down'),
-                  onPressed: () async {
-                    bool data = await blackjack_call("double_down");
-
-                    State_Setter(data);
-                  }),
-            ]) : Container(),
+            play
+                ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    IconButton(
+                        icon: const Icon(Icons.add_circle_rounded,
+                            color: Colors.green,
+                            size: 40.0,
+                            semanticLabel: 'Hit'),
+                        onPressed: () async {
+                          await blackjack_call("hit");
+                        }),
+                    IconButton(
+                        icon: const Icon(Icons.stop_circle_rounded,
+                            color: Colors.red,
+                            size: 40.0,
+                            semanticLabel: 'Stand'),
+                        onPressed: () async {
+                          await blackjack_call("stand", render_delay: false);
+                        }),
+                    IconButton(
+                        icon: const Icon(Icons.exposure_plus_2_rounded,
+                            color: Colors.green,
+                            size: 40.0,
+                            semanticLabel: 'Double Down'),
+                        onPressed: () async {
+                          await blackjack_call("double_down");
+                        }),
+                  ])
+                : Container(),
             SizedBox(height: 100.0)
           ]),
         ),
@@ -300,64 +305,86 @@ class _BlackjackState extends State<Blackjack> {
     var temp_bal = await balanceUpdate();
     if (!game_running) {
       await Future.delayed(Duration(seconds: 5), () {
-          setState(() {
+        setState(() {
           balance = temp_bal;
           play = game_running;
-      });
+        });
       });
     } else {
       setState(() {
+        balance = temp_bal;
         play = game_running;
       });
     }
   }
 
-  Future<void> render(var json) async {
+  Future<void> render(var json, {bool delay_dealer = true}) async {
     var new_player_cards = card_parser(json["PLAYERS_CARDS"]);
     var new_dealer_cards = card_parser(json["DEALERS_CARDS"]);
-      for (String card in new_player_cards) {
-        if (!playerString.contains(card)) {
+    for (String card in new_player_cards) {
+      if (!playerString.contains(card)) {
+        await Future.delayed(Duration(seconds: 1));
+        setState(() {
           playerString.add(card);
           String card_path = "sprites/cards/face-pngs/" + card + ".png";
-          await cardAdd(playerCards, renderPlayerCards, card_path);
-        }
+          cardAdd(playerCards, renderPlayerCards, card_path);
+        });
       }
-      for (String card in new_dealer_cards) {
-        if (!dealerString.contains(card)) {
+    }
+    for (String card in new_dealer_cards) {
+      if (!dealerString.contains(card)) {
+        if (delay_dealer) {
+          await Future.delayed(Duration(seconds: 2));
+        } else {
+          delay_dealer = true;
+        }
+        setState(() {
           dealerString.add(card);
           String card_path = "sprites/cards/face-pngs/" + card + ".png";
-          await cardAdd(dealerCards, renderDealCards, card_path);
-        }
+          cardAdd(dealerCards, renderDealCards, card_path);
+        });
       }
-
-    setState(() {});
-    await Future.delayed(Duration(seconds: 3));
+    }
+    await Future.delayed(Duration(seconds: dealerString.length - 1));
     if (json["GAME_ENDED"] == "true") {
       Fluttertoast.showToast(
           msg: "Game over! Winner: " + json["WINNER"],
           gravity: ToastGravity.BOTTOM,
-          textColor: Colors.black,
+          textColor: Colors.white,
           webPosition: "center",
           fontSize: 40,
-          timeInSecForIosWeb: 10);
+          timeInSecForIosWeb: 6,
+          webBgColor: "linear-gradient(to right, #4E6A54, #4E6A54)");
     }
   }
 
-  Future<bool> blackjack_call(String s) async {
-    var reqs = {"token": sessiontoken, "move": s};
-    var data = await request("UpdateBlackjack", reqs, Toast: false);
-    if (data[0] == 200) {
-      render(data[1]);
+  Future<void> blackjack_call(String s, {render_delay = true}) async {
+    if (stopwatch.elapsedMilliseconds < 2000) {
+      Fluttertoast.showToast(
+          msg: "Your call is coming in too quickly, Please slow down.",
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          webPosition: "center",
+          fontSize: 40,
+          webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
+          timeInSecForIosWeb: 2);
+      return;
+    } else {
+      stopwatch.reset();
+      var reqs = {"token": sessiontoken, "move": s};
+      var data = await request("UpdateBlackjack", reqs, Toast: false);
+      if (data[0] == 200) {
+        render(data[1], delay_dealer: render_delay);
+      }
+      await Future.delayed(Duration(seconds: 3));
+      State_Setter(!(data[1]["GAME_ENDED"] == "true"));
     }
-    print(data[1]["GAME_ENDED"]);
-    return (!(data[1]["GAME_ENDED"] == "true"));
   }
 
   Future<List> RejoinBlackjack() async {
     setState(() {
       clearDeck(); //
     });
-
     var reqs = {"token": sessiontoken};
     var data = await request("RejoinBlackjack", reqs, Toast: false);
     if (data[0] == 200) {

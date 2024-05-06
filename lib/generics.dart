@@ -30,6 +30,7 @@ Future<List> request(String command, Map<String, String> args,
   } else {
     call = Uri.http(SRC, "/" + command);
   }
+  print(call);
   int status = 405;
   try {
     final packet = await http.get(call).timeout(const Duration(seconds: 5));
@@ -107,7 +108,7 @@ App_Bar(context) {
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
                 onPressed: () => {Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Roulette()))}),
+                    context, MaterialPageRoute(builder: (context) => RouletteClass()))}),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(
