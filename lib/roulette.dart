@@ -1,22 +1,17 @@
-import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:intl/intl.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/generics.dart';
 import 'package:front_end/arrow.dart';
 import 'package:roulette/roulette.dart';
 import "package:front_end/roulette_generators.dart";
 
 var currencyValue = new NumberFormat.compact();
-String rouletteBetText = "0.00";
-String rouletteTempBalance = "";
-bool play = false;
+bool play = true;
 List<Widget> betTable = [];
-const tile_dim = 45.0;
-
 final units = Roulette_Generator();
+int timeout = 0;
 
 class RouletteClass extends StatefulWidget {
   const RouletteClass({Key? key}) : super(key: key);
@@ -40,37 +35,217 @@ class _RouletteState extends State<RouletteClass>
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cooper Casino',
-      debugShowCheckedModeBanner: false,
-      theme: new ThemeData().copyWith(
-          scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
-          splashColor: Colors.white,
-          focusColor: Colors.white,
-          colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.white)),
-      home: Scaffold(
-        appBar: App_Bar(context),
-        body: SingleChildScrollView(
-          child: //This child is the selector for placing bets
-              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(height: 100.0),
-            Text('\$' + balance,
+        title: 'Cooper Casino',
+        debugShowCheckedModeBanner: false,
+        theme: new ThemeData().copyWith(
+            scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
+            splashColor: Colors.white,
+            focusColor: Colors.white,
+            colorScheme:
+                ThemeData().colorScheme.copyWith(primary: Colors.white)),
+        home: Scaffold(
+            appBar: App_Bar(context),
+            body: SingleChildScrollView(
+                child: //This child is the selector for placing bets
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                  SizedBox(height: 50.0),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    SizedBox(width: 20.0),
+                  ]),
+                  SizedBox(
+                      child: Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      SizedBox(
+                        height: 350.0,
+                        width: 350.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 30.0),
+                          child: Roulette(
+                            controller: controller,
+                            style: const RouletteStyle(
+                              dividerThickness: 0.0,
+                              dividerColor: Colors.white,
+                              centerStickSizePercent: 0.05,
+                              centerStickerColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Arrow(),
+                    ],
+                  )),
+                  SizedBox(height: 50.0),
+                  play ? Board() : Leaderboard(),
+                ]))));
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  Image img_getter(String path) {
+    return Image.asset(path);
+  }
+
+  Widget Board() {
+    //Used to test & implement additional scaling
+    const n = 12;
+    List<InkWell> tiles = <InkWell>[];
+    for (int start in [3, 2, 1]) {
+      for (int i = start; i <= 36; i += 3) {
+        tiles.add(inkwell_gen(
+            i.toString(), color_finder(i), i, tile_dim, tile_dim,
+            section: "single", label: i.toString()));
+      }
+    }
+    for (int i = 1; i <= 12; i++) {
+      String txt = "C" + i.toString();
+      tiles.add(inkwell_gen(
+          txt, const Color(0xff4E6A54), 36 + i, tile_dim, tile_dim,
+          section: "horizontal", label: i.toString()));
+    }
+    final main_board = GridView.count(
+      crossAxisCount: n,
+      children: tiles,
+      crossAxisSpacing: 1,
+      mainAxisSpacing: 1,
+    );
+    final zero_board = new Column(children: [
+      Containerizer("00", tile_dim * 2, tile_dim, 49,
+          section: "single", label: "37"),
+      Containerizer(
+        "0",
+        tile_dim,
+        tile_dim,
+        50,
+        section: "single",
+      )
+    ]);
+
+    List<Container> Container_List = [];
+    //51
+    var labels = ['3', '2', '1'];
+    for (int i = 1; i <= 3; i++) {
+      Container_List.add(Containerizer('2 to 1', tile_dim, tile_dim * 2, i + 50,
+          section: "vertical", label: labels[i - 1]));
+    }
+    final column_board = new Column(children: Container_List);
+
+    final upper_row = new Row(children: <Widget>[
+      Container(child: zero_board, height: tile_dim * 4, width: tile_dim),
+      Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.white), color: Colors.white),
+          child: main_board,
+          height: tile_dim * 4,
+          width: tile_dim * 12),
+      Container(child: column_board, height: tile_dim * 4, width: tile_dim * 2)
+    ], mainAxisAlignment: MainAxisAlignment.center);
+
+    const middle_text = ["1st 12", "2nd 12", "3rd 12"];
+    const middle_jsons = ["first_dozen", "second_dozen", "third_dozen"];
+    final middle_row = Row(children: [
+      for (int i = 0; i < middle_text.length; i++)
+        Containerizer(middle_text[i], tile_dim, tile_dim * 4, 54 + i,
+            label: middle_jsons[i]),
+      Container(height: tile_dim, width: tile_dim)
+    ], mainAxisAlignment: MainAxisAlignment.center);
+
+    const bottom_text = ["1 to 18", "\t", 'RED', "BLACK", "\t", "19 to 36"];
+    const bottom_json = [
+      "first_half",
+      null,
+      "red",
+      "black",
+      null,
+      "second_half"
+    ];
+    const bottom_colors = [
+      const Color(0xff4E6A54),
+      const Color(0xff4E6A54),
+      Colors.red,
+      Colors.black,
+      const Color(0xff4E6A54),
+      const Color(0xff4E6A54)
+    ];
+    final bottom_row = Row(children: [
+      for (int i = 0; i < bottom_text.length; i++)
+        Containerizer(bottom_text[i], tile_dim, tile_dim * 2, 57 + i,
+            Color: bottom_colors[i], label: bottom_json[i]),
+      Container(height: tile_dim, width: tile_dim)
+    ], mainAxisAlignment: MainAxisAlignment.center);
+
+    return Column(
+      children: [
+        upper_row,
+        middle_row,
+        bottom_row,
+        SizedBox(height: 20.0),
+        play
+            ? Text('Balance Remaining: \$' + temp_balance,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 60.0,
-                    fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 10.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold))
+            : Container(),
+        play ? SizedBox(height: 10.0) : Container(),
+        play
+            ? Text('\$' + rouletteBet,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold))
+            : Container(),
+        SizedBox(
+          height: 10.0,
+        ),
+        play
+            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 TextButton(
                     style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () async {
-                      int status = await Withdraw('1');
-                      String data = await balanceUpdate();
+                    child: Text('Clear',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    onPressed: () {
                       setState(() {
-                        balance = data;
+                        temp_balance = balance;
+                        tappedIn = List.filled(64, false);
+                        bet_data = {
+                          "single": {"1": "0"},
+                          "horizontal": {"1": "0"},
+                          "vertical": {"1": "0"},
+                          "red": "0",
+                          "black": "0",
+                          "first_half": "0",
+                          "second_half": "0",
+                          "first_dozen": "0",
+                          "second_dozen": "0",
+                          "third_dozen": "0"
+                        };
+                      });
+                    }),
+                SizedBox(width: 20.0),
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    onPressed: () {
+                      setState(() {
+                        rouletteBet = "0";
+                      });
+                    },
+                    child: Text('\$0',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                SizedBox(width: 20.0),
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    onPressed: () {
+                      setState(() {
+                        rouletteBet = "1";
                       });
                     },
                     child: Text('\$1',
@@ -79,11 +254,9 @@ class _RouletteState extends State<RouletteClass>
                 SizedBox(width: 20.0),
                 TextButton(
                     style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () async {
-                      int status = await Withdraw('5');
-                      String data = await balanceUpdate();
+                    onPressed: () {
                       setState(() {
-                        balance = data;
+                        rouletteBet = "5";
                       });
                     },
                     child: Text('\$5',
@@ -92,11 +265,9 @@ class _RouletteState extends State<RouletteClass>
                 SizedBox(width: 20.0),
                 TextButton(
                     style: ButtonStyle(backgroundColor: DWPalette()),
-                    onPressed: () async {
-                      int status = await Withdraw('10');
-                      String data = await balanceUpdate();
+                    onPressed: () {
                       setState(() {
-                        balance = data;
+                        rouletteBet = "10";
                       });
                     },
                     child: Text('\$10',
@@ -106,159 +277,68 @@ class _RouletteState extends State<RouletteClass>
                 TextButton(
                     style: ButtonStyle(backgroundColor: DWPalette()),
                     onPressed: () async {
-                      int status = await Withdraw('50');
-                      String data = await balanceUpdate();
                       setState(() {
-                        balance = data;
+                        rouletteBet = "50";
                       });
                     },
                     child: Text('\$50',
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)))
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              TextButton(
-                style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Play',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async {
-                  await controller.rollTo(2, offset: Random().nextDouble());
-                  var curtime = DateTime.now();
-                  if (ratelimit.difference(curtime).inSeconds > 10) {
-                    var col_str = "linear-gradient(to right, #ced111, #ced111)";
-                    Fluttertoast.showToast(
-                        msg:
-                            "The current round is not over. Please wait before rolling again",
-                        gravity: ToastGravity.BOTTOM,
-                        textColor: Colors.black,
-                        webPosition: "center",
-                        webBgColor: col_str,
-                        fontSize: 40);
-                  } else {
-                    ratelimit = curtime;
-                    //TODO: Make this one function call, no logic should be completed in this area
-                    var roll_data =
-                        await Play_Roulette(double.parse(rouletteBetText));
-                    if (roll_data[0] == 200) {
-                      setState(() {
-                        balance = (double.parse(balance) -
-                                double.parse(rouletteBetText))
-                            .toString();
-                      });
-                      String roll_reference =
-                          roll_data[1]["PAYOUT_ID"].toString();
-                      //Straightens string to ensure that it works fine, then converts it to an integer
-                      List<int> roll_labels = [];
-                      for (var string_roll
-                          in roll_reference.padLeft(3, "0").split('')) {
-                        roll_labels.add(int.parse(string_roll));
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+              ])
+            : Container(),
+        SizedBox(height: 20.0),
+        play
+            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                TextButton(
+                  style: ButtonStyle(backgroundColor: DWPalette()),
+                  child: Text('Play Singleplayer',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold)),
+                  onPressed: () async {
+                    //Get Time left
+                    print(bet_data);
+                    //TODO: Implement API Connections & Expand
+                    List<dynamic> game_data = await Play_Roulette();
+                    if (game_data[0] == 200) {
+                      print(game_data[1]);
+                      // print(game_data[1]["ROLLED_NUMBER"].runtimeType);
+                      String roll = game_data[1]["ROLLED_NUMBER"].toString();
+                      if(game_data[1]["ROLLED_NUMBER"] == '37') {
+                        roll = "00";
                       }
-                      onStart(roll_labels);
-                      output_roll_data(
-                          roll_data, double.parse(rouletteBetText));
-                      var newbal;
-                      await Future.delayed(Duration(seconds: 10), () async {
-                        newbal = await balanceUpdate(); //
-                      });
-                      //after
-                      setState(() {
-                        balance = newbal;
-                      });
+                      await controller.rollTo(Roulette_Order.indexOf(roll));
+                      output_roll_data(game_data,  double.parse(balance) - double.parse(temp_balance));
                     }
-                  }
-                },
-              ),
-              SizedBox(width: 20.0),
-              TextButton(
-                style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Clear',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  setState(() {
-                    rouletteBetText = "0.00";
-                    rouletteTempBalance = '';
-                  });
-                },
-              ),
-            ]),
-            SizedBox(height: 30.0),
-            SizedBox(
-                child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                SizedBox(
-                  height: 350.0,
-                  width: 350.0,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 30.0),
-                    child: Roulette(
-                      controller: controller,
-                      style: const RouletteStyle(
-                        dividerThickness: 0.0,
-                        dividerColor: Colors.white,
-                        centerStickSizePercent: 0.05,
-                        centerStickerColor: Colors.white,
-                      ),
-                    ),
-                  ),
+                    setState(() {
+                      balanceUpdate();
+                    });
+                  },
                 ),
-                const Arrow(),
-              ],
-            )),
-            SizedBox(height: 50.0),
-            Container(
-                height: tile_dim * 6+2,
-                width: tile_dim * 16 + 3,
-                child: Board()),
-            SizedBox(height: 10.0),
-            SizedBox(height: 100.0),
-          ]),
-        ),
-      ),
+                SizedBox(width: 20.0),
+                TextButton(
+                    style: ButtonStyle(backgroundColor: DWPalette()),
+                    child: Text('Play Multiplayer',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    onPressed: () async {
+                      //Get Time left
+                      print(bet_data);
+                      //TODO: Implement API Connections & Expand
+                      var game_data = await Play_Roulette(multiplayer: true);
+                      print(game_data);
+                      setState(() {
+                        play = false;
+                      });
+                    })
+              ])
+            : Container(),
+      ],
+      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  Future<int> Withdraw(String depoWithText) async {
-    var data = await request(
-        "Withdraw", {"token": sessiontoken, "amount": depoWithText});
-    return data[0];
-  }
-
-  Image img_getter(String path) {
-    return Image.asset(path);
-  }
-
-  Future<List> Play_Roulette(double bet) async {
-    var reqs = {"token": sessiontoken, "bet": bet.toString()};
-    var data = await request("PlayRoulette", reqs, Toast: false);
-    return data;
-  }
-}
-
-class Board extends StatefulWidget {
-  const Board({Key? key}) : super(key: key);
-  @override
-  _BoardState createState() => _BoardState();
-}
-
-class _BoardState extends State<Board> {
-  List<bool> tappedIn = List.filled(60, false);
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  InkWell inkwell_gen(String msg, Color color, int pos, double h, double w) {
+  InkWell inkwell_gen(String msg, Color color, int pos, double h, double w,
+      {String? section = null, String? label = null}) {
     return InkWell(
         child: Container(
             height: h,
@@ -271,109 +351,76 @@ class _BoardState extends State<Board> {
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold)))),
         onTap: () {
-          
+          double tmp_bal =
+              (double.parse(temp_balance) - double.parse(rouletteBet));
+          print(label);
+          print(section);
+          String user_message = "Bet Placed!";
+          String input = msg;
+          label != null ? input = label : input = msg;
+          String col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
+          var bet_value = rouletteBet;
           setState(() {
-            tappedIn[pos] = !tappedIn[pos];
+            if (section != null) {
+              if (tappedIn[pos]) {
+                temp_balance = (double.parse(temp_balance) +
+                        double.parse(bet_data[section][input]))
+                    .toString();
+              }
+              if (tappedIn[pos] ||
+                  tmp_bal < 0 ||
+                  double.parse(rouletteBet) == 0) {
+                col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
+                bet_value = "0";
+                user_message = "Bet Not Placed";
+              } else {
+                temp_balance = tmp_bal.toString();
+              }
+              bet_data[section][input] = bet_value;
+            } else {
+              temp_balance =
+                  (double.parse(temp_balance) + double.parse(bet_data[input]))
+                      .toString();
+              if (tappedIn[pos] ||
+                  tmp_bal < 0 ||
+                  double.parse(rouletteBet) == 0) {
+                col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
+                bet_value = "0";
+                user_message = "Bet Not Placed";
+              } else {
+                temp_balance = tmp_bal.toString();
+              }
+              bet_data[input] = bet_value;
+            }
+            if ((double.parse(rouletteBet) != 0 && tmp_bal >= 0) ||
+                tappedIn[pos]) {
+              tappedIn[pos] = !tappedIn[pos];
+            }
           });
+          Fluttertoast.showToast(
+              msg: user_message,
+              gravity: ToastGravity.BOTTOM,
+              textColor: Colors.white,
+              webPosition: "center",
+              fontSize: 40,
+              webBgColor: col_str,
+              timeInSecForIosWeb: 1);
         });
   }
 
   Container Containerizer(text, height, width, pos,
-      {Color = const Color(0xff4E6A54), Widget? widget = null}) {
+      {Color = const Color(0xff4E6A54),
+      String? section = null,
+      String? label = null}) {
     return Container(
         decoration: BoxDecoration(border: Border.all(color: Colors.white)),
         height: height,
         width: width,
-        child: inkwell_gen(text, Color, pos, tile_dim, tile_dim));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //Used to test & implement additional scaling
-    const n = 12;
-    List<InkWell> tiles = <InkWell>[];
-    for (int start in [3, 2, 1]) {
-      for (int i = start; i <= 36; i += 3) {
-        tiles.add(
-            inkwell_gen(i.toString(), color_finder(i), i, tile_dim, tile_dim));
-      }
-    }
-    for (int i = 1; i <= 12; i++) {
-      String txt = "C" + i.toString();
-      tiles
-          .add(inkwell_gen(txt, const Color(0xff4E6A54), 36 + i, tile_dim, tile_dim));
-    }
-    final main_board = GridView.count(crossAxisCount: n, children: tiles,crossAxisSpacing: 1, mainAxisSpacing: 1,);
-    final zero_board = new Column(children: [
-      Containerizer("00", tile_dim * 2, tile_dim, 49),
-      Containerizer("0", tile_dim, tile_dim, 50)
-    ]);
-
-    List<Container> Container_List = [];
-    for (int i = 51; i <= 53; i++) {
-      Container_List.add(Containerizer('2 to 1', tile_dim, tile_dim * 3, i));
-    }
-    final column_board = new Column(children: Container_List);
-
-    final upper_row = new Row(children: <Widget>[
-      Container(child: zero_board, height: tile_dim * 4, width: tile_dim),
-      Container(decoration: BoxDecoration(border: Border.all(color: Colors.white),color: Colors.white), child: main_board, height: tile_dim * 4, width: tile_dim * 12),
-      Container(child: column_board, height: tile_dim * 4, width: tile_dim * 3)
-    ], mainAxisAlignment: MainAxisAlignment.center);
-
-    const middle_text = ["1st 12", "2nd 12", "3rd 12"];
-    final middle_row = Row(children: [
-      for (int i = 0; i < middle_text.length; i++)
-        Containerizer(middle_text[i], tile_dim, tile_dim * 4, 54 + i),
-      Container(height: tile_dim, width: tile_dim * 2)
-    ], mainAxisAlignment: MainAxisAlignment.center);
-
-    const bottom_text = ["1 to 18", "EVEN", 'RED', "BLACK", "ODD", "19 to 36"];
-    const bottom_colors = [
-      const Color(0xff4E6A54),
-      const Color(0xff4E6A54),
-      Colors.red,
-      Colors.black,
-      const Color(0xff4E6A54),
-      const Color(0xff4E6A54)
-    ];
-    final bottom_row = Row(children: [
-      for (int i = 0; i < bottom_text.length; i++)
-        Containerizer(bottom_text[i], tile_dim, tile_dim * 2, 54 + i,
-            Color: bottom_colors[i]),
-      Container(height: tile_dim, width: tile_dim * 2)
-    ], mainAxisAlignment: MainAxisAlignment.center);
-
-    return Column(
-      children: [upper_row, middle_row, bottom_row],
-      mainAxisAlignment: MainAxisAlignment.center,
-    );
-
-    // return Row(
-    //   children: [zero_board, main_board],
-    //   mainAxisAlignment: MainAxisAlignment.center,
-    // );
+        child: inkwell_gen(text, Color, pos, tile_dim, tile_dim,
+            section: section, label: label));
   }
 }
 
-void output_roll_data(List roll_data, double bet) {
-  var Json = roll_data[1];
-  var winnings = Json["WINNINGS"];
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
-  var str_wins = winnings.toStringAsFixed(2);
-  var msg = "You won \$" + str_wins + "!";
-  if (winnings < bet) {
-    msg = "You won \$" + str_wins + ". Better luck next time!";
-    col_str = "linear-gradient(to right, #ced111, #ced111)";
-  }
-  Future.delayed(Duration(seconds: 10), () {
-    Fluttertoast.showToast(
-        msg: msg,
-        gravity: ToastGravity.BOTTOM,
-        textColor: Colors.black,
-        webPosition: "center",
-        webBgColor: col_str,
-        fontSize: 40);
-    // Do something
-  });
+Widget Leaderboard() {
+  return Container();
 }

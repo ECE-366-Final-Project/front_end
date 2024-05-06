@@ -28,7 +28,7 @@ Future<List> request(String command, Map<String, String> args,
 // It also displays error or status messages with an optional flag
   var call;
   String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
+  var col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
   } else {
@@ -37,12 +37,12 @@ Future<List> request(String command, Map<String, String> args,
   print(call);
   int status = 405;
   try {
-    final packet = await http.get(call).timeout(const Duration(seconds: 5));
+    final packet = await http.get(call).timeout(const Duration(seconds: 3));
     status = packet.statusCode;
     body = packet.body;
     print(body);
     if (status > 400) {
-      col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
+      col_str =  "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
     body =
@@ -58,7 +58,8 @@ Future<List> request(String command, Map<String, String> args,
         textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
-        fontSize: 40);
+        fontSize: 40,
+        timeInSecForIosWeb: 6);
   }
   return [status, map];
 }

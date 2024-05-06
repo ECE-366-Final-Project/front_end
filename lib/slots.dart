@@ -248,7 +248,7 @@ class _SlotsState extends State<Slots> {
 void output_roll_data(List roll_data, double bet) {
   var Json = roll_data[1];
   var winnings = Json["WINNINGS"];
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
+  var col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
   var str_wins = winnings.toStringAsFixed(2);
   var msg = "You won \$" + str_wins + "!";
   if (winnings < bet) {
@@ -259,7 +259,7 @@ void output_roll_data(List roll_data, double bet) {
     Fluttertoast.showToast(
         msg: msg,
         gravity: ToastGravity.BOTTOM,
-        textColor: Colors.black,
+        textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
         fontSize: 40);
