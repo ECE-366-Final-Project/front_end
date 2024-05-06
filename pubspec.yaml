@@ -22,6 +22,7 @@ dependencies:
   crypto: ^3.0.3
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
 
@@ -33,3 +34,8 @@ flutter:
     - assets/sprites/slots-symbols/
 
   uses-material-design: true
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/images/login_logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
