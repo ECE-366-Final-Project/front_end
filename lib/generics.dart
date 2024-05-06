@@ -65,6 +65,21 @@ Future<List> request(String command, Map<String, String> args,
 }
 
 
+redGreenFont(String type, String charge) {
+  if (charge[0] + charge[1] == r"$-" || type == "WITHDRAWAL") {
+    return Text(charge,
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.red));
+  } else if (charge[0] == r"$" || type == "DEPOSIT") {
+    return Text(charge,
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.green));
+  }
+ else {
+    return Text(charge,
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold));
+  }
+}
 
 
 Future<String> balanceUpdate() async {
@@ -158,3 +173,5 @@ App_Bar(context) {
     ],
   );
 }
+
+

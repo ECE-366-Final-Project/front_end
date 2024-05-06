@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/depowith-palette.dart';
@@ -6,12 +8,13 @@ import 'package:front_end/generics.dart';
 import 'package:front_end/arrow.dart';
 import 'package:roulette/roulette.dart';
 import "package:front_end/roulette_generators.dart";
+import 'package:quiver/async.dart';
 
 var currencyValue = new NumberFormat.compact();
 bool play = true;
 List<Widget> betTable = [];
 final units = Roulette_Generator();
-int timeout = 0;
+Map<dynamic, dynamic> data = {};
 
 class RouletteClass extends StatefulWidget {
   const RouletteClass({Key? key}) : super(key: key);
@@ -301,13 +304,11 @@ class _RouletteState extends State<RouletteClass>
                     List<dynamic> game_data = await Play_Roulette();
                     if (game_data[0] == 200) {
                       print(game_data[1]);
-                      // print(game_data[1]["ROLLED_NUMBER"].runtimeType);
-                      String roll = game_data[1]["ROLLED_NUMBER"].toString();
-                      if(game_data[1]["ROLLED_NUMBER"] == '37') {
-                        roll = "00";
-                      }
-                      await controller.rollTo(Roulette_Order.indexOf(roll));
-                      output_roll_data(game_data,  double.parse(balance) - double.parse(temp_balance));
+                      int index =
+                          Roll_Finder(game_data[1]["ROLLED_NUMBER"].toString());
+                      await controller.rollTo(index);
+                      output_roll_data(game_data,
+                          double.parse(balance) - double.parse(temp_balance));
                     }
                     setState(() {
                       balanceUpdate();
@@ -328,6 +329,7 @@ class _RouletteState extends State<RouletteClass>
                       print(game_data);
                       setState(() {
                         play = false;
+                        timeout;
                       });
                     })
               ])
@@ -419,8 +421,109 @@ class _RouletteState extends State<RouletteClass>
         child: inkwell_gen(text, Color, pos, tile_dim, tile_dim,
             section: section, label: label));
   }
-}
 
-Widget Leaderboard() {
-  return Container();
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: timeout),
+      new Duration(seconds: 1),
+    );
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        current = timeout - duration.elapsed.inSeconds;
+      });
+    });
+    sub.onDone(() async {
+      sub.cancel();
+      await Future.delayed(Duration(milliseconds: 100), () {
+        // Do something
+      });
+      // int index = Roll_Finder(game_data[1]["ROLLED_NUMBER"].toString());
+      // controller.rollTo(index);
+      setState() {
+        //Write data from the api calls so that leaderboard can appropriately process them
+      }
+    });
+  }
+
+  Widget Leaderboard() {
+    startTimer();
+    if (current > 0) {
+      return Column(children: [
+        Text(current.toString() + " Seconds Until Roll!",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 40.0,
+                fontWeight: FontWeight.bold))
+      ], mainAxisAlignment: MainAxisAlignment.center);
+    }
+    //Some Request is made here that gets us the player elements, as well as the roll.
+    var feed;
+    List<Widget> leaderboard_elements = player_extract(feed);
+    return Column(
+        children: leaderboard_elements,
+        mainAxisAlignment: MainAxisAlignment.center);
+  }
+
+  List<Widget> player_extract(List<dynamic>? feed) {
+    if (feed == null) {
+      return [Container()];
+    }
+    List<Widget> ret_list = <Widget>[];
+    //This is the datadump of all 5 latest transactions for each category.
+    for (var object in feed) {
+      ret_list.add(opponent_items(
+          object["username"],
+          r"$" + object["bet"].toString(),
+          r"$" + object["winnings"].toString()));
+    }
+    return ret_list;
+  }
+
+  Widget redGreenFont(bet, win) {
+    // if (double.parse(bet[0].substring(1)) - double.parse(win.substring(1)) > 0) {
+    //alternatively
+    if (double.parse(bet[0]) - double.parse(win) > 0) {
+      //alternatively
+      return Text(r"\$" + win,
+          style: TextStyle(
+              fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.red));
+    } else {
+      //alternatively
+      return Text(r"\$" + win,
+          style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.green));
+    }
+  }
+
+  Column opponent_items(String name, String bet, String win,
+          {Color oddColour = Colors.white}) =>
+      Column(children: [
+        SizedBox(height: 10.0),
+        Container(
+            decoration: BoxDecoration(
+                color: oddColour,
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            padding: EdgeInsets.only(
+                top: 20.0, bottom: 20.0, left: 15.0, right: 15.0),
+            child: Column(children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(name,
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold)),
+                  redGreenFont(bet, win),
+                ],
+              ),
+              SizedBox(height: 10.0),
+              Text(bet,
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold))
+            ]))
+      ]);
 }

@@ -11,7 +11,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 String rouletteBet = "0";
 const tile_dim = 45.0;
 bool play = true;
-var timeout = 0;
+int timeout = 0;
+int current = 0;
+int gameID = -1;
+
 var temp_balance = balance;
 List<bool> tappedIn = List.filled(64, false);
 var Roulette_Order = [
@@ -67,7 +70,6 @@ Map<String, dynamic> bet_data = {
   "third_dozen": "0"
 };
 
-
 List<RouletteUnit> Roulette_Generator() {
   List<RouletteUnit> output = <RouletteUnit>[];
   for (String i in Roulette_Order) {
@@ -88,8 +90,6 @@ Color color_finder(int num) {
   }
   return num_color;
 }
-
-
 
 Future<Response> roulette_request(String token, String args) {
 //This function grabs our request from the database, returning the json as a map.
@@ -115,22 +115,22 @@ Future<Response> roulette_request(String token, String args) {
   }
 }
 
-
-
-  Play_Roulette({multiplayer = false}) async {
-    //String timeout = request("roulette_timeout");
-    //As we're doing roulette differently, I've had to redefine the request system specifically for this game.
-
-    if (multiplayer) {
-      bet_data["isqueued"] = "true";
-      //This should be recieved by the server somehow
-      timeout = 5;
-      //More Processing Should be Done
-    }
-    String packet = jsonEncode(bet_data);
+Play_Roulette({multiplayer = false}) async {
+  //String timeout = request("roulette_timeout");
+  //As we're doing roulette differently, I've had to redefine the request system specifically for this game.
+  String packet = jsonEncode(bet_data);
+  if (multiplayer) {
+    bet_data["isqueued"] = "true";
     var data = await roulette_request(sessiontoken, packet);
-    var map = json.decode(data.body);
-    if(data.statusCode > 200) {
+    //This should be recieved by the server somehow
+    timeout = 5;
+    current = 5;
+    play = false;
+    //More Processing Should be Done
+  }
+  var data = await roulette_request(sessiontoken, packet);
+  var map = json.decode(data.body);
+  if (data.statusCode > 200) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
         gravity: ToastGravity.BOTTOM,
@@ -139,9 +139,9 @@ Future<Response> roulette_request(String token, String args) {
         webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
         fontSize: 40,
         timeInSecForIosWeb: 6);
-    }
-      return [data.statusCode, map];
-    }
+  }
+  return [data.statusCode, map];
+}
 
 void output_roll_data(List roll_data, double bet) {
   var Json = roll_data[1];
@@ -162,7 +162,13 @@ void output_roll_data(List roll_data, double bet) {
         webBgColor: col_str,
         fontSize: 40);
     // feed.add(accountItems("Slots", r"$" + str_wins, status));
-
     // Do something
   });
+}
+
+int Roll_Finder(String api_roll) {
+  if (api_roll == '37') {
+    api_roll = "00";
+  }
+  return Roulette_Order.indexOf(api_roll);  
 }
