@@ -19,8 +19,7 @@ redGreenFont(String type, String charge) {
     return Text(charge,
         style: TextStyle(
             fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.green));
-  }
- else {
+  } else {
     return Text(charge,
         style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold));
   }
@@ -113,6 +112,7 @@ class _Account extends State<Account> {
   @override
   void initState() {
     //Prevents Duplicates
+    load_feeds();
     super.initState();
     print("Initialized State!");
   }
@@ -194,21 +194,22 @@ class _Account extends State<Account> {
       ),
     );
   }
-}
 
-Future<void> load_feeds() async {
-  blackjack_feed.clear();
-  slots_feed.clear();
-  roulette_feed.clear();
-  account_feed.clear();
+  Future<void> load_feeds() async {
+    blackjack_feed.clear();
+    slots_feed.clear();
+    roulette_feed.clear();
+    account_feed.clear();
 
-  var reqs = {"token": sessiontoken};
-  var feed_raw = await request("GetUserHistory", reqs, Toast: false);
-  if (feed_raw[0] == 200) {
-    blackjack_feed = game_extract(feed_raw[1]["Blackjack"]);
-    slots_feed = game_extract(feed_raw[1]["Slots"]);
-    roulette_feed = game_extract(feed_raw[1]["Roulette"]);
-    account_feed = transaction_extract(feed_raw[1]["Transactions"]);
+    var reqs = {"token": sessiontoken};
+    var feed_raw = await request("GetUserHistory", reqs, Toast: false);
+    if (feed_raw[0] == 200) {
+      blackjack_feed = game_extract(feed_raw[1]["Blackjack"]);
+      slots_feed = game_extract(feed_raw[1]["Slots"]);
+      roulette_feed = game_extract(feed_raw[1]["Roulette"]);
+      account_feed = transaction_extract(feed_raw[1]["Transactions"]);
+    }
+    setState(() {});
   }
 }
 
@@ -227,15 +228,12 @@ List<Widget> game_extract(List<dynamic>? feed) {
     var time_label = DateTime.parse(object["time"]).toLocal();
     var formatted_time = DateFormat("MM-dd-yyyy - hh:mm a").format(time_label);
     ret_list.add(accountItems(bet, winnings, formatted_time));
-
-
-    print(object);
   }
   return ret_list;
-
 }
 
 List<Widget> transaction_extract(List<dynamic>? feed) {
+  print(feed);
   if (feed == null) {
     return [Container()];
   }

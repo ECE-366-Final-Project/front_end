@@ -30,6 +30,7 @@ class _RouletteState extends State<RouletteClass>
   @override
   void initState() {
     super.initState();
+    temp_balance = balance;
     controller = RouletteController(vsync: this, group: RouletteGroup(units));
   }
 
@@ -315,23 +316,23 @@ class _RouletteState extends State<RouletteClass>
                     });
                   },
                 ),
-                SizedBox(width: 20.0),
-                TextButton(
-                    style: ButtonStyle(backgroundColor: DWPalette()),
-                    child: Text('Play Multiplayer',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
-                    onPressed: () async {
-                      //Get Time left
-                      print(bet_data);
-                      //TODO: Implement API Connections & Expand
-                      var game_data = await Play_Roulette(multiplayer: true);
-                      print(game_data);
-                      setState(() {
-                        play = false;
-                        timeout;
-                      });
-                    })
+                // SizedBox(width: 20.0),
+                // TextButton(
+                //     style: ButtonStyle(backgroundColor: DWPalette()),
+                //     child: Text('Play Multiplayer',
+                //         style: TextStyle(
+                //             color: Colors.black, fontWeight: FontWeight.bold)),
+                //     onPressed: () async {
+                //       //Get Time left
+                //       print(bet_data);
+                //       //TODO: Implement API Connections & Expand
+                //       var game_data = await Play_Roulette(multiplayer: true);
+                //       print(game_data);
+                //       setState(() {
+                //         play = false;
+                //         timeout;
+                //       });
+                //     })
               ])
             : Container(),
       ],
