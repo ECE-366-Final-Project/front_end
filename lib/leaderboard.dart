@@ -112,12 +112,6 @@ class _Leaderboard extends State<Leaderboard> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 110.0),
-                Text(user_reference,
-                    style: TextStyle(
-                        color: const Color.fromRGBO(255, 255, 255, 1),
-                        fontSize: 40.0,
-                        fontWeight: FontWeight.bold)),
                 SizedBox(height: 20.0),
                 Text('Leaderboards',
                     style: TextStyle(
@@ -150,12 +144,11 @@ class _Leaderboard extends State<Leaderboard> {
   }
 }
 
-List<Widget> game_extract(List<dynamic>? feed, {bool blackjack: false}) {
+List<Widget> game_extract(List<dynamic>? feed, {bool blackjack= false}) {
   if (feed == null) {
     return [Container()];
   }
   List<Widget> ret_list = <Widget>[];
-
   for (var object in feed) {
     var bet = "Bet: " + r'$' + object["bet"].toString();
     var winnings = "Game Refunded";
@@ -166,7 +159,6 @@ List<Widget> game_extract(List<dynamic>? feed, {bool blackjack: false}) {
         winnings = "Game Refunded";
       }
     }
-
     if (object["winnings"] != null) {
       final oCcy = new NumberFormat("#,##0.00", "en_US");
       winnings = r"$" + (oCcy.format(object["winnings"] - object["bet"]));
