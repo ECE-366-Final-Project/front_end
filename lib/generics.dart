@@ -10,6 +10,9 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:front_end/home.dart';
 import 'dart:convert';
+import 'package:front_end/blackjack.dart';
+import 'package:front_end/roulette.dart';
+
 
 String balance = '0.00';
 String user_reference = "";
@@ -21,8 +24,8 @@ const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
     {Toast = true}) async {
   var call;
-  String body = "{Message: Failed!}";
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
+  String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
+  var col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
   } else {
@@ -31,11 +34,11 @@ Future<List> request(String command, Map<String, String> args,
   int status = 405;
   print(call);
   try {
-    final packet = await http.get(call).timeout(const Duration(seconds: 5));
+    final packet = await http.get(call).timeout(const Duration(seconds: 3));
     status = packet.statusCode;
     body = packet.body;
     if (status > 400) {
-      col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
+      col_str =  "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
@@ -50,7 +53,8 @@ Future<List> request(String command, Map<String, String> args,
         textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
-        fontSize: 40);
+        fontSize: 40,
+        timeInSecForIosWeb: 6);
   }
   return [status, map];
 }
@@ -107,7 +111,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {}),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RouletteClass()))),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(
@@ -151,3 +156,5 @@ App_Bar(context) {
     ],
   );
 }
+
+

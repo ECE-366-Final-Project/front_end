@@ -130,14 +130,44 @@ class _SlotsState extends State<Slots> {
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  //TODO: Make this one function call, no logic should be completed in this area
-                  var roll_data = await Play_Slots(double.parse(slotBetText));
-                  if (roll_data[0] == 200) {
-                    String roll_reference = roll_data[1]["PAYOUT_ID"].toString();
-                    //Straightens string to ensure that it works fine, then converts it to an integer
-                    List<int> roll_labels = [];
-                    for(var string_roll in roll_reference.padLeft(3,"0").split('')) {
-                      roll_labels.add(int.parse(string_roll));
+                  var curtime = DateTime.now();
+                  if (ratelimit.difference(curtime).inSeconds > 10) {
+                    var col_str = "linear-gradient(to right, #ced111, #ced111)";
+                    Fluttertoast.showToast(
+                        msg:
+                            "The current round is not over. Please wait before rolling again",
+                        gravity: ToastGravity.BOTTOM,
+                        textColor: Colors.black,
+                        webPosition: "center",
+                        webBgColor: col_str,
+                        fontSize: 40);
+                  } else {
+                    ratelimit = curtime;
+                    var roll_data = await Play_Slots(double.parse(slotBetText));
+                    if (roll_data[0] == 200) {
+                      setState(() {
+                        balance =
+                            (double.parse(balance) - double.parse(slotBetText))
+                                .toString();
+                      });
+                      String roll_reference =
+                          roll_data[1]["PAYOUT_ID"].toString();
+                      //Straightens string to ensure that it works fine, then converts it to an integer
+                      List<int> roll_labels = [];
+                      for (var string_roll
+                          in roll_reference.padLeft(3, "0").split('')) {
+                        roll_labels.add(int.parse(string_roll));
+                      }
+                      onStart(roll_labels);
+                      output_roll_data(roll_data, double.parse(slotBetText));
+                      var newbal;
+                      await Future.delayed(Duration(seconds: 10), () async {
+                        newbal = await balanceUpdate(); //
+                      });
+                      //after
+                      setState(() {
+                        balance = newbal;
+                      });
                     }
                   String newbal = await balanceUpdate();                    //
                     onStart(roll_labels);
@@ -225,24 +255,22 @@ class _SlotsState extends State<Slots> {
 void output_roll_data(List roll_data, double bet) {
   var Json = roll_data[1];
   var winnings = Json["WINNINGS"];
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
-  var str_wins =  winnings.toStringAsFixed(2);
-  var msg = "You won \$" +  str_wins + "!";
-  var status = "Win";
-  if(winnings < bet) {
-      status = "Loss";
-      msg = "You won \$" + str_wins + ". Better luck next time!";
-      col_str = "linear-gradient(to right, #ced111, #ced111)";
-  }  
-Future.delayed(Duration(seconds: 10), () {
-       Fluttertoast.showToast(
+  var col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
+  var str_wins = winnings.toStringAsFixed(2);
+  var msg = "You won \$" + str_wins + "!";
+  if (winnings < bet) {
+    msg = "You won \$" + str_wins + ". Better luck next time!";
+    col_str = "linear-gradient(to right, #ced111, #ced111)";
+  }
+  Future.delayed(Duration(seconds: 10), () {
+    Fluttertoast.showToast(
         msg: msg,
         gravity: ToastGravity.BOTTOM,
-        textColor: Colors.black,
+        textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
         fontSize: 40);
-      feed.add(accountItems("Slots", r"$" + str_wins, status));
+      // feed.add(accountItems("Slots", r"$" + str_wins, status));
   // Do something
 });
 

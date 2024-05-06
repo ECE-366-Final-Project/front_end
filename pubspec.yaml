@@ -20,6 +20,11 @@ dependencies:
   http: ^1.2.1
   fluttertoast: ^8.2.4
   crypto: ^3.0.3
+  shared_preferences: ^2.2.3
+  flip_card: ^0.7.0
+  roulette: ^0.1.5
+  quiver: ^3.2.1
+
 
 dev_dependencies:
   flutter_test:
