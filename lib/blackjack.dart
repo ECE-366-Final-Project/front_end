@@ -221,14 +221,6 @@ class _BlackjackState extends State<Blackjack> {
                     onKeyboardTap: (String value) {
                       bjTempBalance = bjTempBalance +
                           currencyValue.format(double.parse(value));
-                      setState(() {
-                        double toastsize = 20.0;
-                        if (kIsWeb) {
-                          toastsize = 40.0;
-                        }
-
-                        bj_bet_text = bjTempBalance;
-                      });
                     },
                     mainAxisAlignment: MainAxisAlignment.center,
                     textStyle: TextStyle(
