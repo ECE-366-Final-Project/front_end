@@ -221,7 +221,10 @@ List<Widget> game_extract(List<dynamic>? feed) {
 
   for (var object in feed) {
     var bet = "Bet: " + r'$' + object["bet"].toString();
-    var winnings = "Game in Progress";
+    var winnings = "Game Refunded";
+    if (object["active"]) {
+      winnings = "Game In Progress";
+    }
     if (object["winnings"] != null) {
       winnings = r"$" + (object["winnings"] - object["bet"]).toString();
     }
