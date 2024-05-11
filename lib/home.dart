@@ -39,9 +39,13 @@ class Home extends StatelessWidget {
                                     color: Colors.black,
                                     height: 128.0,
                                     width: 128.0),
-                                onPressed: (() => MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Blackjack()))))),
+                                onPressed: (() => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Blackjack()))
+                                    })))),
                     SizedBox(height: 10.0),
                     Text('BLACKJACK',
                         style: TextStyle(

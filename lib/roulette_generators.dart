@@ -7,9 +7,11 @@ import 'generics.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 String rouletteBet = "0";
-const tile_dim = 45.0;
+var tile_dim = 45.0;
+
 bool play = true;
 int timeout = 0;
 int current = 0;
@@ -97,6 +99,11 @@ Future<Response> roulette_request(String token, String args) {
   var token_json = {"token": token};
   Uri call = Uri.http(SRC, "/PlayRoulette", token_json);
   var col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
+  double toastsize = 20.0;
+  if (kIsWeb) {
+    toastsize = 40.0;
+  }
+
   try {
     return http
         .post(call, body: utf8.encode(args))
@@ -109,7 +116,7 @@ Future<Response> roulette_request(String token, String args) {
         textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
-        fontSize: 40,
+        fontSize: toastsize,
         timeInSecForIosWeb: 6);
     throw new TimeoutException("FAILED TO CONNECT TO SERVER");
   }
@@ -119,16 +126,23 @@ Play_Roulette({multiplayer = false}) async {
   //String timeout = request("roulette_timeout");
   //As we're doing roulette differently, I've had to redefine the request system specifically for this game.
   String packet = jsonEncode(bet_data);
+  double toastsize = 20.0;
+  if (kIsWeb) {
+    toastsize = 40.0;
+  }
+
+  var data;
   if (multiplayer) {
     bet_data["isqueued"] = "true";
-    var data = await roulette_request(sessiontoken, packet);
+    data = await roulette_request(sessiontoken, packet);
     //This should be recieved by the server somehow
     timeout = 5;
     current = 5;
     play = false;
     //More Processing Should be done later
+  } else {
+    data = await roulette_request(sessiontoken, packet);
   }
-  var data = await roulette_request(sessiontoken, packet);
   var map = json.decode(data.body);
   if (data.statusCode > 200) {
     Fluttertoast.showToast(
@@ -137,7 +151,7 @@ Play_Roulette({multiplayer = false}) async {
         textColor: Colors.white,
         webPosition: "center",
         webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
-        fontSize: 40,
+        fontSize: toastsize,
         timeInSecForIosWeb: 6);
   }
   return [data.statusCode, map];
@@ -153,6 +167,10 @@ void output_roll_data(List roll_data, double bet) {
     msg = "You won \$" + str_wins + ". Better luck next time!";
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
   }
+  double toastsize = 20.0;
+  if (kIsWeb) {
+    toastsize = 40.0;
+  }
   Future.delayed(Duration(seconds: 2), () {
     Fluttertoast.showToast(
         msg: msg,
@@ -160,7 +178,7 @@ void output_roll_data(List roll_data, double bet) {
         textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
-        fontSize: 40);
+        fontSize: toastsize);
     // feed.add(accountItems("Slots", r"$" + str_wins, status));
     // Do something
   });
@@ -170,5 +188,5 @@ int Roll_Finder(String api_roll) {
   if (api_roll == '37') {
     api_roll = "00";
   }
-  return Roulette_Order.indexOf(api_roll);  
+  return Roulette_Order.indexOf(api_roll);
 }
