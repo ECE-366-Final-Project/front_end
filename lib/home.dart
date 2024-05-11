@@ -65,12 +65,12 @@ class Home extends StatelessWidget {
                                       height: 128.0,
                                       width: 128.0),
                                   onPressed: (() => {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    RouletteClass()))
-                                      })))),
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RouletteClass()))
+                                    })))),
                       SizedBox(height: 10.0),
                       Text('ROULETTE',
                           style: TextStyle(
