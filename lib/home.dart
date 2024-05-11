@@ -3,6 +3,7 @@ import 'package:front_end/generics.dart';
 import "package:front_end/slots.dart";
 import 'package:front_end/blackjack.dart';
 import 'package:front_end/roulette.dart';
+
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -38,13 +39,9 @@ class Home extends StatelessWidget {
                                     color: Colors.black,
                                     height: 128.0,
                                     width: 128.0),
-                                onPressed: (() => {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Blackjack()))
-                                    })))),
+                                onPressed: (() => MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Blackjack()))))),
                     SizedBox(height: 10.0),
                     Text('BLACKJACK',
                         style: TextStyle(
@@ -80,7 +77,6 @@ class Home extends StatelessWidget {
                               color: Colors.white,
                               fontSize: 25.0,
                               fontWeight: FontWeight.bold)),
-                              
                     ],
                   ),
                   SizedBox(width: 50),

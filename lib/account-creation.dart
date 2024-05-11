@@ -135,7 +135,7 @@ class AccountCreation extends StatelessWidget {
                   'CREATE YOUR ACCOUNT',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 20,
                   ),
                 ),
               ),

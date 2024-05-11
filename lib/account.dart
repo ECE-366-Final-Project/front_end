@@ -59,6 +59,7 @@ displayAccountList(BuildContext context) {
         ),
       ],
     ),
+
   );
 }
 
@@ -66,7 +67,6 @@ Column accountItems(String item, String charge, String type,
         {Color oddColour = Colors.white}) =>
     Column(
       children: [
-        SizedBox(height: 10.0),
         Container(
           decoration: BoxDecoration(
               color: oddColour,
@@ -100,6 +100,7 @@ Column accountItems(String item, String charge, String type,
             ],
           ),
         ),
+        SizedBox(height: 10.0),
       ],
     );
 
@@ -115,6 +116,7 @@ class _Account extends State<Account> {
     load_feeds();
     super.initState();
     print("Initialized State!");
+
   }
 
   Widget build(BuildContext context) {
@@ -166,26 +168,7 @@ class _Account extends State<Account> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: 20.0),
-                IconButton(
-                    onPressed: () async {
-                      balance = '0.00';
-                      sessiontoken = "";
-                      final prefs = await SharedPreferences.getInstance();
-                      print("This is the token!");
-                      print(prefs.getString('token'));
-                      await prefs.remove('token');
-                      user_reference = "";
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AccountLogin()));
-                    },
-                    icon: Icon(Icons.logout_rounded,
-                        color: Colors.white,
-                        size: 30.0,
-                        semanticLabel: 'Refresh History')),
-                SizedBox(height: 20.0),
-                displayAccountList(context),
+                displayAccoutList(),
                 SizedBox(height: 100.0),
               ],
             ),

@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 String rouletteBet = "0";
 var tile_dim = 45.0;
+
 bool play = true;
 int timeout = 0;
 int current = 0;
@@ -144,7 +145,6 @@ Play_Roulette({multiplayer = false}) async {
     data = await roulette_request(sessiontoken, packet);
   }
   var map = json.decode(data.body);
-
   if (data.statusCode > 200) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
@@ -153,6 +153,7 @@ Play_Roulette({multiplayer = false}) async {
         webPosition: "center",
         webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
         fontSize: toastsize,
+
         timeInSecForIosWeb: 6);
   }
   return [data.statusCode, map];
@@ -172,8 +173,8 @@ void output_roll_data(List roll_data, double bet) {
   if (kIsWeb) {
     toastsize = 40.0;
   }
-
-  Future.delayed(Duration(seconds: 2), () {
+  Future.delayed
+    (Duration(seconds: 2), () {
     Fluttertoast.showToast(
         msg: msg,
         gravity: ToastGravity.BOTTOM,
@@ -190,5 +191,5 @@ int Roll_Finder(String api_roll) {
   if (api_roll == '37') {
     api_roll = "00";
   }
-  return Roulette_Order.indexOf(api_roll);
+  return Roulette_Order.indexOf(api_roll);  
 }

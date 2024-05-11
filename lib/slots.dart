@@ -29,8 +29,7 @@ class _SlotsState extends State<Slots> {
 
   void onStart(List<int> result) {
     final index = Random().nextInt(20);
-    _controller.start(
-        hitRollItemIndex: index < 5 ? index : null, result: result);
+    _controller.start(hitRollItemIndex: index < 5 ? index : null, result: result);
     Timer(Duration(seconds: 3), () {
       _controller.stop(reelIndex: 0);
     });
@@ -143,7 +142,6 @@ class _SlotsState extends State<Slots> {
                         fontSize: 40);
                   } else {
                     ratelimit = curtime;
-                    //TODO: Make this one function call, no logic should be completed in this area
                     var roll_data = await Play_Slots(double.parse(slotBetText));
                     if (roll_data[0] == 200) {
                       setState(() {
@@ -249,7 +247,7 @@ class _SlotsState extends State<Slots> {
 void output_roll_data(List roll_data, double bet) {
   var Json = roll_data[1];
   var winnings = Json["WINNINGS"];
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
+  var col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
   var str_wins = winnings.toStringAsFixed(2);
   var msg = "You won \$" + str_wins + "!";
   if (winnings < bet) {
@@ -260,13 +258,12 @@ void output_roll_data(List roll_data, double bet) {
     Fluttertoast.showToast(
         msg: msg,
         gravity: ToastGravity.BOTTOM,
-        textColor: Colors.black,
+        textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
         fontSize: 40,
         timeInSecForIosWeb: 7);
     // feed.add(accountItems("Slots", r"$" + str_wins, status));
-
-    // Do something
-  });
+  // Do something
+});
 }

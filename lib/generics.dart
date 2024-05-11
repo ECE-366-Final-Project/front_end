@@ -18,7 +18,8 @@ import 'package:front_end/roulette.dart';
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
-var ratelimit = DateTime.utc(1989, 11, 9);
+DateTime ratelimit = DateTime(2023);
+var feed = <Widget>[];
 
 const SRC = "cheesegrater.ee.cooper.edu:8080";
 Future<List> request(String command, Map<String, String> args,
@@ -39,11 +40,11 @@ Future<List> request(String command, Map<String, String> args,
   }
   print(call);
   int status = 405;
+  print(call);
   try {
-    final packet = await http.get(call).timeout(const Duration(seconds: 5));
+    final packet = await http.get(call).timeout(const Duration(seconds: 3));
     status = packet.statusCode;
     body = packet.body;
-    print(body);
     if (status > 400) {
       color = const Color(0xffdc1c13);
       col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
@@ -56,7 +57,8 @@ Future<List> request(String command, Map<String, String> args,
     Toast = true;
   }
   var map = json.decode(body);
-  if (Toast || status != 200) {
+  print(map);
+  if (Toast || status > 400) {
     Fluttertoast.showToast(
         msg: map["MESSAGE"]!,
         gravity: ToastGravity.BOTTOM,
@@ -64,7 +66,8 @@ Future<List> request(String command, Map<String, String> args,
         webPosition: "center",
         backgroundColor: color,
         webBgColor: col_str,
-        fontSize: toastsize);
+        fontSize: 40,
+        timeInSecForIosWeb: 6);
   }
   return [status, map];
 }
@@ -80,6 +83,12 @@ App_Bar(context) {
     automaticallyImplyLeading: false,
     leading: IconButton(
         icon: Image.asset('assets/images/login_logo.png'),
+    title: TextButton(
+        child: Text('COOPER CASINO',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold)),
         onPressed: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => Home()))),
     backgroundColor: const Color(0xFF000000),
@@ -139,6 +148,7 @@ App_Bar(context) {
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
       TextButton(
+
           child: Text('BALANCE: \$ ' + balance,
               style: TextStyle(
                   color: Colors.white,
@@ -151,6 +161,13 @@ App_Bar(context) {
               color: Colors.white,
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
+      // This is to test the server connection quickly:
+      IconButton(
+          icon: Icon(Icons.network_wifi,
+              color: Colors.white, size: 40.0, semanticLabel: 'Server Check'),
+          onPressed: () async {
+            request("Ping", {});
+          }),
       IconButton(
           icon: const Icon(Icons.account_circle,
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
@@ -169,3 +186,5 @@ App_Bar(context) {
     ],
   );
 }
+
+
