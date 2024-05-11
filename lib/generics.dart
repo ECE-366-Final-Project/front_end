@@ -28,7 +28,6 @@ Future<List> request(String command, Map<String, String> args,
   if (kIsWeb) {
     toastsize = 40.0;
   }
-
   var call;
   String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
   var color = const Color(0xff00b09b);
@@ -66,7 +65,7 @@ Future<List> request(String command, Map<String, String> args,
         webPosition: "center",
         backgroundColor: color,
         webBgColor: col_str,
-        fontSize: 40,
+        fontSize: toastsize,
         timeInSecForIosWeb: 6);
   }
   return [status, map];
@@ -81,8 +80,6 @@ Future<String> balanceUpdate() async {
 App_Bar(context) {
   return AppBar(
     automaticallyImplyLeading: false,
-    leading: IconButton(
-        icon: Image.asset('assets/images/login_logo.png'),
     title: TextButton(
         child: Text('COOPER CASINO',
             style: TextStyle(
@@ -148,7 +145,6 @@ App_Bar(context) {
               fontSize: 25.0,
               fontWeight: FontWeight.bold)),
       TextButton(
-
           child: Text('BALANCE: \$ ' + balance,
               style: TextStyle(
                   color: Colors.white,
@@ -186,5 +182,3 @@ App_Bar(context) {
     ],
   );
 }
-
-

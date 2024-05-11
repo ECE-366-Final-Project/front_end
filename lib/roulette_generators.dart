@@ -7,7 +7,6 @@ import 'generics.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 String rouletteBet = "0";
@@ -153,7 +152,6 @@ Play_Roulette({multiplayer = false}) async {
         webPosition: "center",
         webBgColor: "linear-gradient(to right, #dc1c13, #dc1c13)",
         fontSize: toastsize,
-
         timeInSecForIosWeb: 6);
   }
   return [data.statusCode, map];
@@ -169,12 +167,11 @@ void output_roll_data(List roll_data, double bet) {
     msg = "You won \$" + str_wins + ". Better luck next time!";
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
   }
-    double toastsize = 20.0;
+  double toastsize = 20.0;
   if (kIsWeb) {
     toastsize = 40.0;
   }
-  Future.delayed
-    (Duration(seconds: 2), () {
+  Future.delayed(Duration(seconds: 2), () {
     Fluttertoast.showToast(
         msg: msg,
         gravity: ToastGravity.BOTTOM,
@@ -191,5 +188,5 @@ int Roll_Finder(String api_roll) {
   if (api_roll == '37') {
     api_roll = "00";
   }
-  return Roulette_Order.indexOf(api_roll);  
+  return Roulette_Order.indexOf(api_roll);
 }

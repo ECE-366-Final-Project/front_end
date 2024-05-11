@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/generics.dart';
-import 'package:front_end/account-login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
 List<Widget> account_feed = <Widget>[];
@@ -59,7 +57,6 @@ displayAccountList(BuildContext context) {
         ),
       ],
     ),
-
   );
 }
 
@@ -116,7 +113,6 @@ class _Account extends State<Account> {
     load_feeds();
     super.initState();
     print("Initialized State!");
-
   }
 
   Widget build(BuildContext context) {
@@ -168,7 +164,7 @@ class _Account extends State<Account> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: 20.0),
-                displayAccoutList(),
+                displayAccountList(context),
                 SizedBox(height: 100.0),
               ],
             ),
