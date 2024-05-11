@@ -28,3 +28,11 @@ The first extension allows the frontend to make localhost calls, whilst the seco
 ## Android Release
 For android, the Android Studio IDE is needed, alongside necessary plugins: See these instructions for more information: https://docs.flutter.dev/get-started/install/windows/mobile?tab=physical
 Once you've set up the IDE, run ```flutter create .``` in a suitable development environment to create an android manifest: This then allows any android device with USB Debugging to execute the application.
+
+## Run Unit Tests
+The Front End has 53.9% code coverage through the tests listed in the 'test' folder within the root directory. You can test this by running:
+```
+flutter test --coverage
+```
+Within the same directory, there is a 'coverage' folder that has a 'Lcov.info' file. Drag it over to this [LCOV viewer](https://lcov-viewer.netlify.app/) which outputs the testing breakdown outlined below.
+![image](https://github.com/ECE-366-Final-Project/front_end/assets/60847314/5e826782-ab03-495e-b6b9-1513717753b2)
