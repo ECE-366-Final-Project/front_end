@@ -261,9 +261,10 @@ void output_roll_data(List roll_data, double bet) {
         textColor: Colors.white,
         webPosition: "center",
         webBgColor: col_str,
-        fontSize: 40,
-        timeInSecForIosWeb: 7);
-    // feed.add(accountItems("Slots", r"$" + str_wins, status));
+        fontSize: 40);
+      // feed.add(accountItems("Slots", r"$" + str_wins, status));
   // Do something
 });
+
+ 
 }

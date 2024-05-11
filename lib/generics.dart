@@ -1,12 +1,10 @@
 //This file holds things that are commonly shared amongst different pages:
 //EG: The homebar, special functions (the HTTP get system), and global variables that are shared and should be updated as one.
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/account.dart';
 import 'package:front_end/depo-withdraw.dart';
 import 'package:front_end/color-palette.dart';
-import 'package:front_end/leaderboard.dart';
 import 'package:front_end/slots.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,30 +13,24 @@ import 'dart:convert';
 import 'package:front_end/blackjack.dart';
 import 'package:front_end/roulette.dart';
 
+
 String balance = '0.00';
 String user_reference = "";
 String sessiontoken = '0.00';
 DateTime ratelimit = DateTime(2023);
 var feed = <Widget>[];
 
-const SRC = "cheesegrater.ee.cooper.edu:8080";
+const SRC = "localhost:8080";
 Future<List> request(String command, Map<String, String> args,
-    {bool Toast = true}) async {
-  double toastsize = 20.0;
-  if (kIsWeb) {
-    toastsize = 40.0;
-  }
-
+    {Toast = true}) async {
   var call;
   String body = '''{"MESSAGE": "Failed! Please Try again Later"}''';
-  var color = const Color(0xff00b09b);
-  var col_str = "linear-gradient(to right, #00b09b, #96c93d)";
+  var col_str = "linear-gradient(to right, #4E6A54, #4E6A54)";
   if (args.isNotEmpty) {
     call = Uri.http(SRC, "/" + command, args);
   } else {
     call = Uri.http(SRC, "/" + command);
   }
-  print(call);
   int status = 405;
   print(call);
   try {
@@ -46,13 +38,9 @@ Future<List> request(String command, Map<String, String> args,
     status = packet.statusCode;
     body = packet.body;
     if (status > 400) {
-      color = const Color(0xffdc1c13);
-      col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
+      col_str =  "linear-gradient(to right, #dc1c13, #dc1c13)";
     }
   } on TimeoutException {
-    body =
-        '''{"MESSAGE": "Failed To Connect to Server! Please Try again Later"}''';
-    color = const Color(0xffdc1c13);
     col_str = "linear-gradient(to right, #dc1c13, #dc1c13)";
     Toast = true;
   }
@@ -64,7 +52,6 @@ Future<List> request(String command, Map<String, String> args,
         gravity: ToastGravity.BOTTOM,
         textColor: Colors.white,
         webPosition: "center",
-        backgroundColor: color,
         webBgColor: col_str,
         fontSize: 40,
         timeInSecForIosWeb: 6);
@@ -81,8 +68,6 @@ Future<String> balanceUpdate() async {
 App_Bar(context) {
   return AppBar(
     automaticallyImplyLeading: false,
-    leading: IconButton(
-        icon: Image.asset('assets/images/login_logo.png'),
     title: TextButton(
         child: Text('COOPER CASINO',
             style: TextStyle(
@@ -127,12 +112,8 @@ App_Bar(context) {
                         color: Colors.white,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold)),
-                onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RouletteClass()))
-                    }),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RouletteClass()))),
             TextButton(
                 child: Text('SLOTS',
                     style: TextStyle(
@@ -173,16 +154,6 @@ App_Bar(context) {
               color: Colors.white, size: 40.0, semanticLabel: 'User Account'),
           onPressed: () => Navigator.push(
               context, MaterialPageRoute(builder: (context) => Account()))),
-      Text("|",
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold)),
-      IconButton(
-          icon: const Icon(Icons.leaderboard,
-              color: Colors.white, size: 40.0, semanticLabel: 'Leaderboard'),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Leaderboard()))),
     ],
   );
 }

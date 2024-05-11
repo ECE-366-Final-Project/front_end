@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/account.dart';
 import 'package:front_end/depowith-palette.dart';
 import 'package:front_end/generics.dart';
 import 'package:intl/intl.dart';
@@ -54,18 +55,18 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                 onPressed: () async {
                   int status = await Deposit(depoWithText);
                   var data = await balanceUpdate();
-                  setState(() {
-                    balance = data;
-                    if (status == 200) {
-                      // feed.add(accountItems("Transaction", r"$" + depoWithText, "Deposit"));
-                    }
-                  });
+                    setState(() {
+                      balance = data;
+                      if(status == 200) {
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Deposit"));
+                      }
+                    });
                 },
               ),
               SizedBox(width: 20.0),
               TextButton(
                 style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Withdraw',
+                child: Text('Withdrawal',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 onPressed: () async {
@@ -73,26 +74,9 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
                   String data = await balanceUpdate();
                   setState(() {
                     balance = data;
-                    if (status == 200) {
-                      // feed.add(accountItems("Transaction", r"$" + depoWithText, "Withdrawal"));
-                    }
-                  });
-                },
-              ),
-              SizedBox(width: 20.0),
-              TextButton(
-                style: ButtonStyle(backgroundColor: DWPalette()),
-                child: Text('Withdraw All',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                onPressed: () async {
-                  int status = await Withdraw(balance);
-                  var data = await balanceUpdate();
-                  setState(() {
-                    balance = data;
-                    if (status == 200) {
-                      // feed.add(accountItems("Transaction", r"$" + depoWithText, "Deposit"));
-                    }
+                    if(status == 200) {
+                        feed.add(accountItems("Transaction", r"$" + depoWithText, "Withdrawal"));
+                      }
                   });
                 },
               ),
@@ -146,14 +130,12 @@ class _DepoWithdrawState extends State<DepoWithdraw> {
   }
 
   Future<int> Withdraw(String depoWithText) async {
-    var data = await request(
-        "Withdraw", {"token": sessiontoken, "amount": depoWithText});
+    var data = await request("Withdraw", {"token": sessiontoken, "amount": depoWithText});
     return data[0];
   }
 
   Future<int> Deposit(String depoWithText) async {
-    var data = await request(
-        "Deposit", {"token": sessiontoken, "amount": depoWithText});
+    var data = await request("Deposit", {"token": sessiontoken, "amount": depoWithText});
     return data[0];
   }
 }

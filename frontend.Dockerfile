@@ -28,17 +28,12 @@ WORKDIR /app/
 RUN flutter pub upgrade
 RUN flutter config --enable-web
 
-RUN flutter build web --web-renderer html
-#RUN flutter run -d chrome --web-renderer html --web-port=6969 --debug
+RUN flutter build web --release --web-renderer html
 
 #stage2 host
 FROM nginx:1.25.4-alpine AS deploy
 
 COPY --from=build /app/build/web /usr/share/nginx/html
-COPY --from=build /app/assets /usr/share/nginx/html/assets
-#RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf_orig 
-#COPY ./frontend/nginx.conf /etc/nginx/nginx.conf
-
 #fix nginx to host on nonstandard port
 #EXPOSE 12345
 EXPOSE 80

@@ -378,9 +378,6 @@ class _BlackjackState extends State<Blackjack> {
       }
       await Future.delayed(Duration(seconds: 3));
       State_Setter(!(data[1]["GAME_ENDED"] == "true"));
-      if(data[1]["MESSAGE"] == "USER DOES NOT HAVE ACTIVE GAMES"){
-        State_Setter(false);
-      }
     }
   }
 
