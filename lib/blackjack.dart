@@ -13,6 +13,7 @@ var currencyValue = new NumberFormat.compact();
 String bj_bet_text = "0.00";
 String bjTempBalance = "";
 bool play = false;
+bool options = false;
 FlipCardController _controller = FlipCardController();
 ScrollController _scrollController = ScrollController();
 String backOfCard = 'sprites/cards/face-pngs/Playing_Card_Back.jpg';
@@ -90,6 +91,7 @@ SizedBox cardItems(List<Widget> renderCards) {
 
 class Blackjack extends StatefulWidget {
   const Blackjack({Key? key}) : super(key: key);
+
   @override
   _BlackjackState createState() => _BlackjackState();
 }
@@ -169,6 +171,10 @@ class _BlackjackState extends State<Blackjack> {
                           setState(() {
                             play = true;
                           });
+                          await Future.delayed(Duration(seconds: 6));
+                          setState(() {
+                            options = true;
+                          });
                         }
                       },
                     ),
@@ -199,6 +205,7 @@ class _BlackjackState extends State<Blackjack> {
                         if (payload[0] < 400) {
                           setState(() {
                             play = true;
+                            options = true;
                           });
                         }
                       },
@@ -266,7 +273,7 @@ class _BlackjackState extends State<Blackjack> {
             const SizedBox(height: 40.0),
             cardItems(renderPlayerCards),
             const SizedBox(height: 20.0),
-            play
+            options
                 ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     IconButton(
                         icon: const Icon(Icons.add_circle_rounded,
@@ -308,12 +315,14 @@ class _BlackjackState extends State<Blackjack> {
         setState(() {
           balance = temp_bal;
           play = game_running;
+          options = play;
         });
       });
     } else {
       setState(() {
         balance = temp_bal;
         play = game_running;
+        options = play;
       });
     }
   }
@@ -323,12 +332,12 @@ class _BlackjackState extends State<Blackjack> {
     var new_dealer_cards = card_parser(json["DEALERS_CARDS"]);
     for (String card in new_player_cards) {
       if (!playerString.contains(card)) {
-        await Future.delayed(Duration(seconds: 1));
         setState(() {
           playerString.add(card);
           String card_path = "sprites/cards/face-pngs/" + card + ".png";
           cardAdd(playerCards, renderPlayerCards, card_path);
         });
+        await Future.delayed(Duration(seconds: 2));
       }
     }
     for (String card in new_dealer_cards) {
@@ -345,8 +354,8 @@ class _BlackjackState extends State<Blackjack> {
         });
       }
     }
-    await Future.delayed(Duration(seconds: dealerString.length - 1));
     if (json["GAME_ENDED"] == "true") {
+      await Future.delayed(Duration(seconds: dealerString.length - 1));
       Fluttertoast.showToast(
           msg: "Game over! Winner: " + json["WINNER"],
           gravity: ToastGravity.BOTTOM,
@@ -370,15 +379,17 @@ class _BlackjackState extends State<Blackjack> {
           timeInSecForIosWeb: 2);
       return;
     } else {
+      setState(() {
+        options = false;
+      });
       stopwatch.reset();
       var reqs = {"token": sessiontoken, "move": s};
       var data = await request("UpdateBlackjack", reqs, Toast: false);
       if (data[0] == 200) {
-        render(data[1], delay_dealer: render_delay);
+        await render(data[1], delay_dealer: render_delay);
       }
-      await Future.delayed(Duration(seconds: 3));
       State_Setter(!(data[1]["GAME_ENDED"] == "true"));
-      if(data[1]["MESSAGE"] == "USER DOES NOT HAVE ACTIVE GAMES"){
+      if (data[1]["MESSAGE"] == "USER DOES NOT HAVE ACTIVE GAMES") {
         State_Setter(false);
       }
     }
